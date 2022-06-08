@@ -1,20 +1,12 @@
-# TCC
+# Desenvolvimento de uma aplicação de elementos finitos
 
-## Primeiro Teste
+Por Lucas Bublitz
+Orientado por Pablo Muñoz
 
-    Esse é o primeiro COMMIT do repositório.
+## Sobre este projeto
 
-## Segundo Teste
+O presente projeto corresponde ao meu TCC, requisito para obteção do grau de bacharel em Engenharia Mecânica, e tem por objetivo desenvolver uma programa para aplicar os métodos de elementos finitos, mais especificamente, solucionar problemas de tensão-deformação plana.
 
-    Esse é o segundo COMMIT do repositório!
+## Sobre este repositório
 
-## Terceiro Teste (branch)
-
-    Esse é o teste para branch! Tudo certo?
-## Terceito Teste (branch)
-
-    Testando o sistemas de branch!
-
-## Quarto Teste
-
-    Testanto forks!
+Aqui estão ambos, o resultado e o histórico do meu trabalho, que consitem no próprio documento para avaliação, a dissertação, e o software, meio e objetivo do TCC.
