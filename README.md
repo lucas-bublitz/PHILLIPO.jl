@@ -2,7 +2,7 @@
 
 ## Primeiro Teste
 
-    Esse é o primeiro COMMIT do repositório!
+    Esse é o primeiro COMMIT do repositório.
 
 ## Segundo Teste
 
