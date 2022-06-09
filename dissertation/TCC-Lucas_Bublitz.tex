@@ -62,22 +62,16 @@
 
 \titulo{Título do Trabalho}%
 
-\autor{Lucas {}Bublitz }%
+\autor{Lucas {}Bublitz}%
 \orientador{Pablo {}Muñoz}%
-\coorientador{}%
-
-% ATENÇÃO: O símbolo {} indica o sobrenome para a ficha catalográfica.
-% Exemplo: Sherlock Holmes {}da Silva para sobrenomes compostos;
-% Exemplo: Arnold Alois {}Schwarzenegger para sobrenome simples.
+%\coorientador{}%
 
 \instituicao{Universidade do Estado de Santa Catarina, Centro de Ciências Tecnológicas, Programa de Pós--Graduação em Engenharia Elétrica}%
 
-%\tipotrabalho{Tese (Doutorado)}
-\tipotrabalho{Dissertação (Mestrado)}
+\tipotrabalho{Dissertação}
 
-%\preambulo{Tese apresentada ao Programa de Pós--Graduação em Engenharia Elétrica do Centro de Ciências Tecnológicas da Universidade do Estado de Santa Catarina, como requisito parcial para a obtenção do grau de Doutor em Engenharia Elétrica.}
 
-\preambulo{Dissertação apresentada ao Programa de Pós--Graduação em Engenharia Elétrica do Centro de Ciências Tecnológicas da Universidade do Estado de Santa Catarina, como requisito parcial para a obtenção do grau de Mestre em Engenharia Elétrica.}
+\preambulo{Dissertação apresentada ao Programa de graduação em Engenharia Mecânica do Centro de Ciências Tecnológicas da Universidade do Estado de Santa Catarina, como requisito parcial para a obtenção do grau de Bacharel em Engenharia Mecânica.}
 
 \local{Joinville}%
 
@@ -121,17 +115,13 @@
 % ELEMENTOS TEXTUAIS
 % -----------------------------------------------------------------
 \textual
-
 \pagestyle{PagNumReduzida}						% Comando para cabeçalho somente com numeração de página 10pt
 \aliaspagestyle{chapter}{PagNumReduzida}		% Deixar numeração da primeira página com tamanho igual ao resto da numeração
 % ref.: https://groups.google.com/g/abntex2/c/CP7g8ZMgi-c/m/KjfEnn5b9a4J
 
+\include{Textuais/Introducao}
 
-% ---- Mantenha está estrutura, assim você deixa o trabalho mais organizado -------
 
-\include{Textuais/Capitulo01}
-%\include{Textuais/Capitulo02}
-%\include{Textuais/Capitulo03}
 
 % -----------------------------------------------------------------
 % ELEMENTOS PÓS-TEXTUAIS
@@ -141,12 +131,12 @@
 % Você pode comentar os elementos que não deseja em seu trabalho;
 
 % Referências bibliográficas
-\bibliography{bibliografia}	% Elemento Obrigatório
+\bibliography{Bibliografia}	% Elemento Obrigatório
 
-\include{PosTextuais/Glossario}				% Elemento Opcional
-\include{PosTextuais/Apendices}				% Elemento Opcional
-\include{PosTextuais/Anexos}				% Elemento Opcional
-\include{PosTextuais/IndiceRemissivo}		% Elemento Opcional
+%\include{PosTextuais/Glossario}				% Elemento Opcional
+%\include{PosTextuais/Apendices}				% Elemento Opcional
+%\include{PosTextuais/Anexos}				% Elemento Opcional
+%\include{PosTextuais/IndiceRemissivo}		% Elemento Opcional
 
 \end{document}
 
