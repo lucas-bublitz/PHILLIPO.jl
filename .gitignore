@@ -1,3 +1,5 @@
+
+# Arquivos auxiliares para build do latex
 *.aux
 *.bbl
 *.blg
