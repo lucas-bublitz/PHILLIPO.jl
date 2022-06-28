@@ -15,3 +15,7 @@
 *.gz
 *.toc
 *.ilg
+*.ipynb
+*.py
+/Maneh-2022
+/GiD
