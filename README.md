@@ -1,6 +1,7 @@
 # Desenvolvimento de uma aplicação de elementos finitos
 
 Por Lucas Bublitz
+
 Orientado por Pablo Muñoz
 
 ## Sobre este projeto

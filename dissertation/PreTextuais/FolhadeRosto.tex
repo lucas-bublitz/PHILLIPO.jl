@@ -1,17 +1,5 @@
-% ---
-% Folha de rosto
-% ---
 
-
-
-
-
-
-
-
-% --------------------------------------------------------
 % folha de rosto 
-% --------------------------------------------------------
 
 \makeatletter
 
@@ -28,7 +16,7 @@
 	
 		\vspace*{1.5cm}
 
-		\abntex@ifnotempty{\imprimirpreambulo}{%
+		\abntex@ifnotempty{\imprimirpreambulo}{
 			\hspace{.45\textwidth}
 			{\begin{minipage}{.5\textwidth}
 					\SingleSpacing
@@ -37,9 +25,9 @@
 					{\imprimirorientadorRotulo~\imprimirorientador\par}
 					\abntex@ifnotempty{\imprimircoorientador}{%
 						{\imprimircoorientadorRotulo~\imprimircoorientador}%
-					}%
-			\end{minipage}}%
-		}%
+					}
+			\end{minipage}}
+		}
 	
 		
 		\vfill
@@ -52,9 +40,7 @@
 }
 
 
-% (o * indica que haverá a ficha bibliográfica)
-% ---
 \imprimirfolhaderosto*
-% ---
+
 
 
