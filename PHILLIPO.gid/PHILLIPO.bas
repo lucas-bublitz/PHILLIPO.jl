@@ -2,23 +2,35 @@ PHILLIPO: ARQUIVO DE ENTRADA
 
 PROBLEM DATA
 
-MATERIALS
 
+
+MATERIALS
 *loop materials
-*format "%4i%13.5e"
-*set var PROP1(real)=Operation(MatProp(Density, real))
-*MatNum *PROP1
+ *MatNum 
 *end
 
 NODES LIST
 *loop nodes
-*format "%5i%14.5e%14.5e%14.5e"
-*NodesNum *NodesCoord
+ *NodesNum *NodesCoord
 *end
 
-ELEMENTS
-*set elems(all)
+
+*if(nelem(triangle)>0)
+ELEMENTS triangle linear
+*set elems(triangle)
 *loop elems
-*ElemsNum *ElemsConec *ElemsMat 
+*if(IsQuadratic(int)==0)
+ *ElemsNum *ElemsConec *ElemsMat
+*end 
+*end
 *end
 
+*if(nelem(quadrilateral)>0)
+ELEMENTS quadrilateral linear
+*set elems(quadrilateral)
+*loop elems
+*if(IsQuadratic(int)==0)
+ *ElemsNum *ElemsConec *ElemsMat
+*end 
+*end
+*end
