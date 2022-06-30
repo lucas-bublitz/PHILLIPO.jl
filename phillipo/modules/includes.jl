@@ -4,3 +4,4 @@
 # Autor: Lucas Bublitz
 
 include("IOStream.jl")
+include("Parts.jl")
