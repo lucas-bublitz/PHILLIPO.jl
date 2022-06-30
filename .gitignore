@@ -17,5 +17,7 @@
 *.ilg
 *.ipynb
 *.py
+*.geo
 /Maneh-2022
 /GiD
+/FreeCAD_models

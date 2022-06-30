@@ -19,21 +19,21 @@
 
 # Escopo principal
 module PHILLIPO
-    
-    include("./modules/module_include.jl") # Chamando todos os módulos locais
+
+    export main()
+
+    include("./modules/includes.jl") # Chamando todos os módulos locais
 
     # MÓDULOS LOCAIS
     import .IOStream
 
-    # MÓDULOS EXTERNOS
-    
-
     # PONTO DE PARTIDA
     function main()
         IOStream.header_prompt()
+        IOStream.import_model_abaqus("teste.inp")
     end
 
 end
-import .PHILLIPO
-PHILLIPO.main()
 
+using PHILLIPO
+main()
