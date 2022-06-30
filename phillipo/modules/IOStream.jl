@@ -5,12 +5,7 @@
 
 module IOStream
 
-    # MÓDULOS EXTERNOS
-    import AbaqusReader
-
-    function import_model_abaqus(filename::String)
-        print(AbaqusReader.abaqus_read_model(filename))
-    end
+    
 
     function header_prompt()
         # Imprime o cabeçalho do prompt de execução do programa

@@ -1,4 +1,3 @@
-
 # Arquivos auxiliares para build do latex
 *.aux
 *.bbl
@@ -20,4 +19,5 @@
 *.geo
 /Maneh-2022
 /GiD
-/FreeCAD_models
+/FreeCAD_model
+/testes
