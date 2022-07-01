@@ -4,41 +4,57 @@
 
 module Parts
 
-    # DEFINIÇÃO DOS OBJETOS DAS ESTRUTURAS
-    
-    struct type Structure
-        # Objeto de estrutura. Basicamente, comporta todos os dados do programa
-        elements::AbstractVector{Element}
-        constraints::AbstractVector{Constraint}
-        global_stiffness_matrix::AbstractMatrix{Float64}
-        global_displacement_vector::Vector{Float64}
+    # RESTRIÇÕES
+
+    abstract type Constraint end # Grupo de todas as restrições
+
+    struct Force_fixed_node <: Constraint
+        componenst::Vector{Float64}
     end
 
-    # DEFINIÇÃO DOS OBJETOS DOS NÓS
+    struct Deformation_fixed_node <: Constraint 
+        componenst::Vector{Float64}
+     end
+ 
+    # NÓS
     
     struct Node
         # Objeto de nó
         index::Integer
-        position::Array{Float64}
+        position::Vector{Float64}
+        constraints::Vector{Constraint}
     end
 
-    # DEFINIÇÃO DOS OBJETOS DOS ELEMENTOS
+    # MATERIAIS
+
+    struct Material 
+        name::String
+        young_module::Float64
+        poisson_ratio::Float64
+    end
+
+    # ELEMENTOS
 
     abstract type Element end
-    abstract type Linear end
 
+    abstract type Linear <: Element end # Grupo dos elementos lineares
 
-    # DEFINIÇÃO DOS OBJETOS DAS RESTRIÇÕES
+    struct Triangle_Linear <: Linear
+        # Elemento triangular linear
+        index::Integer
+        nodes::Vector{Node}
+        local_stiffness_matrix::AbstractMatrix{Float64}
+        material::Material
+    end
+
+    # ESTRUTURAS
     
-    abstract type Constraint end
-
-    struct Force_fixed <: Constraint
-        componenst::Vector{Float64}
+    struct Structure
+        # Objeto de estrutura. Basicamente, comporta todos os dados principais do programa
+        elements::AbstractVector{Element}
+        global_stiffness_matrix::AbstractMatrix{Float64}
+        global_displacement_vector::Vector{Float64}
+        
     end
 
-    struct Deformation_fixed <: Constraint 
-        componenst::Vector{Float64}
-    end
-
-    abstract type Element end
 end
