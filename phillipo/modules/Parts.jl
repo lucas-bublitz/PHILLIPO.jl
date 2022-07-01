@@ -8,11 +8,11 @@ module Parts
 
     abstract type Constraint end # Grupo de todas as restrições
 
-    struct Force_fixed_node <: Constraint
+    struct Force_node <: Constraint
         componenst::Vector{Float64}
     end
 
-    struct Deformation_fixed_node <: Constraint 
+    struct Deformation_node <: Constraint 
         componenst::Vector{Float64}
      end
  
@@ -54,7 +54,9 @@ module Parts
         elements::AbstractVector{Element}
         global_stiffness_matrix::AbstractMatrix{Float64}
         global_displacement_vector::Vector{Float64}
-        
+        function Structure(input_dict::Dict)
+            print("\nCOMENÇANDO")
+        end
     end
 
 end

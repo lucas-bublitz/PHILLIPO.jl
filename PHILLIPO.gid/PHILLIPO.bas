@@ -1,18 +1,22 @@
-PHILLIPO: ARQUIVO DE ENTRADA
 
-PROBLEM DATA
-
-
-
-MATERIALS
+{
+    "title": "PHILLIPO: arquivo de entrada",
+    "type": "EPD",
+    "materials":[
 *loop materials
- *MatNum 
+        [*MatNum, "*Matprop(0)", *Matprop(1), *Matprop(2)],
 *end
+    ],
+    "nodes":[
+*loop nodes
+        [*NodesNum, *NodesCoord]
+*end
+       
+    ],
+}
+
 
 NODES LIST
-*loop nodes
- *NodesNum *NodesCoord
-*end
 
 
 *if(nelem(triangle)>0)

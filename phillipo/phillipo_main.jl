@@ -20,16 +20,15 @@ module PHILLIPO
 
     include("./modules/includes.jl") # Chamando todos os módulos locais
 
-    # MÓDULOS LOCAIS
+    # MÓDULOS INTERNOS
     import .IOStream
     import .Parts
 
     # PONTO DE PARTIDA
     function main()
-        asdasd::Parts.Element
-        # IOStream.header_prompt()
-
-        # IOStream.open_parse_input_file("input.dat")
+        IOStream.header_prompt()
+        input_dict::Dict = IOStream.open_parse_input_file("input.dat")
+        Parts.Structure(input_dict)
     end
 
 end

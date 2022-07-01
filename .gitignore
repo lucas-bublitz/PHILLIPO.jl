@@ -15,9 +15,9 @@
 *.toc
 *.ilg
 *.ipynb
-*.py
-*.geo
+*.dat
 /Maneh-2022
 /GiD
 /FreeCAD_model
 /testes
+/phillipo/input.dat
