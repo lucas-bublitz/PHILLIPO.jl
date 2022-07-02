@@ -23,12 +23,23 @@ module PHILLIPO
     # MÓDULOS INTERNOS
     import .IOStream
     import .Parts
+    import .Converters
 
     # PONTO DE PARTIDA
     function main()
+
         IOStream.header_prompt()
-        input_dict::Dict = IOStream.open_parse_input_file("input.dat")
-        Parts.Structure(input_dict)
+        (nodes, elements_triangles_linear, constraints_forces, constraints_displacements, materials, type_problem) = "input.dat" |> IOStream.open_parse_input_file |> Converters.convert_input
+        
+        elements_triangles_linear_length = size(elements_triangles_linear)[1]
+        if(elements_triangles_linear_length > 0)
+            for j = 1:elements_triangles_linear_length
+                D::Array{Float64, 2} = Parts.generate_D_matrix(type_problem, materials[elements_triangles_linear[j, 2], :])
+                Parts.triangle_linear_local_stiffness_matrix(elements_triangles_linear[j, :], nodes, D)
+                println(D)
+            end
+        end
+
     end
 
 end

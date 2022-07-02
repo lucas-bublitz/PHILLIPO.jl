@@ -1,40 +1,46 @@
 
 {
     "title": "PHILLIPO: arquivo de entrada",
-    "type": "EPD",
+    "type": "plane_strain",
     "materials":[
 *loop materials
-        [*MatNum, "*Matprop(0)", *Matprop(1), *Matprop(2)],
+        ["*Matprop(0)", *Matprop(1), *Matprop(2)], 
 *end
+        null
     ],
     "nodes":[
 *loop nodes
-        [*NodesNum, *NodesCoord]
+*format "%e,%e"
+        [*NodesCoord],
 *end
-       
+        null
     ],
+    "elements":{
+        "linear":{
+            "triangles":[
+*loop elems
+*format "%i%i%i,%i,%i"
+                [*ElemsNum, *ElemsMat, *ElemsConec],
+*end
+                null
+            ]
+        }
+    },
+    "constraints":{
+        "displacements":[
+*Set Cond Constraint_displacement *nodes 
+*loop nodes *OnlyInCond
+            [*NodesNum, *cond(1), *cond(2)],
+*end nodes
+            null
+        ],
+        "forces":[
+*Set Cond Constraint_force *nodes 
+*loop nodes *OnlyInCond
+            [*NodesNum, *cond(1), *cond(2)],
+*end nodes
+            null
+        ]
+    }
 }
 
-
-NODES LIST
-
-
-*if(nelem(triangle)>0)
-ELEMENTS triangle linear
-*set elems(triangle)
-*loop elems
-*if(IsQuadratic(int)==0)
- *ElemsNum *ElemsConec *ElemsMat
-*end 
-*end
-*end
-
-*if(nelem(quadrilateral)>0)
-ELEMENTS quadrilateral linear
-*set elems(quadrilateral)
-*loop elems
-*if(IsQuadratic(int)==0)
- *ElemsNum *ElemsConec *ElemsMat
-*end 
-*end
-*end

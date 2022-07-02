@@ -1,0 +1,11 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "type": "julia",
+            "request": "launch",
+            "name": "Launch",
+            "program": "${workspaceFolder}\\phillipo\\philli_main.jl" 
+        }
+    ]
+}

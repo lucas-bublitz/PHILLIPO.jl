@@ -2,19 +2,26 @@
 # PHILLIPO
 
 module Converters
+
     function convert_input(input_dict::Dict)
-        # CONVERTENDO OS TIPOS DOS VALORES DOS NÓS PARA FLOAT64
-        nodes_length = length(input_dict["nodes"])
-        nodes = Array{Float64, 2}(undef, nodes_length, 2)
-        for j = 1:nodes_length - 1 # -1 porque toda a lista do JSON termina com o tipo nothing
-           nodes[j, 1:2] = convert(Array{Float64, 1}, input_dict["nodes"][j])
-        end
-        # CONVERTENDO OS TIPOS DOS VALORES DOS ELEMENTOS PARA INT32
-        # ELEMENTO TRIANGULAR LINEAR
-        elements_triangular_length = length(input_dict["elements"]["linear"]["triangles"])
-        elements_triangular = Array{Any, 2}(undef, elements_triangular_length, 5)
-        for j = 1:elements_triangular_length - 1 # -1 porque toda a lista do JSON termina com o tipo nothing
-            println(convert(Array{Any, 1}, input_dict["elements"]["linear"]["triangles"][j]))
-        end
+        # Separa os dados do dicionário de entrada em 
+        type_problem              = input_dict["type"]
+        nodes                     = json_vectors_into_matrix(input_dict["nodes"], Float64, 2)
+        elements_triangles_linear = json_vectors_into_matrix(input_dict["elements"]["linear"]["triangles"], Int32, 5)
+        constraints_forces        = json_vectors_into_matrix(input_dict["constraints"]["forces"], Any, 3)
+        constraints_displacements = json_vectors_into_matrix(input_dict["constraints"]["displacements"], Any, 3)
+        materials                 = json_vectors_into_matrix(input_dict["materials"], Any, 3)
+        (nodes, elements_triangles_linear, constraints_forces, constraints_displacements, materials, type_problem)
     end
-end
+
+    function json_vectors_into_matrix(vectors::Vector{Any}, type::Any, size::Int)
+        # Converte um vector de vetores em uma matriz
+        vectors_length = length(vectors) - 1 # -1 porque toda a lista do JSON termina com o tipo nothing
+        matrix  = Array{type, 2}(undef, vectors_length, size)
+        for j = 1:vectors_length
+            matrix[j, 1:size] = convert(Array{type, 1}, vectors[j])
+        end
+        matrix
+    end
+
+end 
