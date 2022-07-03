@@ -14,7 +14,6 @@
 # Autor: Lucas Bublitz                                                                                 #
 
 
-
 module PHILLIPO
     # Módulo do escopo principal
 
@@ -24,25 +23,38 @@ module PHILLIPO
     import .IOStream
     import .Parts
     import .Converters
-
+    import LinearAlgebra
     # PONTO DE PARTIDA
     function main()
 
         IOStream.header_prompt()
         (nodes, elements_triangles_linear, constraints_forces, constraints_displacements, materials, type_problem) = "input.dat" |> IOStream.open_parse_input_file |> Converters.convert_input
         
+        nodes_length = size(nodes)[1]
+        F_global_force_vector = zeros(Float64, 2 * nodes_length, 1)
+        K_global_stiffness_matrix = Array{Float64, 2}(undef, 2 * nodes_length, 2 * nodes_length)
+
+        # ELEMENTOS TRIANGULARES LINEARES, cálculo da matriz de rigidez
         elements_triangles_linear_length = size(elements_triangles_linear)[1]
         if(elements_triangles_linear_length > 0)
             for j = 1:elements_triangles_linear_length
-                D::Array{Float64, 2} = Parts.generate_D_matrix(type_problem, materials[elements_triangles_linear[j, 2], :])
-                Parts.triangle_linear_local_stiffness_matrix(elements_triangles_linear[j, :], nodes, D)
-                println(D)
+                D::Array{Float64, 2}                        = Parts.generate_D_matrix(type_problem, materials[elements_triangles_linear[j, 2], :])
+                K_triangle_linear_matrix::Array{Float64, 2} = Parts.generate_K_triangle_linear_matrix(elements_triangles_linear[j, :], nodes, D)
+                Parts.assemble_stiffness_matrix!(K_global_stiffness_matrix, elements_triangles_linear[j,3:5], K_triangle_linear_matrix)
+                println(j)
             end
         end
 
+        
+        constraints_forces_length = size(constraints_forces)[1]
+        for j = 1:constraints_forces_length
+            F_global_force_vector[2 * constraints_forces[j,1] - 1:2 * constraints_forces[j,1]] = constraints_forces[2:3]
+        end
+
+        println(size(LinearAlgebra.inv(K_global_stiffness_matrix)))
     end
 
 end
 
 import .PHILLIPO
-PHILLIPO.main()
+@time PHILLIPO.main()

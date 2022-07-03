@@ -6,7 +6,7 @@ module Parts
 
     import LinearAlgebra
 
-    function triangle_linear_local_stiffness_matrix(element::Array{Int32, 1}, nodes::Array{Float64, 2}, D::Array{Float64, 2})::Array{Float64, 2}
+    function generate_K_triangle_linear_matrix(element::Array{Int32, 1}, nodes::Array{Float64, 2}, D::Array{Float64, 2})::Array{Float64, 2}
         index     = element[1] 
         material  = element[2]
         i_index   = element[3]
@@ -59,9 +59,17 @@ module Parts
                 ν     1 - ν 0           ;
                 0     0     (1 - 2ν) / 2
             ]
-        elseif problem_type == "plane_stress"
-            
+        else
+            error("PHILLIPO: Tipo de problema desconhecido!")
         end 
     end
 
+    function assemble_stiffness_matrix!(K_global_matrix::Array{Float64, 2}, nodes::Vector{Int32}, K_element_matrix::Array{Float64, 2})
+        nodes_length = length(nodes)
+        degrees_vector = Vector{Int32}(undef, 2 * nodes_length)
+        for j = 1:nodes_length
+            degrees_vector[2 * j - 1: 2* j] = [2 * nodes[j] - 1, 2 * nodes[j]]
+        end 
+        K_global_matrix[degrees_vector, degrees_vector] = K_element_matrix
+    end
 end

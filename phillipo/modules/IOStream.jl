@@ -18,7 +18,7 @@ module IOStream
         # Imprime o cabeçalho do prompt de execução do programa
         header_msg_file = open("./modules/header_msg.txt", "r")
         header_msg_text::String = read(header_msg_file, String)
-        print(header_msg_text)
+        println(header_msg_text)
         close(header_msg_file)
     end
 

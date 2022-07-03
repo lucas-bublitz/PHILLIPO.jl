@@ -15,7 +15,7 @@
 *.toc
 *.ilg
 *.ipynb
-*.dat
+
 /Maneh-2022
 /GiD
 /FreeCAD_model

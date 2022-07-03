@@ -5,7 +5,11 @@
             "type": "julia",
             "request": "launch",
             "name": "Launch",
-            "program": "${workspaceFolder}\\phillipo\\philli_main.jl" 
+            "program": "${workspaceFolder}\\phillipo\\phillipo_main.jl" ,
+            "cwd": "${workspaceFolder}\\phillipo\\",
+            "presentation": {
+                "clear": true                        // <-- this line
+            }
         }
     ]
 }
