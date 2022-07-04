@@ -43,7 +43,7 @@ module Parts
         B::Array{Float64, 2} = 1/(2Δ) * [
             b_i 0   b_j 0   b_m 0  ;
             0   c_i 0   c_j 0   c_m;
-            c_i b_i c_j b_m c_m b_m
+            c_i b_i c_j b_j c_m b_m
          ]
          
         B' * D * B
@@ -54,13 +54,15 @@ module Parts
         ν::Float64 = material[3] # Coeficiente de Poisson
         if problem_type == "plane_strain"
             return E / ((1 + ν) * (1 - 2ν)) * [
-                1 - ν ν     0           ;
-                ν     1 - ν 0           ;
-                0     0     (1 - 2ν) / 2
+                (1 - ν) ν       0           ;
+                ν       (1 - ν) 0           ;
+                0       0       (1 - 2ν) / 2
             ]
+        elseif problem_type == "3D"
+            
         else
             error("PHILLIPO: Tipo de problema desconhecido!")
-        end 
+        end
     end
 
     function assemble_stiffness_matrix!(K_global_matrix::Array{Float64, 2}, nodes::Vector{Int32}, K_element_matrix::Array{Float64, 2})
@@ -69,12 +71,13 @@ module Parts
         for j = 1:nodes_length
             degrees_vector[2 * j - 1: 2* j] = [2 * nodes[j] - 1, 2 * nodes[j]]
         end 
-        K_global_matrix[degrees_vector, degrees_vector] = K_element_matrix
+        K_global_matrix[degrees_vector, degrees_vector] += K_element_matrix
     end
 
     function generate_U_displacement_vector(K_global_stiffness_matrix::Matrix{Float64},F_global_force_vector::Vector{Float64},free_displacements_vector::Vector{Int64})
         U_displacement_vector = zeros(Float64, length(F_global_force_vector))
         K_free_displacements = K_global_stiffness_matrix[free_displacements_vector,free_displacements_vector]
+
         U_displacement_vector[free_displacements_vector] = K_free_displacements \ F_global_force_vector[free_displacements_vector]
         U_displacement_vector
     end

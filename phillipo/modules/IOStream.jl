@@ -16,10 +16,20 @@ module IOStream
 
     function header_prompt()
         # Imprime o cabeçalho do prompt de execução do programa
-        header_msg_file = open("./modules/header_msg.txt", "r")
+        header_msg_file = open(string(@__DIR__ ,"/header_msg.txt"), "r")
         header_msg_text::String = read(header_msg_file, String)
         println(header_msg_text)
         close(header_msg_file)
+    end
+
+    
+
+    function write_vector_on_output_file(file::IO, vector::Vector{Float64}, types::Tuple)
+        write(file, join((types[1], types[2]), " "), "\n")
+        vector_length = length(vector) ÷ 2
+        for j = 1:vector_length
+            write(file, join((j,vector[2*j-1],vector[2*j])," "), "\n")
+        end
     end
 
 end 
