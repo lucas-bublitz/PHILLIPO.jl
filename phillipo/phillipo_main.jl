@@ -21,7 +21,7 @@ module PHILLIPO
 
     # MÓDULOS INTERNOS
     import .IOStream
-    import .Parts
+    import .Elements
     import .Converters
     import LinearAlgebra
     # PONTO DE PARTIDA
@@ -48,9 +48,9 @@ module PHILLIPO
         elements_triangles_linear_length = size(elements_triangles_linear)[1]
         if(elements_triangles_linear_length > 0)
             for j = 1:elements_triangles_linear_length
-                D::Array{Float64, 2}                        = Parts.generate_D_matrix(type_problem, materials[elements_triangles_linear[j, 2], :])
-                K_triangle_linear_matrix::Array{Float64, 2} = Parts.generate_K_triangle_linear_matrix(elements_triangles_linear[j, :], nodes, D)
-                Parts.assemble_stiffness_matrix!(K_global_stiffness_matrix, elements_triangles_linear[j,3:5], K_triangle_linear_matrix)
+                D::Array{Float64, 2}                        = Elements.generate_D_matrix(type_problem, materials[elements_triangles_linear[j, 2], :])
+                K_triangle_linear_matrix::Array{Float64, 2} = Elements.generate_K_triangle_linear_matrix(elements_triangles_linear[j, :], nodes, D)
+                Elements.assemble_stiffness_matrix!(K_global_stiffness_matrix, elements_triangles_linear[j,3:5], K_triangle_linear_matrix)
             end
         end
 
@@ -61,7 +61,7 @@ module PHILLIPO
             F_global_force_vector[2 * constraints_forces[j,1] - 1:2 * constraints_forces[j,1]] = constraints_forces[2:3]
         end
 
-        U_displacement_vector = Parts.generate_U_displacement_vector(K_global_stiffness_matrix,F_global_force_vector,free_displacements_vector)
+        U_displacement_vector = Elements.generate_U_displacement_vector(K_global_stiffness_matrix,F_global_force_vector,free_displacements_vector)
 
         F_global_force_vector[constraints_displacements_vector] = K_global_stiffness_matrix[free_displacements_vector, constraints_displacements_vector]' * U_displacement_vector[free_displacements_vector]
         output_file = open(string(@__DIR__,"/output.favia.res"), "w")

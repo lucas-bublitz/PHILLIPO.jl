@@ -2,7 +2,7 @@
 # PHILLIPO
 # Módulo: definição dos objetos de estrutura e elementos, chamados partes
 
-module Parts
+module Elements
 
     import LinearAlgebra
 
