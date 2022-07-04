@@ -49,7 +49,7 @@ module Parts
         B' * D * B
     end
 
-    function generate_D_matrix(problem_type::String, material::Vector{Any})::Array{Float64, 2}
+    function generate_D_matrix(problem_type, material)::Array{Float64, 2}
         E::Float64 = material[2] # Módulo de young
         ν::Float64 = material[3] # Coeficiente de Poisson
         if problem_type == "plane_strain"
