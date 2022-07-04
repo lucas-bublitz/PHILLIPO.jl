@@ -8,7 +8,6 @@ module Parts
 
     function generate_K_triangle_linear_matrix(element::Array{Int32, 1}, nodes::Array{Float64, 2}, D::Array{Float64, 2})::Array{Float64, 2}
         index     = element[1] 
-        material  = element[2]
         i_index   = element[3]
         j_index   = element[4]
         m_index   = element[5]
@@ -72,4 +71,12 @@ module Parts
         end 
         K_global_matrix[degrees_vector, degrees_vector] = K_element_matrix
     end
+
+    function generate_U_displacement_vector(K_global_stiffness_matrix::Matrix{Float64},F_global_force_vector::Vector{Float64},free_displacements_vector::Vector{Int64})
+        U_displacement_vector = zeros(Float64, length(F_global_force_vector))
+        K_free_displacements = K_global_stiffness_matrix[free_displacements_vector,free_displacements_vector]
+        U_displacement_vector[free_displacements_vector] = K_free_displacements \ F_global_force_vector[free_displacements_vector]
+        U_displacement_vector
+    end
+        
 end

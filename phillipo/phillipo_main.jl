@@ -26,13 +26,23 @@ module PHILLIPO
     import LinearAlgebra
     # PONTO DE PARTIDA
     function main()
-
         IOStream.header_prompt()
         (nodes, elements_triangles_linear, constraints_forces, constraints_displacements, materials, type_problem) = "input.dat" |> IOStream.open_parse_input_file |> Converters.convert_input
         
         nodes_length = size(nodes)[1]
-        F_global_force_vector = zeros(Float64, 2 * nodes_length, 1)
+        F_global_force_vector = zeros(Float64, 2 * nodes_length)
         K_global_stiffness_matrix = Array{Float64, 2}(undef, 2 * nodes_length, 2 * nodes_length)
+
+        # VETOR DE GRAUS DE LIBERADE
+        # Fixos
+        constraints_displacements_length = size(constraints_displacements)[1]
+        constraints_displacements_vector = Vector{Int32}(undef, 2 * constraints_displacements_length)
+        for j = 1:constraints_displacements_length
+            constraints_displacements_vector[2*j-1:2*j] = [2 * constraints_displacements[j,1] - 1, 2 * constraints_displacements[j,1]]
+        end
+
+        # Livres
+        free_displacements_vector = filter(x -> x ∉ constraints_displacements_vector, 1:2*nodes_length)
 
         # ELEMENTOS TRIANGULARES LINEARES, cálculo da matriz de rigidez
         elements_triangles_linear_length = size(elements_triangles_linear)[1]
@@ -41,19 +51,23 @@ module PHILLIPO
                 D::Array{Float64, 2}                        = Parts.generate_D_matrix(type_problem, materials[elements_triangles_linear[j, 2], :])
                 K_triangle_linear_matrix::Array{Float64, 2} = Parts.generate_K_triangle_linear_matrix(elements_triangles_linear[j, :], nodes, D)
                 Parts.assemble_stiffness_matrix!(K_global_stiffness_matrix, elements_triangles_linear[j,3:5], K_triangle_linear_matrix)
-                println(j)
             end
         end
 
-        
+        # CONDIÇÕES DE CONTORNO
+        # Forças
         constraints_forces_length = size(constraints_forces)[1]
         for j = 1:constraints_forces_length
             F_global_force_vector[2 * constraints_forces[j,1] - 1:2 * constraints_forces[j,1]] = constraints_forces[2:3]
         end
+        
+        #
+        U_displacement_vector = Parts.generate_U_displacement_vector(K_global_stiffness_matrix,F_global_force_vector,free_displacements_vector)
 
-        println(size(LinearAlgebra.inv(K_global_stiffness_matrix)))
+        F_global_force_vector = K_global_stiffness_matrix * U_displacement_vector
+
+        F_global_force_vector
     end
-
 end
 
 import .PHILLIPO
