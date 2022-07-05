@@ -6,6 +6,17 @@ module Elements
 
     import LinearAlgebra
 
+    abstract type Element end
+
+    struct TriangleLinear
+        index::Integer
+        nodes::Vector{Integer}
+        material::Integer
+        # Simbologia do Zinckevisck
+        D::Matrix{Real}
+        B::Matrix{Real}
+    end
+
     function generate_K_triangle_linear_matrix(element::Array{Int32, 1}, nodes::Array{Float64, 2}, D::Array{Float64, 2})::Array{Float64, 2}
         index     = element[1] 
         i_index   = element[3]

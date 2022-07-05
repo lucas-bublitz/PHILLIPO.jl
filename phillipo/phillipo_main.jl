@@ -47,7 +47,7 @@ module PHILLIPO
         # ELEMENTOS TRIANGULARES LINEARES, cálculo da matriz de rigidez
         elements_triangles_linear_length = size(elements_triangles_linear)[1]
         if(elements_triangles_linear_length > 0)
-            for j = 1:elements_triangles_linear_length
+            @time for j = 1:elements_triangles_linear_length
                 D::Array{Float64, 2}                        = Elements.generate_D_matrix(type_problem, materials[elements_triangles_linear[j, 2], :])
                 K_triangle_linear_matrix::Array{Float64, 2} = Elements.generate_K_triangle_linear_matrix(elements_triangles_linear[j, :], nodes, D)
                 Elements.assemble_stiffness_matrix!(K_global_stiffness_matrix, elements_triangles_linear[j,3:5], K_triangle_linear_matrix)

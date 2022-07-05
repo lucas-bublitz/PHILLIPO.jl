@@ -3,6 +3,6 @@
 # Script para adicionar todos os arquivos que contêm os módulos locais
 # Autor: Lucas Bublitz
 
-include("Parts.jl")
+include("Elements.jl")
 include("IOStream.jl")
 include("Converters.jl")
