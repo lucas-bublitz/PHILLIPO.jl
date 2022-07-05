@@ -58,7 +58,7 @@ module PHILLIPO
         # Forças
         constraints_forces_length = size(constraints_forces)[1]
         for j = 1:constraints_forces_length
-            F_global_force_vector[2 * constraints_forces[j,1] - 1:2 * constraints_forces[j,1]] = constraints_forces[2:3]
+            F_global_force_vector[2 * constraints_forces[j,1] - 1:2 * constraints_forces[j,1]] = constraints_forces[j, 2:3]
         end
 
         U_displacement_vector = Parts.generate_U_displacement_vector(K_global_stiffness_matrix,F_global_force_vector,free_displacements_vector)
