@@ -23,7 +23,10 @@ module PHILLIPO
     import .IOStream
     import .Elements
     import .Converters
+
+    # MÓDULOS EXTERNOS
     import LinearAlgebra
+    
     # PONTO DE PARTIDA
     function main()
         IOStream.header_prompt()

@@ -15,6 +15,13 @@ module Elements
         # Simbologia do Zinckevisck
         D::Matrix{Real}
         B::Matrix{Real}
+        K::Matrix{Real}
+        function TriangleLinear(triangle_element::Vector{Integer}, material::Vector{Any}, nodes_position::Vector{}, type_problem::String)
+            index    = triangle_element[1]
+            material = triangle_element[2]
+            nodes    = triangle_element[3:5]
+            D = generate_D_matrix()
+        end
     end
 
     function generate_K_triangle_linear_matrix(element::Array{Int32, 1}, nodes::Array{Float64, 2}, D::Array{Float64, 2})::Array{Float64, 2}
