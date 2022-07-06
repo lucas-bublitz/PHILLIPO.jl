@@ -8,67 +8,71 @@ module Elements
 
     abstract type Element end
 
-    struct TriangleLinear
+    struct TriangleLinear <: Element
+        
         index::Integer
-        nodes::Vector{Integer}
-        material::Integer
+        material_index::Integer
+        nodes_index::Vector{Integer}
+        interpolation_function_coeff::Matrix{Real}
         # Simbologia do Zinckevisck
         D::Matrix{Real}
         B::Matrix{Real}
         K::Matrix{Real}
-        function TriangleLinear(triangle_element::Vector{Any}, material::Vector{Any}, nodes::Vector{Any}, type_problem::String)
-            index    = triangle_element[1]
-            material = triangle_element[2]
-            nodes    = triangle_element[3:5]
+
+        degrees_freedom::Vector{Integer}
+
+        function TriangleLinear(triangle_element_vector, materials::Vector{Any}, nodes::Vector{Any}, problem_type::String)
+           
+            index          = triangle_element_vector[1]
+            material_index = triangle_element_vector[2]
+            nodes_index    = triangle_element_vector[3:5]
             
-            index     = element[1] 
-            i_index   = element[3]
-            j_index   = element[4]
-            m_index   = element[5]
-            
-            i::Vector{Float64} = nodes[i_index, :]
-            j::Vector{Float64} = nodes[j_index, :]
-            m::Vector{Float64} = nodes[m_index, :]
+            i::Vector{Real} = nodes[nodes_index[1]]
+            j::Vector{Real} = nodes[nodes_index[2]]
+            m::Vector{Real} = nodes[nodes_index[3]]
     
-            Δ::Float64 = 1/2 * LinearAlgebra.det([
+            Δ::Real = 1/2 * LinearAlgebra.det([
                 1  i[1]  i[2];
                 1  j[1]  j[2];
                 1  m[1]  m[2]
             ])
             
-            a_i::Float64 = j[1] * m[2] - m[1] * j[2]
-            b_i::Float64 = j[2] - m[2]
-            c_i::Float64 = m[1] - j[1]
+            a_i::Real = j[1] * m[2] - m[1] * j[2]
+            b_i::Real = j[2] - m[2]
+            c_i::Real = m[1] - j[1]
     
-            a_j::Float64 = m[1] * i[2] - i[1] * m[2]
-            b_j::Float64 = m[2] - i[2]
-            c_j::Float64 = i[1] - m[1]
+            a_j::Real = m[1] * i[2] - i[1] * m[2]
+            b_j::Real = m[2] - i[2]
+            c_j::Real = i[1] - m[1]
     
-            a_m::Float64 = i[1] * j[2] - j[1] * i[2]
-            b_m::Float64 = i[2] - j[2]
-            c_m::Float64 = j[1] - i[1]
-    
-            interpolation_function_coeff::Array{Float64, 2} = [
+            a_m::Real = i[1] * j[2] - j[1] * i[2]
+            b_m::Real = i[2] - j[2]
+            c_m::Real = j[1] - i[1]
+
+            interpolation_function_coeff::Matrix{Real} = [
                 a_i b_i c_i;
                 a_j b_j c_j;
                 a_m b_m c_m
             ]
-    
-            B::Array{Float64, 2} = 1/(2Δ) * [
+
+            B::Matrix{Real} = 1/(2Δ) * [
                 b_i 0   b_j 0   b_m 0  ;
                 0   c_i 0   c_j 0   c_m;
                 c_i b_i c_j b_j c_m b_m
             ]
-             
-            K = B' * D * B
-        end
+
+            D::Matrix{Real} = generate_D_matrix(problem_type, materials[material_index])
+
+            K::Matrix{Real} = B' * D * B
+
+            degrees_freedom = reduce(vcat, map((x) -> [2 * x - 1, 2 * x], nodes_index))
+
+            new(index, material_index, nodes_index, interpolation_function_coeff, D, B, K, degrees_freedom)
+        end 
     end
 
-    function generate_K_triangle_linear_matrix(element::Array{Int32, 1}, nodes::Array{Float64, 2}, D::Array{Float64, 2})::Array{Float64, 2}
-       
-    end
 
-    function generate_D_matrix(problem_type, material)::Array{Float64, 2}
+    function generate_D_matrix(problem_type, material)::Matrix{Real}
         E::Float64 = material[2] # Módulo de young
         ν::Float64 = material[3] # Coeficiente de Poisson
         if problem_type == "plane_strain"
@@ -84,17 +88,14 @@ module Elements
         end
     end
 
-    function assemble_stiffness_matrix!(K_global_matrix::Array{Float64, 2}, nodes::Vector{Int32}, K_element_matrix::Array{Float64, 2})
-        nodes_length = length(nodes)
-        degrees_vector = Vector{Int32}(undef, 2 * nodes_length)
-        for j = 1:nodes_length
-            degrees_vector[2 * j - 1: 2* j] = [2 * nodes[j] - 1, 2 * nodes[j]]
-        end 
-        K_global_matrix[degrees_vector, degrees_vector] += K_element_matrix
+    function assemble_stiffness_matrix!(K_global_matrix::Array{Float64, 2}, elements::Vector{Element})
+        for element in elements
+            K_global_matrix[element.degrees_freedom, element.degrees_freedom] += element.K
+        end
     end
 
     function generate_U_displacement_vector(K_global_stiffness_matrix::Matrix{Float64},F_global_force_vector::Vector{Float64},free_displacements_vector::Vector{Int64})
-        U_displacement_vector = zeros(Float64, length(F_global_force_vector))
+        U_displacement_vector = zeros(Real, length(F_global_force_vector))
         K_free_displacements = K_global_stiffness_matrix[free_displacements_vector,free_displacements_vector]
 
         U_displacement_vector[free_displacements_vector] = K_free_displacements \ F_global_force_vector[free_displacements_vector]

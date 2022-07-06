@@ -8,6 +8,11 @@ module IOStream
     # MÓDULOS EXTERNOS
     import JSON
 
+    struct input_data
+        nodes::Vector{Vector{Integer}}
+        material::Vector{Any}
+    end
+
     function open_parse_input_file(file_name::String)::Dict
         # Carrega e interpreta o arquivo de entrada
         # Retorna um dicionário
@@ -22,9 +27,8 @@ module IOStream
         close(header_msg_file)
     end
 
-    
 
-    function write_vector_on_output_file(file::IO, vector::Vector{Float64}, types::Tuple)
+    function write_vector_on_output_file(file::IO, vector::Vector{Real}, types::Tuple)
         write(file, join((types[1], types[2]), " "), "\n")
         vector_length = length(vector) ÷ 2
         for j = 1:vector_length

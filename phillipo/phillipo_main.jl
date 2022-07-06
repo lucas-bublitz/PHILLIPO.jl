@@ -30,45 +30,68 @@ module PHILLIPO
     # PONTO DE PARTIDA
     function main()
         IOStream.header_prompt()
-        (nodes, elements_triangles_linear, constraints_forces, constraints_displacements, materials, type_problem) = string(@__DIR__ ,"/input.dat") |> IOStream.open_parse_input_file |> Converters.convert_input
+        input_dict = string(@__DIR__ ,"/input.dat") |> IOStream.open_parse_input_file
+    
+
+        problem_type = input_dict["type"]
+        nodes = input_dict["nodes"]
+        materials = input_dict["materials"]
+        constraints_forces = input_dict["constraints"]["forces"]
+        constraints_displacments = input_dict["constraints"]["displacements"]
+        pop!(nodes)
+        pop!(materials)
+        pop!(constraints_forces)
+        pop!(constraints_displacments)
         
-        nodes_length = size(nodes)[1]
-        F_global_force_vector = zeros(Float64, 2 * nodes_length)
-        K_global_stiffness_matrix = zeros(Float64, 2 * nodes_length, 2 * nodes_length)
+        # VARIÁVEIS GLOBAIS
+        dimensions = input_dict["type"] == "3D" ? 3 : 2
+        nodes_length = length(nodes)
+        elements = Vector{Elements.Element}()
+        F_global_force_vector = zeros(Float64, dimensions * nodes_length)
+        K_global_stiffness_matrix = zeros(Float64, dimensions * nodes_length, dimensions * nodes_length)
+        U_displacement_vector = zeros(Float64, dimensions * nodes_length)
+        
+        # GRAUS DE LIBERDADE, livres e restritos
+        constraints_degrees = begin
+            if problem_type == "3D"
 
-        # VETOR DE GRAUS DE LIBERADE
-        # Fixos
-        constraints_displacements_length = size(constraints_displacements)[1]
-        constraints_displacements_vector = zeros(Int32, 2 * constraints_displacements_length)
-        for j = 1:constraints_displacements_length
-            constraints_displacements_vector[2*j-1:2*j] = [2 * constraints_displacements[j,1] - 1, 2 * constraints_displacements[j,1]]
+            else
+                reduce(vcat, map((x) -> [2 * x[1] - 1, 2 * x[1]], constraints_displacments))
+            end
         end
+        free_degrees = filter(x -> x ∉ constraints_degrees, 1:dimensions*nodes_length)
+        
+        # RESTRIÇÕES DE FORÇA
+        forces_degrees = begin
+            if problem_type == "3D"
 
-        # Livres
-        free_displacements_vector = filter(x -> x ∉ constraints_displacements_vector, 1:2*nodes_length)
+            else
+                reduce(vcat, map((x) -> [2 * x[1] - 1, 2 * x[1]], constraints_forces))
+            end
+        end
+        F_global_force_vector[forces_degrees] = begin
+            if problem_type == "3D"
 
-        # ELEMENTOS TRIANGULARES LINEARES, cálculo da matriz de rigidez
-        elements_triangles_linear_length = size(elements_triangles_linear)[1]
-        if(elements_triangles_linear_length > 0)
-            @time for j = 1:elements_triangles_linear_length
-                D::Array{Float64, 2}                        = Elements.generate_D_matrix(type_problem, materials[elements_triangles_linear[j, 2], :])
-                K_triangle_linear_matrix::Array{Float64, 2} = Elements.generate_K_triangle_linear_matrix(elements_triangles_linear[j, :], nodes, D)
-                Elements.assemble_stiffness_matrix!(K_global_stiffness_matrix, elements_triangles_linear[j,3:5], K_triangle_linear_matrix)
+            else
+                reduce(vcat, map((x) -> [x[2], x[3]], constraints_forces))
             end
         end
 
-        # CONDIÇÕES DE CONTORNO
-        # Forças
-        constraints_forces_length = size(constraints_forces)[1]
-        for j = 1:constraints_forces_length
-            F_global_force_vector[2 * constraints_forces[j,1] - 1:2 * constraints_forces[j,1]] = constraints_forces[j, 2:3]
+        # CONSTRUÇÃO DOS ELEMENTOS
+        if "triangles" in keys(input_dict["elements"]["linear"])
+            pop!(input_dict["elements"]["linear"]["triangles"])
+            for triangle in input_dict["elements"]["linear"]["triangles"]
+                push!(elements, Elements.TriangleLinear(triangle, materials, nodes, problem_type))
+            end
         end
 
-        U_displacement_vector = Elements.generate_U_displacement_vector(K_global_stiffness_matrix,F_global_force_vector,free_displacements_vector)
+        Elements.assemble_stiffness_matrix!(K_global_stiffness_matrix, elements)
 
-        F_global_force_vector[constraints_displacements_vector] = K_global_stiffness_matrix[free_displacements_vector, constraints_displacements_vector]' * U_displacement_vector[free_displacements_vector]
+        U_displacement_vector = Elements.generate_U_displacement_vector(K_global_stiffness_matrix,F_global_force_vector,free_degrees)
+
+        # F_global_force_vector[constraints_displacements_vector] = K_global_stiffness_matrix[free_displacements_vector, constraints_displacements_vector]' * U_displacement_vector[free_displacements_vector]
+        
         output_file = open(string(@__DIR__,"/output.favia.res"), "w")
-
         IOStream.write_vector_on_output_file(output_file, U_displacement_vector, ("displacements"," 2  1  2  1  0"))
         close(output_file)  
     end
