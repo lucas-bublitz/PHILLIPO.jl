@@ -22,7 +22,6 @@ module PHILLIPO
     # MÓDULOS INTERNOS
     import .IOStream
     import .Elements
-    import .Converters
 
     # MÓDULOS EXTERNOS
     import LinearAlgebra
@@ -42,7 +41,7 @@ module PHILLIPO
         pop!(materials)
         pop!(constraints_forces)
         pop!(constraints_displacments)
-        
+
         # VARIÁVEIS GLOBAIS
         dimensions = input_dict["type"] == "3D" ? 3 : 2
         nodes_length = length(nodes)
@@ -54,7 +53,7 @@ module PHILLIPO
         # GRAUS DE LIBERDADE, livres e restritos
         constraints_degrees = begin
             if problem_type == "3D"
-
+                reduce(vcat, map((x) -> [3 * x[1] - 2, 3 * x[1] - 1, 3 * x[1]], constraints_displacments))
             else
                 reduce(vcat, map((x) -> [2 * x[1] - 1, 2 * x[1]], constraints_displacments))
             end
@@ -64,35 +63,41 @@ module PHILLIPO
         # RESTRIÇÕES DE FORÇA
         forces_degrees = begin
             if problem_type == "3D"
-
+                reduce(vcat, map((x) -> [3 * x[1] - 2, 3 * x[1] - 1, 3 * x[1]], constraints_forces))
             else
                 reduce(vcat, map((x) -> [2 * x[1] - 1, 2 * x[1]], constraints_forces))
             end
         end
         F_global_force_vector[forces_degrees] = begin
             if problem_type == "3D"
-
+                reduce(vcat, map((x) -> [x[2], x[3], x[4]], constraints_forces))
             else
                 reduce(vcat, map((x) -> [x[2], x[3]], constraints_forces))
             end
         end
 
         # CONSTRUÇÃO DOS ELEMENTOS
-        if "triangles" in keys(input_dict["elements"]["linear"])
-            pop!(input_dict["elements"]["linear"]["triangles"])
-            for triangle in input_dict["elements"]["linear"]["triangles"]
-                push!(elements, Elements.TriangleLinear(triangle, materials, nodes, problem_type))
+        if problem_type == "3D"
+            if "tetrahedrons" in keys(input_dict["elements"]["linear"])
+                pop!(input_dict["elements"]["linear"]["tetrahedrons"])
+                for tetrahedron in input_dict["elements"]["linear"]["tetrahedrons"]
+                    push!(elements, Elements.TetrahedronLinear(tetrahedron, materials, nodes))
+                end
+            end
+        else
+            if "triangles" in keys(input_dict["elements"]["linear"])
+                pop!(input_dict["elements"]["linear"]["triangles"])
+                for triangle in input_dict["elements"]["linear"]["triangles"]
+                    push!(elements, Elements.TriangleLinear(triangle, materials, nodes, problem_type))
+                end
             end
         end
-
         Elements.assemble_stiffness_matrix!(K_global_stiffness_matrix, elements)
 
         U_displacement_vector = Elements.generate_U_displacement_vector(K_global_stiffness_matrix,F_global_force_vector,free_degrees)
-
-        # F_global_force_vector[constraints_displacements_vector] = K_global_stiffness_matrix[free_displacements_vector, constraints_displacements_vector]' * U_displacement_vector[free_displacements_vector]
         
         output_file = open(string(@__DIR__,"/output.favia.res"), "w")
-        IOStream.write_vector_on_output_file(output_file, U_displacement_vector, ("displacements"," 2  1  2  1  0"))
+        IOStream.write_vector_on_output_file(output_file, U_displacement_vector, ("displacements"," 2  1  2  1  0"), dimensions)
         close(output_file)  
     end
 end
