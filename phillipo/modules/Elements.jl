@@ -16,55 +16,56 @@ module Elements
         D::Matrix{Real}
         B::Matrix{Real}
         K::Matrix{Real}
-        function TriangleLinear(triangle_element::Vector{Integer}, material::Vector{Any}, nodes_position::Vector{}, type_problem::String)
+        function TriangleLinear(triangle_element::Vector{Any}, material::Vector{Any}, nodes::Vector{Any}, type_problem::String)
             index    = triangle_element[1]
             material = triangle_element[2]
             nodes    = triangle_element[3:5]
-            D = generate_D_matrix()
+            
+            index     = element[1] 
+            i_index   = element[3]
+            j_index   = element[4]
+            m_index   = element[5]
+            
+            i::Vector{Float64} = nodes[i_index, :]
+            j::Vector{Float64} = nodes[j_index, :]
+            m::Vector{Float64} = nodes[m_index, :]
+    
+            Δ::Float64 = 1/2 * LinearAlgebra.det([
+                1  i[1]  i[2];
+                1  j[1]  j[2];
+                1  m[1]  m[2]
+            ])
+            
+            a_i::Float64 = j[1] * m[2] - m[1] * j[2]
+            b_i::Float64 = j[2] - m[2]
+            c_i::Float64 = m[1] - j[1]
+    
+            a_j::Float64 = m[1] * i[2] - i[1] * m[2]
+            b_j::Float64 = m[2] - i[2]
+            c_j::Float64 = i[1] - m[1]
+    
+            a_m::Float64 = i[1] * j[2] - j[1] * i[2]
+            b_m::Float64 = i[2] - j[2]
+            c_m::Float64 = j[1] - i[1]
+    
+            interpolation_function_coeff::Array{Float64, 2} = [
+                a_i b_i c_i;
+                a_j b_j c_j;
+                a_m b_m c_m
+            ]
+    
+            B::Array{Float64, 2} = 1/(2Δ) * [
+                b_i 0   b_j 0   b_m 0  ;
+                0   c_i 0   c_j 0   c_m;
+                c_i b_i c_j b_j c_m b_m
+            ]
+             
+            K = B' * D * B
         end
     end
 
     function generate_K_triangle_linear_matrix(element::Array{Int32, 1}, nodes::Array{Float64, 2}, D::Array{Float64, 2})::Array{Float64, 2}
-        index     = element[1] 
-        i_index   = element[3]
-        j_index   = element[4]
-        m_index   = element[5]
-
-        i::Vector{Float64} = nodes[i_index, :]
-        j::Vector{Float64} = nodes[j_index, :]
-        m::Vector{Float64} = nodes[m_index, :]
-
-        Δ::Float64 = 1/2 * LinearAlgebra.det([
-            1  i[1]  i[2];
-            1  j[1]  j[2];
-            1  m[1]  m[2]
-        ])
-        
-        a_i::Float64 = j[1] * m[2] - m[1] * j[2]
-        b_i::Float64 = j[2] - m[2]
-        c_i::Float64 = m[1] - j[1]
-
-        a_j::Float64 = m[1] * i[2] - i[1] * m[2]
-        b_j::Float64 = m[2] - i[2]
-        c_j::Float64 = i[1] - m[1]
-
-        a_m::Float64 = i[1] * j[2] - j[1] * i[2]
-        b_m::Float64 = i[2] - j[2]
-        c_m::Float64 = j[1] - i[1]
-
-        interpolation_function_coeff::Array{Float64, 2} = [
-            a_i b_i c_i;
-            a_j b_j c_j;
-            a_m b_m c_m
-        ]
-
-        B::Array{Float64, 2} = 1/(2Δ) * [
-            b_i 0   b_j 0   b_m 0  ;
-            0   c_i 0   c_j 0   c_m;
-            c_i b_i c_j b_j c_m b_m
-         ]
-         
-        B' * D * B
+       
     end
 
     function generate_D_matrix(problem_type, material)::Array{Float64, 2}
