@@ -95,7 +95,7 @@ module PHILLIPO
         end
         
         Elements.assemble_stiffness_matrix!(K_global_stiffness_matrix, elements)
-        exit()
+        
         U_displacement_vector = Elements.generate_U_displacement_vector(K_global_stiffness_matrix,F_global_force_vector,free_degrees)
         
         output_file = open(string(@__DIR__,"/output.favia.res"), "w")
