@@ -6,10 +6,7 @@
             "request": "launch",
             "name": "Launch",
             "program": "${workspaceFolder}\\phillipo\\phillipo_main.jl" ,
-            "cwd": "${workspaceFolder}\\phillipo\\",
-            "presentation": {
-                "clear": true                        // <-- this line
-            }
+            "cwd": "${workspaceFolder}\\phillipo\\"
         }
     ]
 }
