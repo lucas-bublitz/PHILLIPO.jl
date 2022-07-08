@@ -1,7 +1,7 @@
 
 {
     "title": "PHILLIPO: arquivo de entrada",
-    "type": "plane_strain",
+    "type": "3D",
     "materials":[
 *loop materials
         ["*Matprop(0)", *Matprop(1), *Matprop(2)], 
@@ -17,16 +17,17 @@
     ],
     "elements":{
         "linear":{
-            "triangles":[
+*set elems(tetrahedra)
+            "tetrahedrons":[
 *loop elems
-*format "%i%i%i,%i,%i"
+*format "%i%i%i,%i,%i,%i"
                 [*ElemsNum, *ElemsMat, *ElemsConec],
 *end
                 null
-            ]
+            ]       
         }
     },
-    "constraints":{
+    "constraints":{  
         "displacements":[
 *Set Cond Constraint_displacement *nodes 
 *loop nodes *OnlyInCond
