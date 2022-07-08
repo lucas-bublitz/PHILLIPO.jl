@@ -15,7 +15,9 @@
 *.toc
 *.ilg
 *.ipynb
-
+*.res
+input.dat
+output.favia.res
 /Maneh-2022
 /GiD
 /FreeCAD_model
