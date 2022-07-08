@@ -98,7 +98,7 @@ module PHILLIPO
         
         U_displacement_vector = Elements.generate_U_displacement_vector(K_global_stiffness_matrix,F_global_force_vector,free_degrees)
         
-        output_file = open(string(@__DIR__,"/output.favia.res"), "w")
+        output_file = open(string(@__DIR__,"/output.flavia.res"), "w")
         IOStream.write_vector_on_output_file(output_file, U_displacement_vector, ("displacements"," 2  1  2  1  0"), dimensions)
         close(output_file)  
     end
