@@ -32,9 +32,8 @@ module IOStream
             end
         elseif  dimensions == 3
             for j = 1:vector_length
-                write(file, join((j,vector[3*j-2],vector[3*j-2],vector[3*j])," "), "\n")
+                write(file, join((j,vector[3*j-2],vector[3*j-1],vector[3*j])," "), "\n")
             end
         end
     end
-
 end 

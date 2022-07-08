@@ -23,8 +23,10 @@ module Elements
            
             index          = triangle_element_vector[1]
             material_index = triangle_element_vector[2]
+            # Conectividade
             nodes_index    = triangle_element_vector[3:5]
             
+
             i::Vector{Real} = nodes[nodes_index[1]]
             j::Vector{Real} = nodes[nodes_index[2]]
             m::Vector{Real} = nodes[nodes_index[3]]
@@ -94,21 +96,21 @@ module Elements
                 1 m[1] m[2] m[3];
                 1 p[1] p[2] p[3]
             ]
-            interpolation_function_coeff::Matrix{Real} = LinearAlgebra.inv(position_nodes_matrix)'
+            interpolation_function_coeff::Matrix{Real} = LinearAlgebra.inv(position_nodes_matrix)
             V::Real = 1/6 * LinearAlgebra.det(position_nodes_matrix)
 
-            coeff_i = interpolation_function_coeff[1,:]
-            coeff_j = interpolation_function_coeff[2,:]
-            coeff_m = interpolation_function_coeff[3,:]
-            coeff_p = interpolation_function_coeff[4,:]
+            a::Vector{Real} = interpolation_function_coeff[1,:]
+            b::Vector{Real} = interpolation_function_coeff[2,:]
+            c::Vector{Real} = interpolation_function_coeff[3,:]
+            d::Vector{Real} = interpolation_function_coeff[4,:]
             
             B::Matrix{Real} = [
-                coeff_i[2] 0          0          coeff_j[2] 0          0          coeff_m[2] 0          0          coeff_p[2] 0          0         ;
-                0          coeff_i[3] 0          0          coeff_j[3] 0          0          coeff_m[3] 0          0          coeff_p[3] 0         ;
-                0          0          coeff_i[4] 0          0          coeff_j[4] 0          0          coeff_m[4] 0          0          coeff_p[4];
-                coeff_i[2] coeff_i[3] 0          coeff_j[2] coeff_j[3] 0          coeff_m[2] coeff_m[3] 0          coeff_p[2] coeff_p[3] 0         ;
-                0          coeff_i[4] coeff_i[3] 0          coeff_j[4] coeff_j[3] 0          coeff_m[4] coeff_m[3] 0          coeff_p[4] coeff_p[3];
-                coeff_i[4] 0          coeff_i[3] coeff_j[4] 0          coeff_j[3] coeff_m[4] 0          coeff_m[3] coeff_p[4] 0          coeff_p[3]
+                b[1]  0      0    b[2]  0      0    b[3]  0      0    b[4]  0      0   ;
+                0     c[1]   0    0     c[2]   0    0     c[3]   0    0     c[4]   0   ;
+                0     0      d[1] 0     0      d[2] 0     0      d[3] 0     0      d[4];
+                c[1]  b[1]   0    c[2]  b[2]   0    c[3]  b[3]   0    c[4]  b[4]   0   ;
+                0     d[1]   c[1] 0     d[2]   c[2] 0     d[3]   c[3] 0     d[4]   c[4];
+                d[1]  0      b[1] d[2]  0      b[2] d[3]  0      b[3] d[4]  0      b[4]  
             ]
 
             D::Matrix{Real} = generate_D_matrix("3D", materials[material_index])
@@ -123,6 +125,7 @@ module Elements
 
 
     function generate_D_matrix(problem_type, material)::Matrix{Real}
+        # Gera a matrix da lei de Hook
         E::Float64 = material[2] # Módulo de young
         ν::Float64 = material[3] # Coeficiente de Poisson
         if problem_type == "plane_strain"
@@ -145,7 +148,7 @@ module Elements
         end
     end
 
-    function assemble_stiffness_matrix!(K_global_matrix::Array{Float64, 2}, elements::Vector{Element})
+    function assemble_stiffness_matrix!(K_global_matrix::Matrix{Float64}, elements)
         for element in elements
             K_global_matrix[element.degrees_freedom, element.degrees_freedom] += element.K
         end
@@ -153,8 +156,7 @@ module Elements
 
     function generate_U_displacement_vector(K_global_stiffness_matrix::Matrix{Float64},F_global_force_vector::Vector{Float64},free_displacements_vector::Vector{Int64})
         U_displacement_vector = zeros(Real, length(F_global_force_vector))
-        K_free_displacements = K_global_stiffness_matrix[free_displacements_vector,free_displacements_vector]
-
+        K_free_displacements =  LinearAlgebra.factorize(K_global_stiffness_matrix[free_displacements_vector,free_displacements_vector])
         U_displacement_vector[free_displacements_vector] = K_free_displacements \ F_global_force_vector[free_displacements_vector]
         U_displacement_vector
     end

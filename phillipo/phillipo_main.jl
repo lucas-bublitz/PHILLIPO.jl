@@ -25,12 +25,12 @@ module PHILLIPO
 
     # MÓDULOS EXTERNOS
     import LinearAlgebra
-    
+    using  ProgressBars
     # PONTO DE PARTIDA
     function main()
         IOStream.header_prompt()
         input_dict = string(@__DIR__ ,"/input.dat") |> IOStream.open_parse_input_file
-    
+        
 
         problem_type = input_dict["type"]
         nodes = input_dict["nodes"]
@@ -77,23 +77,25 @@ module PHILLIPO
         end
 
         # CONSTRUÇÃO DOS ELEMENTOS
+        println("LENDO DADOS DE ENTRADA:")
         if problem_type == "3D"
             if "tetrahedrons" in keys(input_dict["elements"]["linear"])
                 pop!(input_dict["elements"]["linear"]["tetrahedrons"])
-                for tetrahedron in input_dict["elements"]["linear"]["tetrahedrons"]
+                for tetrahedron in ProgressBar(input_dict["elements"]["linear"]["tetrahedrons"])
                     push!(elements, Elements.TetrahedronLinear(tetrahedron, materials, nodes))
                 end
             end
         else
             if "triangles" in keys(input_dict["elements"]["linear"])
                 pop!(input_dict["elements"]["linear"]["triangles"])
-                for triangle in input_dict["elements"]["linear"]["triangles"]
+                Threads.@threads for triangle in input_dict["elements"]["linear"]["triangles"]
                     push!(elements, Elements.TriangleLinear(triangle, materials, nodes, problem_type))
                 end
             end
         end
+        
         Elements.assemble_stiffness_matrix!(K_global_stiffness_matrix, elements)
-
+        exit()
         U_displacement_vector = Elements.generate_U_displacement_vector(K_global_stiffness_matrix,F_global_force_vector,free_degrees)
         
         output_file = open(string(@__DIR__,"/output.favia.res"), "w")
@@ -104,4 +106,3 @@ end
 
 import .PHILLIPO
 @time PHILLIPO.main()
-exit()
