@@ -25,11 +25,13 @@ module PHILLIPO
 
     # MÓDULOS EXTERNOS
     import LinearAlgebra
-    using  ProgressBars
+    import SparseArrays
+
     # PONTO DE PARTIDA
     function main()
         IOStream.header_prompt()
-        input_dict = string(@__DIR__ ,"/input.dat") |> IOStream.open_parse_input_file
+        print("Lendo arquivo JSON...                 ")
+        @time input_dict = string(@__DIR__ ,"/input.dat") |> IOStream.open_parse_input_file
         
 
         problem_type = input_dict["type"]
@@ -37,6 +39,7 @@ module PHILLIPO
         materials = input_dict["materials"]
         constraints_forces = input_dict["constraints"]["forces"]
         constraints_displacments = input_dict["constraints"]["displacements"]
+        
         pop!(nodes)
         pop!(materials)
         pop!(constraints_forces)
@@ -77,12 +80,14 @@ module PHILLIPO
         end
 
         # CONSTRUÇÃO DOS ELEMENTOS
-        println("LENDO DADOS DE ENTRADA:")
+        print("Construindo os elementos...           ")
         if problem_type == "3D"
+            pop!(input_dict["elements"]["linear"]["tetrahedrons"])
+            elements_length = length(input_dict["elements"]["linear"]["tetrahedrons"])
+            elements = Vector{Elements.Element}(undef, elements_length)
             if "tetrahedrons" in keys(input_dict["elements"]["linear"])
-                pop!(input_dict["elements"]["linear"]["tetrahedrons"])
-                for tetrahedron in ProgressBar(input_dict["elements"]["linear"]["tetrahedrons"])
-                    push!(elements, Elements.TetrahedronLinear(tetrahedron, materials, nodes))
+                @time for j in 1:elements_length
+                    elements[j] = Elements.TetrahedronLinear(input_dict["elements"]["linear"]["tetrahedrons"][j], materials, nodes)
                 end
             end
         else
@@ -94,15 +99,18 @@ module PHILLIPO
             end
         end
         
-        Elements.assemble_stiffness_matrix!(K_global_stiffness_matrix, elements)
-        
-        U_displacement_vector = Elements.generate_U_displacement_vector(K_global_stiffness_matrix,F_global_force_vector,free_degrees)
-        
+        print("Montando a matrix de rigidez global...")
+        @time Elements.assemble_stiffness_matrix!(K_global_stiffness_matrix, elements)
+        print("Resolvendo o sistema...               ")
+        @time U_displacement_vector = Elements.generate_U_displacement_vector(K_global_stiffness_matrix,F_global_force_vector,free_degrees)
+
+        print("Imprimindo o arquivo de saída...      ")
         output_file = open(string(@__DIR__,"/output.favia.res"), "w")
-        IOStream.write_vector_on_output_file(output_file, U_displacement_vector, ("displacements"," 2  1  2  1  0"), dimensions)
-        close(output_file)  
+        @time IOStream.write_vector_on_output_file(output_file, U_displacement_vector, ("displacements"," 2  1  2  1  0"), dimensions)
+        close(output_file)
     end
 end
 
 import .PHILLIPO
 @time PHILLIPO.main()
+exit()

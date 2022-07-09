@@ -4,7 +4,9 @@
 
 module Elements
 
+    #MÓDULOS EXTERNOS
     import LinearAlgebra
+    import SparseArrays
 
     abstract type Element end
 
@@ -148,7 +150,7 @@ module Elements
         end
     end
 
-    function assemble_stiffness_matrix!(K_global_matrix::Matrix{Float64}, elements)
+    function assemble_stiffness_matrix!(K_global_matrix::Matrix{Float64}, elements::Vector{Element})
         for element in elements
             K_global_matrix[element.degrees_freedom, element.degrees_freedom] += element.K
         end
@@ -156,7 +158,7 @@ module Elements
 
     function generate_U_displacement_vector(K_global_stiffness_matrix::Matrix{Float64},F_global_force_vector::Vector{Float64},free_displacements_vector::Vector{Int64})
         U_displacement_vector = zeros(Real, length(F_global_force_vector))
-        K_free_displacements =  LinearAlgebra.factorize(K_global_stiffness_matrix[free_displacements_vector,free_displacements_vector])
+        K_free_displacements =  SparseArrays.sparse(K_global_stiffness_matrix[free_displacements_vector,free_displacements_vector])
         U_displacement_vector[free_displacements_vector] = K_free_displacements \ F_global_force_vector[free_displacements_vector]
         U_displacement_vector
     end
