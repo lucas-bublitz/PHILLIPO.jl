@@ -17,7 +17,7 @@
 module PHILLIPO
     # Módulo do escopo principal
 
-    include("./modules/includes.jl") # Chamando todos os módulos locais
+    @time include("./modules/includes.jl") # Chamando todos os módulos locais
 
     # MÓDULOS INTERNOS
     import .IOStream
@@ -48,6 +48,8 @@ module PHILLIPO
         # VARIÁVEIS GLOBAIS
         dimensions = input_dict["type"] == "3D" ? 3 : 2
         nodes_length = length(nodes)
+        print("Número de nós: ")
+        println(nodes_length)
         elements = Vector{Elements.Element}()
         F_global_force_vector = zeros(Float64, dimensions * nodes_length)
         K_global_stiffness_matrix = zeros(Float64, dimensions * nodes_length, dimensions * nodes_length)
