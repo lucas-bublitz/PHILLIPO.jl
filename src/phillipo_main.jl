@@ -17,10 +17,10 @@
 module PHILLIPO
     # Módulo do escopo principal
 
-    @time include("./modules/includes.jl") # Chamando todos os módulos locais
+    include("./modules/includes.jl") # Chamando todos os módulos locais
 
     # MÓDULOS INTERNOS
-    import .IOStream
+    import .IOfiles
     import .Elements
 
     # MÓDULOS EXTERNOS
@@ -29,9 +29,9 @@ module PHILLIPO
 
     # PONTO DE PARTIDA
     function main()
-        IOStream.header_prompt()
+        IOfiles.header_prompt()
         print("Lendo arquivo JSON...                 ")
-        @time input_dict = string(@__DIR__ ,"/input.dat") |> IOStream.open_parse_input_file
+        input_dict = string(@__DIR__ ,"/input.dat") |> IOfiles.open_parse_input_file
         
 
         problem_type = input_dict["type"]
@@ -107,8 +107,8 @@ module PHILLIPO
         @time U_displacement_vector = Elements.generate_U_displacement_vector(K_global_stiffness_matrix,F_global_force_vector,free_degrees)
 
         print("Imprimindo o arquivo de saída...      ")
-        output_file = open(string(@__DIR__,"/output.favia.res"), "w")
-        @time IOStream.write_vector_on_output_file(output_file, U_displacement_vector, ("displacements"," 2  1  2  1  0"), dimensions)
+        output_file = open(string(@__DIR__,"/output.flavia.res"), "w")
+        @time IOfiles.write_vector_on_output_file(output_file, U_displacement_vector, ("displacements"," 2  1  2  1  0"), dimensions)
         close(output_file)
     end
 end

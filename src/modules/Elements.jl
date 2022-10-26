@@ -158,6 +158,7 @@ module Elements
         U_displacement_vector = zeros(Real, length(F_global_force_vector))
         K_free_displacements  = sparse(K_global_stiffness_matrix[free_displacements_vector,free_displacements_vector])
         U_displacement_vector[free_displacements_vector] = K_free_displacements \ F_global_force_vector[free_displacements_vector]
+        println(typeof(K_free_displacements))
         U_displacement_vector
     end
 end
