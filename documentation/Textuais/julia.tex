@@ -5,9 +5,8 @@
     (Alan Edelman)
 \end{quotation}
 
-Julia é uma linguagem de programação dinâmica, opcionalmente tipada, pré-compilada, generalista, de código livre\footnotemark{} e de alto nível. \cite[capítulo: The scope of Julia]{Sherrington}
-
-\footnotetext{A Linguagem Julia, é distribuída, quase integralmente, sob a MIT License, que permite a modificação, utilização e distribuição, seja comercial ou gratuita, de qualquer parte do código, assim como das documentações associadas. Os componentes do módulo Base e as bibliotecas e ferramentas externa, que têm licença diferente, podem ser consultados diretamente no repositório da linguagem: \url{https://github.com/JuliaLang/julia}}
+Julia é uma linguagem de programação dinâmica, opcionalmente tipada, pré-compilada, generalista, de código livre\footnotemark{} e de alto nível. \cite[Capítulo: The scope of Julia]{Sherrington} Criada por Jeff Bezanso, Stefan Karpinski, Viral B. Shah e Alan Edelman em 2012, com o objetivo de solucionar \emph{the two language problem} (o problema de duas linguagens), conciliando produtividade e performance
+\footnotetext{A Linguagem Julia, é distribuída, quase integralmente, sob a MIT License, que permite a modificação, utilização e distribuição, seja comercial ou gratuita, de qualquer parte do código, assim como das documentações associadas. Os componentes do módulo Base e as bibliotecas e ferramentas externas, que têm licença diferente, podem ser consultados diretamente no repositório da linguagem: \url{https://github.com/JuliaLang/julia}}
 
 
 
@@ -20,7 +19,7 @@ Há sempre uma barganha que o programador tem que fazer na hora de decidir que l
 
 Python e C são bons exemplos disso, embora não exista em si uma linguagem mais rápida que a outra, pois elas são apenas abstrações de comandos interpretados pelo compilador ou interpretador, é notável que programs escritos puramente em Python tendem a serem executados mais lentamente que programas em C. Isso se devem, entre outras causas, por C ter uma integração maior com o hardware, possibilitando o programador a remodelar o algoritmo de modo a tornar mais eficiente sua execução, ou seja, a interação entre o programador e a máquina é muito próxima direta, pois ele programa já com a estrutura do computador em mente. Python, por sua vez, cria uma camada a mais. Os comandos escritos nessa linguagem são interpretados dinamicamente gerando um bytecode, para então serem executados em uma máquina virtual a fim de serem executados. Esse tipo de abordagem tem diversas vantagens, como tornar o código mais legível (esse conceito está vinculado, diretamente, com a semelhança do código com o algoritmo que o programador tem por objetivo implementar) e, de certa forma, universal, pois com essa nova camada permite que qualquer código em Python possa rodar em qualquer computador que tenha o interpretador da linguagem instalado, salvo casos de dependências externas. Entretanto, essa camada extra faz com que o interpretador não possa mais encontrar otimizações com facilidade, distanciando o código do que é realmente executado no hardware. Julia foi a solução desenvolvida para conciliar esses dois mundos.
 
-\section{O que Julia pode substituir (sem muita dificuldade)}
+\section{O que Julia pode substituir e o que deve substituir}
 
 Mesmo com o avanço notável que a linguagem tem tido na última década, ainda não é óbvio que se possa, sem pensar duas vezes, suprir a demanda de programas robustos e otimizados para o processamento e gerenciamento de quantidades massivas de dados. Não é óbvio justamente pelo fato de não ser verdade. Em lato senso, Julia é C. Em stricto senso, nem perto disso. Para poder explicar esse tópico um tanto polêmico, sobre a eficiência das linguagem interpretadas, compiladas ou pré-compiladas (categorias que hoje não refletem mais, com clareza, a forma de execução das linguagens de programação), é preciso dar um passo atrás e começar com uma pergunta mais fundamental: o que é uma programa? Ainda mais que o presente trabalho trata da aplicação de Julia em uma área que, comumente, não se preocupa com esse tópico.
 
