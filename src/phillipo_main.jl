@@ -17,7 +17,7 @@
 module PHILLIPO
     # Módulo do escopo principal
 
-    include("./modules/includes.jl") # Chamando todos os módulos locais
+    include("./modules/includes.jl") # Módulos internos
 
     # MÓDULOS INTERNOS
     import .IOfiles
@@ -33,6 +33,9 @@ module PHILLIPO
         print("Lendo arquivo JSON...                 ")
         input_dict = string(@__DIR__ ,"/input.dat") |> IOfiles.open_parse_input_file
         
+        # struct main_problem<: Proble
+        #     mesh::mesh
+        # end
 
         problem_type = input_dict["type"]
         nodes = input_dict["nodes"]
