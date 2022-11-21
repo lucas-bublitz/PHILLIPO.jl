@@ -86,12 +86,12 @@ module PHILLIPO
 
         # CONSTRUÇÃO DOS ELEMENTOS
         print("Construindo os elementos...           ")
-        if problem_type == "3D"
+        @time if problem_type == "3D"
             pop!(input_dict["elements"]["linear"]["tetrahedrons"])
             elements_length = length(input_dict["elements"]["linear"]["tetrahedrons"])
             elements = Vector{Elements.Element}(undef, elements_length)
             if "tetrahedrons" in keys(input_dict["elements"]["linear"])
-                @time for j in 1:elements_length
+                for j in 1:elements_length
                     elements[j] = Elements.TetrahedronLinear(input_dict["elements"]["linear"]["tetrahedrons"][j], materials, nodes)
                 end
             end
