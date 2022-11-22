@@ -19,19 +19,20 @@ module PHILLIPO
 
     include("./modules/includes.jl") # Módulos internos
 
-    # MÓDULOS INTERNOS
-    import .IOfiles
-    import .Elements
-
     # MÓDULOS EXTERNOS
     import LinearAlgebra
     import SparseArrays
 
+    # MÓDULOS INTERNOS
+    import .IOfiles
+    import .Elements
+    import .Matrices
+    
     # PONTO DE PARTIDA
     function main()
         IOfiles.header_prompt()
         print("Lendo arquivo JSON...                 ")
-        input_dict = string(@__DIR__ ,"/input.dat") |> IOfiles.open_parse_input_file
+        input_dict = string(@__DIR__ ,"/input.json") |> IOfiles.open_parse_input_file
         
         # struct main_problem<: Proble
         #     mesh::mesh
@@ -51,13 +52,12 @@ module PHILLIPO
         # VARIÁVEIS GLOBAIS
         dimensions = input_dict["type"] == "3D" ? 3 : 2
         nodes_length = length(nodes)
-        print("Número de nós: ")
-        println(nodes_length)
+        
         elements = Vector{Elements.Element}()
         F_global_force_vector = zeros(Float64, dimensions * nodes_length)
-        K_global_stiffness_matrix = zeros(Float64, dimensions * nodes_length, dimensions * nodes_length)
+        K_global_stiffness_matrix_vector = [Matrices.SparseMatrixCOO() for i = 1:Threads.nthreads()]
         U_displacement_vector = zeros(Float64, dimensions * nodes_length)
-        
+
         # GRAUS DE LIBERDADE, livres e restritos
         constraints_degrees = begin
             if problem_type == "3D"
@@ -84,15 +84,18 @@ module PHILLIPO
             end
         end
 
+        
         # CONSTRUÇÃO DOS ELEMENTOS
+        println("Número de threads:                    $(Threads.nthreads())")
         print("Construindo os elementos...           ")
         @time if problem_type == "3D"
             pop!(input_dict["elements"]["linear"]["tetrahedrons"])
             elements_length = length(input_dict["elements"]["linear"]["tetrahedrons"])
             elements = Vector{Elements.Element}(undef, elements_length)
             if "tetrahedrons" in keys(input_dict["elements"]["linear"])
-                for j in 1:elements_length
+                Threads.@threads for j in 1:elements_length
                     elements[j] = Elements.TetrahedronLinear(input_dict["elements"]["linear"]["tetrahedrons"][j], materials, nodes)
+                    Matrices.add!(K_global_stiffness_matrix_vector[Threads.threadid()], elements[j].degrees_freedom, elements[j].K)
                 end
             end
         else
@@ -105,7 +108,7 @@ module PHILLIPO
         end
         
         print("Montando a matrix de rigidez global...")
-        @time Elements.assemble_stiffness_matrix!(K_global_stiffness_matrix, elements)
+        @time K_global_stiffness_matrix = Matrices.sum(K_global_stiffness_matrix_vector)
         print("Resolvendo o sistema...               ")
         @time U_displacement_vector = Elements.generate_U_displacement_vector(K_global_stiffness_matrix,F_global_force_vector,free_degrees)
 
@@ -115,7 +118,8 @@ module PHILLIPO
         close(output_file)
     end
 end
-
+using BenchmarkTools
 import .PHILLIPO
 @time PHILLIPO.main()
-exit()
+@time PHILLIPO.main()
+

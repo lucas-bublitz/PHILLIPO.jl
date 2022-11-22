@@ -6,6 +6,8 @@
 module Matrices
 
     using SparseArrays
+    import Base.sum
+    export SparseMatrixCOO, spCOO, sum, add!
 
     mutable struct SparseMatrixCOO{Tv,Ti<:Integer} <: AbstractSparseMatrix{Tv,Ti}
         I :: Vector{Ti}
@@ -13,6 +15,7 @@ module Matrices
         V :: Vector{Tv}
     end
 
+    spCOO(A::Matrix) = SparseMatrixCOO(A)
     SparseMatrixCOO() = SparseMatrixCOO(Int[], Int[], Float64[])
     SparseMatrixCOO(A::SparseMatrixCSC{Tv,Ti}) where {Tv, Ti<:Integer} = SparseMatrixCOO(findnz(A)...)
     SparseMatrixCOO(A::Matrix) = SparseMatrixCOO(sparse(A))
@@ -51,27 +54,7 @@ module Matrices
         return nothing
     end
 
-    """
-        assemble!(K, dofs1, dofs2, Ke)
-    Assemble a local dense element matrix `Ke` to a global sparse matrix `K`, to the
-    location given by lists of indices `dofs1` and `dofs2`.
-    # Example
-    ```julia
-    dofs1 = [3, 4]
-    dofs2 = [6, 7, 8]
-    Ke = [5.0 6.0 7.0; 8.0 9.0 10.0]
-    K = SparseMatrixCOO()
-    assemble!(K, dofs1, dofs2, Ke)
-    Matrix(K)
-    # output
-    4x8 Array{Float64,2}:
-    0.0  0.0  0.0  0.0  0.0  0.0  0.0   0.0
-    0.0  0.0  0.0  0.0  0.0  0.0  0.0   0.0
-    0.0  0.0  0.0  0.0  0.0  5.0  6.0   7.0
-    0.0  0.0  0.0  0.0  0.0  8.0  9.0  10.0
-    ```
-    """
-    function assemble_local_matrix!(A::SparseMatrixCOO, dofs1::AbstractVector{Int}, dofs2::AbstractVector{Int}, data)
+    function assemble_local_matrix!(A::SparseMatrixCOO, dofs1::Vector{<:Integer}, dofs2::Vector{<:Integer}, data)
         n, m = length(dofs1), length(dofs2)
         @assert length(data) == n*m
         k = 1
@@ -80,11 +63,21 @@ module Matrices
                 add!(A, dofs1[i], dofs2[j], data[k])
                 k += 1
             end
-        end
+        end 
         return nothing
     end
 
-    function add!(A::SparseMatrixCOO, dofs1::AbstractVector{Int}, dofs2::AbstractVector{Int}, data)
-        assemble_local_matrix!(A, dofs1, dofs2, data)
+    function add!(A::SparseMatrixCOO, dofs::Vector{<:Integer}, data)
+        assemble_local_matrix!(A, dofs, dofs, data)
+    end
+
+    # Modificação para  PHILLIPO
+    function sum(A::Vector{<:SparseMatrixCOO})::SparseMatrixCSC
+        # Retorna uma matriz em CSC a partir de um vetor formado por matrizes em COO
+        I = reduce(vcat, getfield.(A, :I))
+        J = reduce(vcat, getfield.(A, :J))
+        V = reduce(vcat, getfield.(A, :V))
+        sparse(I,J,V)
     end
 end
+
