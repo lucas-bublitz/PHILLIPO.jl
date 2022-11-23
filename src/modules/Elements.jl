@@ -1,6 +1,6 @@
 
 # PHILLIPO
-# Módulo: definição dos objetos de estrutura e elementos, chamados partes
+# Módulo: definição dos elementos e funções relacionadas
 
 module Elements
 
@@ -12,7 +12,7 @@ module Elements
     abstract type Element end
 
     struct TriangleLinear <: Element
-        
+
         index::Integer
         material_index::Integer
         nodes_index::Vector{Integer}
@@ -26,7 +26,6 @@ module Elements
            
             index          = triangle_element_vector[1]
             material_index = triangle_element_vector[2]
-            # Conectividade
             nodes_index    = triangle_element_vector[3:5]
             
 
@@ -150,15 +149,17 @@ module Elements
             error("PHILLIPO: Tipo de problema desconhecido!")
         end
     end
+
     function assemble_stiffness_matrix!(K_global_matrix::Matrix{Float64}, elements::Vector{Element})::SparseMatrixCSC
         for element in elements
             K_global_matrix[element.degrees_freedom, element.degrees_freedom] += element.K
         end
     end
-    function generate_U_displacement_vector(K_global_stiffness_matrix::SparseArrays.SparseMatrixCSC,F_global_force_vector::Vector{<:Real},free_displacements_vector::Vector{<:Integer})
-        U_displacement_vector = zeros(Real, length(F_global_force_vector))
-        K_free_displacements  = K_global_stiffness_matrix[free_displacements_vector,free_displacements_vector]
-        U_displacement_vector[free_displacements_vector] = K_free_displacements \ F_global_force_vector[free_displacements_vector]
-        U_displacement_vector
+
+    function generate_U(K::SparseArrays.SparseMatrixCSC,F::Vector{<:Real},free_displacements_vector::Vector{<:Integer})
+        U = zeros(Real, length(F))
+        U[free_displacements_vector] = K[free_displacements_vector,free_displacements_vector] \ F[free_displacements_vector]
+        U
     end
+
 end

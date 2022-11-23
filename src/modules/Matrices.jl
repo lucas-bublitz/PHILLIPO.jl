@@ -15,10 +15,10 @@ module Matrices
         V :: Vector{Tv}
     end
 
-    spCOO(A::Matrix) = SparseMatrixCOO(A)
+    spCOO(A::Matrix{<:Number}) = SparseMatrixCOO(A)
     SparseMatrixCOO() = SparseMatrixCOO(Int[], Int[], Float64[])
     SparseMatrixCOO(A::SparseMatrixCSC{Tv,Ti}) where {Tv, Ti<:Integer} = SparseMatrixCOO(findnz(A)...)
-    SparseMatrixCOO(A::Matrix) = SparseMatrixCOO(sparse(A))
+    SparseMatrixCOO(A::Matrix{<:Real}) = SparseMatrixCOO(sparse(A))
     SparseArrays.SparseMatrixCSC(A::SparseMatrixCOO) = sparse(A.I, A.J, A.V)
     Base.isempty(A::SparseMatrixCOO) = isempty(A.I) && isempty(A.J) && isempty(A.V)
     Base.size(A::SparseMatrixCOO) = isempty(A) ? (0, 0) : (maximum(A.I), maximum(A.J))
@@ -67,11 +67,10 @@ module Matrices
         return nothing
     end
 
-    function add!(A::SparseMatrixCOO, dofs::Vector{<:Integer}, data)
-        assemble_local_matrix!(A, dofs, dofs, data)
+    function add!(A::SparseMatrixCOO, dof1::Vector{<:Integer}, dof2::Vector{<:Integer}, data)
+        assemble_local_matrix!(A, dof1, dof2, data)
     end
 
-    # Modificação para  PHILLIPO
     function sum(A::Vector{<:SparseMatrixCOO})::SparseMatrixCSC
         # Retorna uma matriz em CSC a partir de um vetor formado por matrizes em COO
         I = reduce(vcat, getfield.(A, :I))
@@ -79,5 +78,10 @@ module Matrices
         V = reduce(vcat, getfield.(A, :V))
         sparse(I,J,V)
     end
+
+    function add!(A::SparseMatrixCOO, dof::Vector{<:Integer}, data)
+        assemble_local_matrix!(A, dof, dof, data)
+    end
+    
 end
 
