@@ -21,7 +21,7 @@ module IOfiles
         close(header_msg_file)
     end
 
-    function write_vector_on_output_file(file, vector::Vector{Real}, types::Tuple, dimensions::Integer)
+    function write_vector_on_output_file(file, vector::Vector{<:Real}, types::Tuple, dimensions::Integer)
         write(file, join((types[1], types[2]), " "), "\n")
         vector_length = length(vector) ÷ dimensions 
         if dimensions == 2

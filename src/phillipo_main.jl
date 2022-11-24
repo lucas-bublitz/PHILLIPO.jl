@@ -19,12 +19,12 @@ module PHILLIPO
 
     include("./modules/includes.jl") # Módulos internos
 
-    # MÓDULOS EXTERNOS
+    # MÓDUgLOS EXTERNOS
     import LinearAlgebra
     import SparseArrays
     import DataStructures
 
-    # MÓDULOS INTERNOS
+    # MÓDUgLOS INTERNOS
     import .IOfiles
     import .Elements
     import .Matrices
@@ -50,30 +50,34 @@ module PHILLIPO
         dimensions = input_dict["type"] == "3D" ? 3 : 2
         nodes_length = length(nodes)
         elements = Vector{Elements.Element}()
-        F_global_force_vector = zeros(Float64, dimensions * nodes_length)
-        U_displacement_vector = zeros(Float64, dimensions * nodes_length)
-        K_global_stiffness_matrix_vector = [Matrices.SparseMatrixCOO() for i = 1:Threads.nthreads()]
+        Fg = zeros(Float64, dimensions * nodes_length)
+        Ug = zeros(Float64, dimensions * nodes_length)
+        Kg_vector = [Matrices.SparseMatrixCOO() for i = 1:Threads.nthreads()]
 
+        # GRAUS DE LIBERDADE: LIVRES E PRESCRITOS 
         if problem_type == "3D"
-            # GRAUS DE LIBERDADE, livres e restritos
-            constraints_degrees = reduce(vcat, map((x) -> [3 * x[1] - 2, 3 * x[1] - 1, 3 * x[1]], constraints_displacments))
+            dof_prescribe = reduce(vcat, map((x) -> [3 * x[1] - 2, 3 * x[1] - 1, 3 * x[1]], constraints_displacments))
+            dof_free = filter(x -> x ∉ dof_prescribe, 1:dimensions*nodes_length)
+            # RESTRIÇÃO DE DESLOCAMENTO
+            Ug[dof_prescribe] = reduce(vcat, map((x) -> [x[2], x[3], x[4]], constraints_displacments))
+            # RESTRIÇÕES DE FORÇA
+            if !isempty(constraints_forces)
+                dof_constraints_forces = reduce(vcat, map((x) -> [3 * x[1] - 2, 3 * x[1] - 1, 3 * x[1]], constraints_forces))
+                Fg[dof_constraints_forces] = reduce(vcat, map((x) -> [x[2], x[3], x[4]], constraints_forces))
+            end 
+        else
+            # RESTRIÇÕES DE DESLOCAMENTO
+            constraints_degrees = reduce(vcat, map((x) -> [2 * x[1] - 1, 2 * x[1]], constraints_displacments))
+            Ug[constraints_degrees] = reduce(vcat, map((x) -> [x[2], x[3]], constraints_displacments))
             free_degrees = filter(x -> x ∉ constraints_degrees, 1:dimensions*nodes_length)
             # RESTRIÇÕES DE FORÇA
-            forces_degrees = reduce(vcat, map((x) -> [3 * x[1] - 2, 3 * x[1] - 1, 3 * x[1]], constraints_forces))
-            F_global_force_vector[forces_degrees] = reduce(vcat, map((x) -> [x[2], x[3], x[4]], constraints_forces))
-
-        else
-            # GRAUS DE LIBERDADE, livres e restritos
-            constraints_degrees = reduce(vcat, map((x) -> [2 * x[1] - 1, 2 * x[1]], constraints_displacments))
-            free_degrees = filter(x -> x ∉ constraints_degrees, 1:dimensions*nodes_length)
-            #RESTRIÇÕES DE FORÇA
             forces_degrees = reduce(vcat, map((x) -> [2 * x[1] - 1, 2 * x[1]], constraints_forces))
-            F_global_force_vector[forces_degrees] = reduce(vcat, map((x) -> [x[2], x[3]], constraints_forces))
+            Fg[forces_degrees] = reduce(vcat, map((x) -> [x[2], x[3]], constraints_forces))
         end
 
         println("Número de threads: $(Threads.nthreads())")
         
-        # CONSTRUÇÃO DOS ELEMENTOS
+        # CONSTRUgÇÃO DOS ELEMENTOS
         print("Construindo os elementos e a matrix de rigidez global paralelamente... ")
         @time if problem_type == "3D"
             pop!(input_dict["elements"]["linear"]["tetrahedrons"])
@@ -83,7 +87,7 @@ module PHILLIPO
                 Threads.@threads for j in 1:elements_length
                     elements[j] = Elements.TetrahedronLinear(input_dict["elements"]["linear"]["tetrahedrons"][j], materials, nodes)
                     Matrices.add!(
-                        K_global_stiffness_matrix_vector[Threads.threadid()],
+                        Kg_vector[Threads.threadid()],
                         elements[j].degrees_freedom, 
                         elements[j].K
                     )
@@ -98,7 +102,7 @@ module PHILLIPO
                 Threads.@threads for j in 1:elements_length
                     elements[j] = Elements.TriangleLinear(triangle, materials, nodes, problem_type)
                     Matrices.add!(
-                        K_global_stiffness_matrix_vector[Threads.threadid()],
+                        Kg_vector[Threads.threadid()],
                         elements[j].degrees_freedom, 
                         elements[j].K
                     )
@@ -107,14 +111,13 @@ module PHILLIPO
         end
         
         print("Montando a matrix global de rigidez...")
-        @time K_global_stiffness_matrix = Matrices.sum(K_global_stiffness_matrix_vector)
-        
+        @time Kg = Matrices.sum(Kg_vector)
         print("Resolvendo o sistema...               ")
-        @time U_displacement_vector = Elements.generate_U(K_global_stiffness_matrix,F_global_force_vector,free_degrees)
+        @time Elements.direct_solve!(Kg, Ug, Fg, dof_free, dof_prescribe)
 
         print("Imprimindo o arquivo de saída...      ")
         output_file = open(string(@__DIR__,"/output.flavia.res"), "w")
-        @time IOfiles.write_vector_on_output_file(output_file, U_displacement_vector, ("displacements"," 2  1  2  1  0"), dimensions)
+        @time IOfiles.write_vector_on_output_file(output_file, Ug, ("displacements"," 2  1  2  1  0"), dimensions)
         close(output_file)
     end
 end
