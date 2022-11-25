@@ -29,14 +29,16 @@
     },
     "constraints":{  
         "displacements":[
-*Set Cond Constraint_displacement *nodes 
+*Set Cond Constraint_displacement_line *nodes 
+*Set Cond Constraint_displacement_point *nodes
+*Set Cond Constraint_displacement_surface *nodes 
 *loop nodes *OnlyInCond
             [*NodesNum, *cond(1), *cond(2), *cond(3)],
 *end nodes
             null
         ],
         "forces":[
-*Set Cond Constraint_force *nodes 
+*Set Cond Constraint_force_point *nodes 
 *loop nodes *OnlyInCond
             [*NodesNum, *cond(1), *cond(2), *cond(3)],
 *end nodes

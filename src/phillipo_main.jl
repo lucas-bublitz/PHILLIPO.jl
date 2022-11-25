@@ -22,14 +22,13 @@ module PHILLIPO
     # MÓDUgLOS EXTERNOS
     import LinearAlgebra
     import SparseArrays
-    import DataStructures
 
     # MÓDUgLOS INTERNOS
     import .IOfiles
     import .Elements
     import .Matrices
     
-    # PONTO DE PARTIDA
+    # PONTO DE PARTIDA (aqui inicia a execução)
     function main()
         IOfiles.header_prompt()
         print("Lendo arquivo JSON...                 ")
@@ -116,13 +115,23 @@ module PHILLIPO
         @time Elements.direct_solve!(Kg, Ug, Fg, dof_free, dof_prescribe)
 
         print("Imprimindo o arquivo de saída...      ")
-        output_file = open(string(@__DIR__,"/output.flavia.res"), "w")
-        @time IOfiles.write_vector_on_output_file(output_file, Ug, ("displacements"," 2  1  2  1  0"), dimensions)
+        output_file = open(string(@__DIR__,"/output.post.res"), "w")
+        IOfiles.write_header(output_file, "# PHIILLIPO arquivo de resultados")
+
+        # DESLOCAMENTOS
+        IOfiles.write_result(output_file,
+            (
+                "Result \"Displacements\" \"Load Analysis\" 1 Vector OnNodes",
+                "ComponentNames \"X-Displ\", \"Y-Displ\", \"Z-Displ\""
+            ), 
+            dimensions, Ug
+        )
         close(output_file)
     end
 end
 using BenchmarkTools
 import .PHILLIPO
 @time PHILLIPO.main()
+exit(0)
 
 

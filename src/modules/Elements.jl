@@ -63,7 +63,7 @@ module Elements
                 c_i b_i c_j b_j c_m b_m
             ]
 
-            D::Matrix{Real} = generate_D_matrix(problem_type, materials[material_index])
+            D::Matrix{Real} = generate_D(problem_type, materials[material_index])
 
             K::Matrix{Real} = B' * D * B * Δ * 1
 
@@ -115,7 +115,7 @@ module Elements
                 d[1]  0      b[1] d[2]  0      b[2] d[3]  0      b[3] d[4]  0      b[4]  
             ]
 
-            D::Matrix{Real} = generate_D_matrix("3D", materials[material_index])
+            D::Matrix{Real} = generate_D("3D", materials[material_index])
 
             K::Matrix{Real} =  B' * D * B * V
 
@@ -126,7 +126,7 @@ module Elements
     end
 
 
-    function generate_D_matrix(problem_type, material)::Matrix{Real}
+    function generate_D(problem_type, material)::Matrix{Real}
         # Gera a matrix da lei de Hook
         E::Float64 = material[2] # Módulo de young
         ν::Float64 = material[3] # Coeficiente de Poisson
