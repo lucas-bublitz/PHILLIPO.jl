@@ -26,7 +26,9 @@ module PHILLIPO
     # MÓDUgLOS INTERNOS
     import .IOfiles
     import .Elements
+    import .Solver
     import .Matrices
+    import .Stress
     
     # PONTO DE PARTIDA (aqui inicia a execução)
     function main()
@@ -112,16 +114,20 @@ module PHILLIPO
         print("Montando a matrix global de rigidez...")
         @time Kg = Matrices.sum(Kg_vector)
         print("Resolvendo o sistema...               ")
-        @time Elements.direct_solve!(Kg, Ug, Fg, dof_free, dof_prescribe)
+        @time Solver.direct_solve!(Kg, Ug, Fg, dof_free, dof_prescribe)
+
+        print("Recuperando as tensões")
+
+        σ, GaussPoints = Stress.recovery_linear(elements, Ug)
 
         print("Imprimindo o arquivo de saída...      ")
         output_file = open(string(@__DIR__,"/output.post.res"), "w")
-        IOfiles.write_header(output_file, "# PHIILLIPO arquivo de resultados")
+        IOfiles.write_header(output_file)
 
         # DESLOCAMENTOS
         IOfiles.write_result(output_file,
             (
-                "Result \"Displacements\" \"Load Analysis\" 1 Vector OnNodes",
+                "Result \"Displacements\" \"Load Analysis\" 0 Vector OnNodes",
                 "ComponentNames \"X-Displ\", \"Y-Displ\", \"Z-Displ\""
             ), 
             dimensions, Ug

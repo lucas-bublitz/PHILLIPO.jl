@@ -21,11 +21,7 @@ module IOfiles
         close(header_msg_file)
     end
 
-    function write_header(
-            file::IOStream,
-            header::String
-        )
-        write(file, header, "\n")
+    function write_header(file::IOStream)
         write(file, "GiD Post Results File 1.0", "\n")
     end
 

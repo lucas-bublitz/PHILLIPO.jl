@@ -5,3 +5,4 @@
 include("IOfiles.jl")
 include("Matrices.jl")
 include("Elements.jl")
+include("Solver.jl")

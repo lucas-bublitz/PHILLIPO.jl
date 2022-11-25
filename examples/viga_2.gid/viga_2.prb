@@ -1,0 +1,8 @@
+PROBLEM DATA
+QUESTION: type#CB#(plane_stress, plane_strain)
+VALUE: plane_stress
+QUESTION: thickness
+VALUE: 1.0
+END PROBLEM DATA
+INTERVAL DATA
+END INTERVAL DATA
