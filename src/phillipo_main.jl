@@ -67,13 +67,15 @@ module PHILLIPO
                 Fg[dof_constraints_forces] = reduce(vcat, map((x) -> [x[2], x[3], x[4]], constraints_forces))
             end 
         else
-            # RESTRIÇÕES DE DESLOCAMENTO
-            constraints_degrees = reduce(vcat, map((x) -> [2 * x[1] - 1, 2 * x[1]], constraints_displacments))
-            Ug[constraints_degrees] = reduce(vcat, map((x) -> [x[2], x[3]], constraints_displacments))
-            free_degrees = filter(x -> x ∉ constraints_degrees, 1:dimensions*nodes_length)
+            dof_prescribe = reduce(vcat, map((x) -> [2 * x[1] - 1, 2 * x[1]], constraints_displacments))
+            dof_free = filter(x -> x ∉ dof_prescribe, 1:dimensions*nodes_length)
+            # RESTRIÇÃO DE DESLOCAMENTO
+            Ug[dof_prescribe] = reduce(vcat, map((x) -> [x[2], x[3]], constraints_displacments))
             # RESTRIÇÕES DE FORÇA
-            forces_degrees = reduce(vcat, map((x) -> [2 * x[1] - 1, 2 * x[1]], constraints_forces))
-            Fg[forces_degrees] = reduce(vcat, map((x) -> [x[2], x[3]], constraints_forces))
+            if !isempty(constraints_forces)
+                dof_constraints_forces = reduce(vcat, map((x) -> [2 * x[1] - 1, 2 * x[1]], constraints_forces))
+                Fg[dof_constraints_forces] = reduce(vcat, map((x) -> [x[2], x[3]], constraints_forces))
+            end 
         end
 
         println("Número de threads: $(Threads.nthreads())")
@@ -98,7 +100,6 @@ module PHILLIPO
             pop!(input_dict["elements"]["linear"]["triangles"])
             elements_length = length(input_dict["elements"]["linear"]["triangles"])
             elements = Vector{Elements.Element}(undef, elements_length)
-            pop!(input_dict["elements"]["linear"]["triangles"])
             if "triangles" in keys(input_dict["elements"]["linear"])
                 Threads.@threads for j in 1:elements_length
                     elements[j] = Elements.TriangleLinear(triangle, materials, nodes, problem_type)
@@ -116,21 +117,47 @@ module PHILLIPO
         print("Resolvendo o sistema...               ")
         @time Solver.direct_solve!(Kg, Ug, Fg, dof_free, dof_prescribe)
 
-        print("Recuperando as tensões")
-
-        σ, GaussPoints = Stress.recovery_linear(elements, Ug)
+        println("Recuperando as tensões...")
+        σ, σvm = Stress.recovery(elements, Ug)
 
         print("Imprimindo o arquivo de saída...      ")
         output_file = open(string(@__DIR__,"/output.post.res"), "w")
         IOfiles.write_header(output_file)
 
+        # Pontos gaussianos
+        if "tetrahedrons" in keys(input_dict["elements"]["linear"])
+            write(output_file,
+                "GaussPoints \"gpoints\" ElemType Tetrahedra \n",
+                " Number Of Gauss Points: 1 \n",
+                " Natural Coordinates: internal \n",
+                "end gausspoints \n",
+            )
+        end
+        if "triangles" in keys(input_dict["elements"]["linear"])
+            write(output_file,
+                "GaussPoints \"gpoints\" ElemType Triangle \n",
+                " Number Of Gauss Points: 1 \n",
+                " Natural Coordinates: internal \n",
+                "end gausspoints \n",
+            )
+        end
+
         # DESLOCAMENTOS
-        IOfiles.write_result(output_file,
-            (
-                "Result \"Displacements\" \"Load Analysis\" 0 Vector OnNodes",
-                "ComponentNames \"X-Displ\", \"Y-Displ\", \"Z-Displ\""
-            ), 
+        IOfiles.write_result_nodes(output_file,
+            "Result \"Displacements\" \"Load Analysis\" 0 Vector OnNodes",
             dimensions, Ug
+        )
+
+        # ESTADO TENSÃO
+        IOfiles.write_result_gauss(output_file,
+            "Result \"Stress\" \"Load Analysis\" 0 matrix$( problem_type == "3d" ? ":3" : ":6") OnGaussPoints \"gpoints\"", 
+            σ
+        )
+
+        # VON MISSES
+        IOfiles.write_result_gauss(output_file,
+            "Result \"Von Misses\" \"Load Analysis\" 0 scalar OnGaussPoints \"gpoints\"",
+            σvm
         )
         close(output_file)
     end

@@ -25,32 +25,41 @@ module IOfiles
         write(file, "GiD Post Results File 1.0", "\n")
     end
 
-    function write_result(
+    function write_result_nodes(
             file::IOStream,
             header::Tuple, 
             d::Integer,
             vector::Vector{<:Real}
         )
-        write(file, join(header, "\n"), "\n")
+        write(file, header, "\n")
         vector_length = length(vector) ÷ d
 
         write(file, "Values", "\n")
         for i = 1:vector_length
-            write(file, "$(i)", " ",
+            write(file, " $(i)", " ",
                 join((vector[d * i - j] for j = (d - 1):-1:0), " "),
                 "\n"
             )
         end
         write(file, "End Values", "\n")
-        # if dimensions == 2
-        #     for j = 1:vector_length
-        #         write(file, join((j,vector[2*j-1],vector[2*j])," "), "\n")
-        #     end
-        # elseif  dimensions == 3
-        #     for j = 1:vector_length
-        #         write(file, join((j,vector[3*j-2],vector[3*j-1],vector[3*j])," "), "\n")
-        #     end
-        # end
-
     end
+
+    function write_result_gauss(
+            file::IOStream,
+            header::Tuple, 
+            vector::Vector
+        )
+        write(file, header, "\n")
+        vector_length = length(vector)
+
+        write(file, "Values", "\n")
+        for i = 1:vector_length
+            write(file, " $(i)", " ",
+                join(vector[i], " "),
+                "\n"
+            )
+        end
+        write(file, "End Values", "\n")
+    end
+
 end 
