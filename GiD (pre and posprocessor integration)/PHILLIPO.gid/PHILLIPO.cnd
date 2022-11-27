@@ -1,27 +1,56 @@
 
-CONDITION: Constraint_displacement
+CONDITION: Constraint_displacement_point
 CONDTYPE: over points
 CONDMESHTYPE: over nodes
 QUESTION: X
 VALUE: 0.0
 QUESTION: Y
 VALUE: 0.0
+QUESTION: Z 
+value: 0.0
 END CONDITION
 
-CONDITION: Constraint_displacement
-CONDTYPE: over LINES
+CONDITION: Constraint_displacement_line
+CONDTYPE: over lines
 CONDMESHTYPE: over nodes
 QUESTION: X
 VALUE: 0.0
 QUESTION: Y
 VALUE: 0.0
+QUESTION: Z
+value: 0.0
 END CONDITION
 
-CONDITION: Constraint_force
-CONDTYPE: over POINTS
+CONDITION: Constraint_displacement_surface
+CONDTYPE: over surfaces
 CONDMESHTYPE: over nodes
 QUESTION: X
 VALUE: 0.0
 QUESTION: Y
 VALUE: 0.0
+QUESTION: Z
+value: 0.0
+END CONDITION
+
+CONDITION: Constraint_force_point
+CONDTYPE: over points
+CONDMESHTYPE: over nodes
+QUESTION: X
+VALUE: 0.0
+QUESTION: Y
+VALUE: 0.0
+QUESTION: Z
+value: 0.0
+END CONDITION
+
+
+CONDITION: Constraint_force_line
+CONDTYPE: over lines
+CONDMESHTYPE: over face elements
+QUESTION: X
+VALUE: 0.0
+QUESTION: Y
+VALUE: 0.0
+QUESTION: Z
+value: 0.0
 END CONDITION

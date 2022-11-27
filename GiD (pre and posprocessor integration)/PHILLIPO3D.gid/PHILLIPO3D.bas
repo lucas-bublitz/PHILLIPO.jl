@@ -30,14 +30,20 @@
     "constraints":{  
         "displacements":[
 *Set Cond Constraint_displacement_line *nodes 
-*Set Cond Constraint_displacement_point *nodes
+*loop nodes *OnlyInCond
+            [*NodesNum, *cond(1), *cond(2), *cond(3)],
+*end nodes
 *Set Cond Constraint_displacement_surface *nodes 
+*loop nodes *OnlyInCond
+            [*NodesNum, *cond(1), *cond(2), *cond(3)],
+*end nodes
+*Set Cond Constraint_displacement_point *nodes
 *loop nodes *OnlyInCond
             [*NodesNum, *cond(1), *cond(2), *cond(3)],
 *end nodes
             null
         ],
-        "forces":[
+        "forces_nodes":[
 *Set Cond Constraint_force_point *nodes 
 *loop nodes *OnlyInCond
             [*NodesNum, *cond(1), *cond(2), *cond(3)],
