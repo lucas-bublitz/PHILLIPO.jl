@@ -33,34 +33,22 @@ module Elements
             j::Vector{Real} = nodes[nodes_index[2]]
             m::Vector{Real} = nodes[nodes_index[3]]
     
-            Δ::Real = 1/2 * LinearAlgebra.det([
+            interpolation_function_coeff::Matrix{Real} = 1/2 * LinearAlgebra.inv([
                 1  i[1]  i[2];
                 1  j[1]  j[2];
                 1  m[1]  m[2]
             ])
             
-            a_i::Real = j[1] * m[2] - m[1] * j[2]
-            b_i::Real = j[2] - m[2]
-            c_i::Real = m[1] - j[1]
-    
-            a_j::Real = m[1] * i[2] - i[1] * m[2]
-            b_j::Real = m[2] - i[2]
-            c_j::Real = i[1] - m[1]
-    
-            a_m::Real = i[1] * j[2] - j[1] * i[2]
-            b_m::Real = i[2] - j[2]
-            c_m::Real = j[1] - i[1]
+            a::Vector{Real} = interpolation_function_coeff[1,:]
+            b::Vector{Real} = interpolation_function_coeff[2,:]
+            c::Vector{Real} = interpolation_function_coeff[3,:]
 
-            interpolation_function_coeff::Matrix{Real} = 1/(2Δ) * [
-                a_i b_i c_i;
-                a_j b_j c_j;
-                a_m b_m c_m
-            ]
+            Δ::Real = 1/2 *  LinearAlgebra.det(interpolation_function_coeff)
 
             B::Matrix{Real} = 1/(2Δ) * [
-                b_i 0   b_j 0   b_m 0  ;
-                0   c_i 0   c_j 0   c_m;
-                c_i b_i c_j b_j c_m b_m
+                b[1] 0    b[2] 0    b[3] 0   ;
+                0    c[1] 0    c[2] 0    c[3];
+                c[1] b[1] c[2] b[2] c[3] b[3]
             ]
 
             D::Matrix{Real} = generate_D(problem_type, materials[material_index])

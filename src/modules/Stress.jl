@@ -13,8 +13,8 @@ module Stress
 
     von_misses(σ::Vector{<:Real}) = length(σ) == 3 ? von_misses_2D(σ) : von_misses_3D(σ)
 
-    function von_misses_2d()
-
+    function von_misses_2D(σ::Vector{<:Real})
+        √(σ[1]^2 - σ[1] * σ[2] + σ[2]^2 + 3 * σ[3]^2)
     end
 
     function von_misses_3D(σ::Vector{<:Real})

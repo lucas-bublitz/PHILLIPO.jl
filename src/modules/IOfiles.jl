@@ -27,7 +27,7 @@ module IOfiles
 
     function write_result_nodes(
             file::IOStream,
-            header::Tuple, 
+            header::String, 
             d::Integer,
             vector::Vector{<:Real}
         )
@@ -44,9 +44,9 @@ module IOfiles
         write(file, "End Values", "\n")
     end
 
-    function write_result_gauss(
+    function write_result_gauss_center(
             file::IOStream,
-            header::Tuple, 
+            header::String, 
             vector::Vector
         )
         write(file, header, "\n")

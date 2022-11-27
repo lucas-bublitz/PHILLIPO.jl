@@ -39,12 +39,14 @@ module PHILLIPO
         problem_type = input_dict["type"]
         nodes = input_dict["nodes"]
         materials = input_dict["materials"]
-        constraints_forces = input_dict["constraints"]["forces"]
+        constraints_forces_nodes = input_dict["constraints"]["forces_nodes"]
+        #constraints_forces_lines = input_dict["constraints"]["forces_lines"]
         constraints_displacments = input_dict["constraints"]["displacements"]
         
         pop!(nodes)
         pop!(materials)
-        pop!(constraints_forces)
+        pop!(constraints_forces_nodes)
+        #pop!(constraints_forces_lines)
         pop!(constraints_displacments)
 
         # VARIÁVEIS do PROBLEMA
@@ -55,27 +57,27 @@ module PHILLIPO
         Ug = zeros(Float64, dimensions * nodes_length)
         Kg_vector = [Matrices.SparseMatrixCOO() for i = 1:Threads.nthreads()]
 
-        # GRAUS DE LIBERDADE: LIVRES E PRESCRITOS 
+        # GRAUS DE LIBERDADE: LIVRES E PRESCRITOS
         if problem_type == "3D"
             dof_prescribe = reduce(vcat, map((x) -> [3 * x[1] - 2, 3 * x[1] - 1, 3 * x[1]], constraints_displacments))
             dof_free = filter(x -> x ∉ dof_prescribe, 1:dimensions*nodes_length)
             # RESTRIÇÃO DE DESLOCAMENTO
             Ug[dof_prescribe] = reduce(vcat, map((x) -> [x[2], x[3], x[4]], constraints_displacments))
-            # RESTRIÇÕES DE FORÇA
-            if !isempty(constraints_forces)
-                dof_constraints_forces = reduce(vcat, map((x) -> [3 * x[1] - 2, 3 * x[1] - 1, 3 * x[1]], constraints_forces))
-                Fg[dof_constraints_forces] = reduce(vcat, map((x) -> [x[2], x[3], x[4]], constraints_forces))
-            end 
+            # RESTRIÇÕES DE FORÇA SOBRE NÓS
+            if !isempty(constraints_forces_nodes)
+                dof_constraints_forces_nodes = reduce(vcat, map((x) -> [3 * x[1] - 2, 3 * x[1] - 1, 3 * x[1]], constraints_forces_nodes))
+                Fg[dof_constraints_forces_nodes] = reduce(vcat, map((x) -> [x[2], x[3], x[4]], constraints_forces_nodes))
+            end
         else
             dof_prescribe = reduce(vcat, map((x) -> [2 * x[1] - 1, 2 * x[1]], constraints_displacments))
             dof_free = filter(x -> x ∉ dof_prescribe, 1:dimensions*nodes_length)
             # RESTRIÇÃO DE DESLOCAMENTO
             Ug[dof_prescribe] = reduce(vcat, map((x) -> [x[2], x[3]], constraints_displacments))
-            # RESTRIÇÕES DE FORÇA
-            if !isempty(constraints_forces)
-                dof_constraints_forces = reduce(vcat, map((x) -> [2 * x[1] - 1, 2 * x[1]], constraints_forces))
-                Fg[dof_constraints_forces] = reduce(vcat, map((x) -> [x[2], x[3]], constraints_forces))
-            end 
+            # RESTRIÇÕES DE FORÇA SOBRE NÓS
+            if !isempty(constraints_forces_nodes)
+                dof_constraints_forces_nodes = reduce(vcat, map((x) -> [2 * x[1] - 1, 2 * x[1]], constraints_forces_nodes))
+                Fg[dof_constraints_forces_nodes] = reduce(vcat, map((x) -> [x[2], x[3]], constraints_forces_nodes))
+            end
         end
 
         println("Número de threads: $(Threads.nthreads())")
@@ -102,7 +104,7 @@ module PHILLIPO
             elements = Vector{Elements.Element}(undef, elements_length)
             if "triangles" in keys(input_dict["elements"]["linear"])
                 Threads.@threads for j in 1:elements_length
-                    elements[j] = Elements.TriangleLinear(triangle, materials, nodes, problem_type)
+                    elements[j] = Elements.TriangleLinear(input_dict["elements"]["linear"]["triangles"][j], materials, nodes, problem_type)
                     Matrices.add!(
                         Kg_vector[Threads.threadid()],
                         elements[j].degrees_freedom, 
@@ -112,6 +114,10 @@ module PHILLIPO
             end
         end
         
+        # RESTRIÇÃO DE FORÇAS SOBRE LINHAS
+        #end
+
+
         print("Montando a matrix global de rigidez...")
         @time Kg = Matrices.sum(Kg_vector)
         print("Resolvendo o sistema...               ")
@@ -149,13 +155,13 @@ module PHILLIPO
         )
 
         # ESTADO TENSÃO
-        IOfiles.write_result_gauss(output_file,
-            "Result \"Stress\" \"Load Analysis\" 0 matrix$( problem_type == "3d" ? ":3" : ":6") OnGaussPoints \"gpoints\"", 
+        IOfiles.write_result_gauss_center(output_file,
+            "Result \"Stress\" \"Load Analysis\" 0 $( problem_type == "3d" ? "matrix" : "PlainDeformationMatrix") OnGaussPoints \"gpoints\"", 
             σ
         )
 
         # VON MISSES
-        IOfiles.write_result_gauss(output_file,
+        IOfiles.write_result_gauss_center(output_file,
             "Result \"Von Misses\" \"Load Analysis\" 0 scalar OnGaussPoints \"gpoints\"",
             σvm
         )
