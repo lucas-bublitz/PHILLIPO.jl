@@ -39,14 +39,16 @@ module PHILLIPO
         problem_type = input_dict["type"]
         nodes = input_dict["nodes"]
         materials = input_dict["materials"]
-        constraints_forces_nodes = input_dict["constraints"]["forces_nodes"]
-        #constraints_forces_lines = input_dict["constraints"]["forces_lines"]
-        constraints_displacments = input_dict["constraints"]["displacements"]
+        constraints_forces_nodes    = input_dict["constraints"]["forces_nodes"]
+        constraints_forces_lines    = input_dict["constraints"]["forces_lines"]
+        constraints_forces_surfaces = input_dict["constraints"]["forces_surfaces"]
+        constraints_displacments    = input_dict["constraints"]["displacements"]
         
         pop!(nodes)
         pop!(materials)
         pop!(constraints_forces_nodes)
-        #pop!(constraints_forces_lines)
+        pop!(constraints_forces_lines)
+        pop!(constraints_forces_surfaces)
         pop!(constraints_displacments)
 
         # VARIÁVEIS do PROBLEMA
@@ -115,8 +117,13 @@ module PHILLIPO
         end
         
         # RESTRIÇÃO DE FORÇAS SOBRE LINHAS
-        #end
-
+        if !isempty(constraints_forces_lines)
+            Elements.assemble_force_line!(Fg, nodes, constraints_forces_lines, dimensions)
+        end
+        # RESTRIÇÃO DE FORÇAS SOBRE SUPERFÍCIES
+        if !isempty(constraints_forces_surfaces)
+            Elements.assemble_force_surface!(Fg, nodes, constraints_forces_surfaces, dimensions)
+        end
 
         print("Montando a matrix global de rigidez...")
         @time Kg = Matrices.sum(Kg_vector)

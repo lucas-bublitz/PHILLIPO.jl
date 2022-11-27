@@ -33,7 +33,7 @@ module Elements
             j::Vector{Real} = nodes[nodes_index[2]]
             m::Vector{Real} = nodes[nodes_index[3]]
     
-            interpolation_function_coeff::Matrix{Real} = 1/2 * LinearAlgebra.inv([
+            interpolation_function_coeff::Matrix{Real} = LinearAlgebra.inv([
                 1  i[1]  i[2];
                 1  j[1]  j[2];
                 1  m[1]  m[2]
@@ -142,6 +142,69 @@ module Elements
         for element in elements
             K_global_matrix[element.degrees_freedom, element.degrees_freedom] += element.K
         end
+    end
+    
+    function assemble_force_line!(
+            Fg::Vector{<:Real}, 
+            nodes::Vector, 
+            forces::Vector, 
+            d::Integer
+        )
+
+        elements_index = [i[1] for i in forces]
+        nodes_index    = [i[2:3] for i in forces]
+        forces_vector  = [i[4:(3 + d)] for i in forces]
+
+        dof_i = mapreduce(el -> [d * el[1] - i for i in d-1:-1:0], vcat , nodes_index)
+        dof_j = mapreduce(el -> [d * el[2] - i for i in d-1:-1:0], vcat, nodes_index) 
+
+        nodes_i = nodes[[i[1] for i in nodes_index]]
+        nodes_j = nodes[[i[2] for i in nodes_index]]
+
+
+        L = LinearAlgebra.norm(nodes_i .- nodes_j)
+        F = 1/2 * L .* forces_vector
+        
+        Fe = reduce(vcat, F)
+
+        Fg[dof_i] = Fe
+        Fg[dof_j] = Fe
+
+    end
+
+    function assemble_force_surface!(
+            Fg::Vector{<:Real}, 
+            nodes::Vector, 
+            forces::Vector, 
+            d::Integer
+        )
+        elements_index = [i[1] for i in forces]
+        nodes_index    = [i[2:4] for i in forces]
+        forces_vector  = [i[5:(4 + d)] for i in forces]
+
+        dof_i = mapreduce(el -> [d * el[1] - i for i in d-1:-1:0], vcat , nodes_index)
+        dof_j = mapreduce(el -> [d * el[2] - i for i in d-1:-1:0], vcat, nodes_index) 
+        dof_k = mapreduce(el -> [d * el[3] - i for i in d-1:-1:0], vcat, nodes_index)
+
+        nodes_i = nodes[[i[1] for i in nodes_index]]
+        nodes_j = nodes[[i[2] for i in nodes_index]]
+        nodes_k = nodes[[i[3] for i in nodes_index]]
+
+        vector_ij = nodes_j .- nodes_i
+        vector_ik = nodes_k .- nodes_i
+        
+        Δ =  1/2 * LinearAlgebra.norm(LinearAlgebra.cross.(vector_ij, vector_ik))
+
+        F =  1/3 * Δ .* forces_vector
+        
+        
+
+        Fe = reduce(vcat, F)
+
+        Fg[dof_i] = Fe
+        Fg[dof_j] = Fe
+        Fg[dof_k] = Fe
+    
     end
 
 end
