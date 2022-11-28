@@ -75,6 +75,7 @@ module Elements
             material_index = tetrahedron_element_vector[2]
             nodes_index = tetrahedron_element_vector[3:6]
             
+
             i::Vector{Real} = nodes[nodes_index[1]]
             j::Vector{Real} = nodes[nodes_index[2]]
             m::Vector{Real} = nodes[nodes_index[3]]
@@ -102,6 +103,12 @@ module Elements
                 0     d[1]   c[1] 0     d[2]   c[2] 0     d[3]   c[3] 0     d[4]   c[4];
                 d[1]  0      b[1] d[2]  0      b[2] d[3]  0      b[3] d[4]  0      b[4]  
             ]
+
+            try
+                materials[material_index]
+            catch
+                error("Material não definido no elemento de índice: $(index)")
+            end
 
             D::Matrix{Real} = generate_D("3D", materials[material_index])
 

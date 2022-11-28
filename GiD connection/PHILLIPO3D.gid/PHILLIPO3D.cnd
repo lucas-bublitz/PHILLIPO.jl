@@ -42,3 +42,14 @@ VALUE: 0.0
 QUESTION: Z
 value: 0.0
 END CONDITION
+
+CONDITION: Constraint_force_surface
+CONDTYPE: over surface
+CONDMESHTYPE: over face elements
+QUESTION: X
+VALUE: 0.0
+QUESTION: Y
+VALUE: 0.0
+QUESTION: Z
+value: 0.0
+END CONDITION
