@@ -22,8 +22,8 @@ PHILLIPO possui as seguintes dependências diretas:
 - SparseArrays
 - JSON
 
-Os dois primeiros módulos são instalados junto com a própria linguagem Julia, portanto não há a necessidade de instalação. JSON, entretanto, deve ser requerido por meio do gerenciador de pacotes de Julia: o Pkg.jl. Para tanto, deve-se inicial uma sessão, chamando o comando 'julia', e pressionar "]", para entrar no modo de comando PKG. Depois, basta executar o seguinte comando:
+Os dois primeiros módulos são instalados junto com a própria linguagem Julia, portanto não há a necessidade de instalação. JSON, entretanto, deve ser requerido por meio do gerenciador de pacotes de Julia: o Pkg.jl. Para tanto, deve-se inicial uma sessão, chamando o comando `julia`, e pressionar `]`, para entrar no modo de comando PKG. Depois, basta executar o seguinte comando:
 
-'''
+```
 add JSON
-'''
+```
