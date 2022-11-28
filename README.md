@@ -22,6 +22,6 @@ PHILLIPO é utilziado, atualmente, para ser chamado pelo GiD (um pre e pos visua
 
 Todos esses módulos estão disponíveis por meio do gerenciador de pacotes Pkg.jl (o oficial da linguagem Julia).
 
-Primeiro passo: os arquivos
+## Primeiro passo: Julia e GiD
 
-A primeira coisa a se fazer para rodar PHILLIPO é baixar o seu código fonte, dispoível em https://github.com/lucas-bublitz/PHILLIPO
+O GiD pode ser baixado (em sua versão gratuita e limitada) pelo site oficial: https://www.gidsimulation.com/gid-for-science/downloads/ (Recomenda-se a utilização da versão 16.0.)
