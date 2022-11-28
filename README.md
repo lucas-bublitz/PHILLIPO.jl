@@ -14,14 +14,6 @@ Aqui estão ambos, o resultado e o histórico do meu trabalho, que consitem no p
 
 ## Instalação 
 
-PHILLIPO é utilziado, atualmente, para ser chamado pelo GiD (um pre e pos visualizador), e tem como dependências diretas:
-
-- LinearAlgebra
-- JSON
-- SparseArrays
-
-Todos esses módulos estão disponíveis por meio do gerenciador de pacotes Pkg.jl (o oficial da linguagem Julia).
-
-## Primeiro passo: Julia e GiD
+### Primeiro passo: Julia e GiD
 
 O GiD pode ser baixado (em sua versão gratuita e limitada) pelo site oficial: https://www.gidsimulation.com/gid-for-science/downloads/ (Recomenda-se a utilização da versão 16.0.)
