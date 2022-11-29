@@ -42,3 +42,36 @@ PHILLIPO pode ser instalado utilizando o Pkg.jl, que é o gerenciador de pacotes
 add https://github.com/lucas-bublitz/PHILLIPO.jl
 ```
 para instalar o módulo PHILLIPO.
+<pre>
+  ,ggggggggggggggg     
+dP""""""88"""""""     
+Yb,_    88            
+ `""    88            
+        88            
+        88  
+        88 
+  gg,   88  
+   "Yb,,8P 
+     "Y8P'    
+</pre>
+<pre class="y-text">
+  gg     gg 
+  I8     8I 
+  I8,   ,8I 
+ ,d8b, ,d8I 
+ P""Y88P"888
+       ,d8I'
+     ,dP'8I           
+    ,8"  8I 
+    I8   8I 
+    `8, ,8I 
+      `Y8P"         
+</pre>
+<style>
+    .y-text {
+        color: blue;
+        position: absolute;
+        top: 82px;
+        left: 80px;
+    }
+</style>
