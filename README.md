@@ -8,18 +8,22 @@ O presente projeto corresponde ao meu TCC, requisito para obtebção do grau de 
 
 ## Sobre este repositório
 
-Aqui estão ambos, o resultado e o histórico do meu trabalho, que consiste no próprio documento para avaliação (a monografia em `\documentation`) e o software (PHILLIPO em `\src`), e a integração com o GiD (os dois problem types em `\GiD connection`). Também estão disponíveis alguns exemplos em `\examples`.
+Aqui estão ambos, o resultado e o histórico do meu trabalho, que consiste no próprio documento para avaliação (a monografia em `\documentation`), o software (PHILLIPO em `\src`), e a integração com o GiD (os dois problem types em `\GiD connection`). Também estão disponíveis alguns exemplos em `\examples`.
 
 ## Instalação
 
 ### Julia & GiD
-Para se utilizar PHILLIPO plenamente, é preciso ter a linguagem Julia instalada (Recomenda-se a LTS v1.6.7), que pode ser obtida pelo  site oficial: https://julialang.org/downloads/. (Durante a instalação, lembre-se de marcar a opção de adicionar Julia nas variáveis de ambiente!) Também é preciso possuir o GiD, a fim de facilitar a geração dos os arquivos de entrada para o módulo e a visualização dos resultados. Seu instalador pode ser obtido pelo site oficial (em sua versão gratuita e limitada): https://www.gidsimulation.com/gid-for-science/downloads/. Por questões de compatibilidade, recomenda-se a utilização da versão 16.0.)
 
+Para se utilizar PHILLIPO, é preciso ter a linguagem Julia instalada (Recomenda-se a LTS v1.6.7), que pode ser obtida pelo site oficial: https://julialang.org/downloads/. (Durante a instalação, lembre-se de marcar a opção de adicionar Julia nas variáveis de ambiente!) Também é preciso possuir o GiD, a fim de promover a geração dos os arquivos de entrada para o módulo e a visualização dos resultados. Seu instalador pode ser obtido pelo site oficial (em sua versão gratuita e limitada): https://www.gidsimulation.com/gid-for-science/downloads/. Por questões de compatibilidade, recomenda-se a utilização da versão 16.0.
+
+As duas pastas presentes em `\GiD connection`, `PHILLIPO.gid` e `PHILLIPO3D.gid`, precisam ser adicionadas no próprio GiD, o que é realizado, abrindo o software, por meio do comando`Load...`, localizado em `Data -> Problem Type -> Load...`.
+
+Os arquivos do projeto podem ser baixado em `.zip`, por meio do botão verde sobre a parte direita da árvore de aquivos deste repositório. 
 
 ### PHILLIPO
 
-PHILLIPO é distribuído pelo gerenciador de pacotes de Julia, o Pkg.jl, porém ainda não se encontra no repositório oficial. Para instalar o módulo basta executar o seguinte comando:
+PHILLIPO pode ser instalado utilizando o Pkg.jl, que é o gerenciador de pacotes da linguagem Julia. Para tanto, basta iniciar uma sessão, abrindo o aplicativo Julia, ou executando `julia` em um terminal. Se esse comando não for executado, provavelmente Julia não foi adicionada às variáveis de ambiente. Com o terminal Julia aberto, deve-se pressionar `]` para que o terminal entre no modo Pkg, e, então, executar o comando:
 ```
-pkg> add
+pkg> add https://github.com/lucas-bublitz/PHILLIPO
 ```
-
+para instalar o módulo PHILLIPO.
