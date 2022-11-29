@@ -8,6 +8,7 @@ module IOfiles
     # MÓDULOS EXTERNOS
     import JSON
 
+    # texto de cabeçalho (salvando durate a compilação)
     header_msg_file = open(string(@__DIR__ ,"/header_msg.txt"), "r")
     header_msg_text::String = read(header_msg_file, String)
 

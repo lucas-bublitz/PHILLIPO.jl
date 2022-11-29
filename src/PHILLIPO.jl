@@ -31,7 +31,10 @@ module PHILLIPO
     import .Stress
     
     # PONTO DE PARTIDA (aqui inicia a execução)
-    function main(input_path::String, output_path::String)
+    function main(
+            input_path::String, # Arquivo de entrada (.json)
+            output_path::String # Arquivo de saida (.post.res, formato do GiD)
+        )
         IOfiles.header_prompt()
         print("Lendo arquivo JSON...                 ")
         println(string(@__DIR__, "/input.json"))
