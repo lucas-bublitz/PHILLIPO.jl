@@ -31,10 +31,11 @@ module PHILLIPO
     import .Stress
     
     # PONTO DE PARTIDA (aqui inicia a execução)
-    function main()
+    function main(input_path::String, output_path::String)
         IOfiles.header_prompt()
         print("Lendo arquivo JSON...                 ")
-        input_dict = string(@__DIR__ ,"/input.json") |> IOfiles.open_parse_input_file
+        println(string(@__DIR__, "/input.json"))
+        input_dict = string(input_path) |> IOfiles.open_parse_input_file
 
         problem_type = input_dict["type"]
         nodes = input_dict["nodes"]
@@ -136,7 +137,7 @@ module PHILLIPO
         σ, σvm = Stress.recovery(elements, Ug)
 
         print("Imprimindo o arquivo de saída...      ")
-        output_file = open(string(@__DIR__,"/output.post.res"), "w")
+        output_file = open(string(output_path), "w")
         IOfiles.write_header(output_file)
 
         # Pontos gaussianos

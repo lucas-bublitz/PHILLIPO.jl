@@ -13,5 +13,3 @@
  PHILLIPO é um solucionador para problemas lineares, estáticos e elásticos de elementos finitos    
  Criado por Lucas Bublitz
  Orientado por Pablo Rojas-Munoz
-
- 
