@@ -7,8 +7,10 @@ module IOfiles
 
     # MÓDULOS EXTERNOS
     import JSON
-    print("123123")
-    pipoca = 1
+
+    header_msg_file = open(string(@__DIR__ ,"/header_msg.txt"), "r")
+    header_msg_text::String = read(header_msg_file, String)
+
     function open_parse_input_file(file_name::String)::Dict
         # Carrega e interpreta o arquivo de entrada
         # Retorna um dicionário
@@ -19,7 +21,7 @@ module IOfiles
         # Imprime o cabeçalho do prompt de execução do programa
         # header_msg_file = open(string(@__DIR__,"header_msg.txt"), "r")
         # header_msg_text::String = read(header_msg_file, String)
-        println(pipoca)
+        println(header_msg_text)
     end
 
     function write_header(file::IOStream)
