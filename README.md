@@ -24,6 +24,6 @@ Os arquivos do projeto podem ser baixado em `.zip`, por meio do botão verde sob
 
 PHILLIPO pode ser instalado utilizando o Pkg.jl, que é o gerenciador de pacotes da linguagem Julia. Para tanto, basta iniciar uma sessão, abrindo o aplicativo Julia, ou executando `julia` em um terminal. Se esse comando não for executado, provavelmente Julia não foi adicionada às variáveis de ambiente. Com o terminal Julia aberto, deve-se pressionar `]` para que o terminal entre no modo Pkg, e, então, executar o comando:
 ```
-pkg> add https://github.com/lucas-bublitz/PHILLIPO
+add https://github.com/lucas-bublitz/PHILLIPO.jl
 ```
 para instalar o módulo PHILLIPO.
