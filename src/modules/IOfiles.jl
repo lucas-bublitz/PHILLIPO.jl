@@ -10,7 +10,7 @@ module IOfiles
 
     # texto de cabeçalho (salvando durate a compilação)
     header_msg_file = open(string(@__DIR__ ,"/header_msg.txt"), "r")
-    header_msg_text::String = read(header_msg_file, String)
+    header_msg_text = read(header_msg_file, String)
 
     function open_parse_input_file(file_name::String)::Dict
         # Carrega e interpreta o arquivo de entrada
