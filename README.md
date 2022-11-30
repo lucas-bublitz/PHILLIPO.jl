@@ -40,3 +40,6 @@ PHILLIPO pode ser instalado utilizando o Pkg.jl, que é o gerenciador de pacotes
 add https://github.com/lucas-bublitz/PHILLIPO.jl
 ```
 para instalar o módulo PHILLIPO.
+
+- [ ] pipoca
+- [x] pipoca 2
