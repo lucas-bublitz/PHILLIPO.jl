@@ -27,9 +27,13 @@ Aqui estão ambos, o resultado e o histórico do meu trabalho, que consiste no p
 
 ### Julia & GiD
 
-Para se utilizar PHILLIPO, é preciso ter a linguagem Julia instalada (Recomenda-se a LTS v1.6.7), que pode ser obtida pelo site oficial: https://julialang.org/downloads/. (Durante a instalação, lembre-se de marcar a opção de adicionar Julia nas variáveis de ambiente!) Também é preciso possuir o GiD, a fim de promover a geração dos os arquivos de entrada para o módulo e a visualização dos resultados. Seu instalador pode ser obtido pelo site oficial (em sua versão gratuita e limitada): https://www.gidsimulation.com/gid-for-science/downloads/. Por questões de compatibilidade, recomenda-se a utilização da versão 16.0.
+Para se utilizar PHILLIPO, é preciso ter a linguagem Julia instalada (Recomenda-se a LTS v1.6.7), que pode ser obtida pelo site oficial: https://julialang.org/downloads/. (Durante a instalação, lembre-se de marcar a opção de adicionar Julia nas variáveis de ambiente: `☑ add Julia to PATH`) Também é preciso possuir o GiD, a fim de promover a geração dos os arquivos de entrada para o módulo e a visualização dos resultados. Seu instalador pode ser obtido pelo site oficial (em sua versão gratuita e limitada): https://www.gidsimulation.com/gid-for-science/downloads/. Por questões de compatibilidade, recomenda-se a utilização da versão 16.0.
 
+<<<<<<< HEAD
 As duas pastas presentes em `\GiD connection`, `PHILLIPO.gid` e `PHILLIPO3D.gid`, precisam ser adicionadas ao próprio GiD, para definir o padrão da criação de arquivos das malhas com condições de contorno.
+=======
+As duas pastas presentes em `\GiD connection`, `PHILLIPO.gid` e `PHILLIPO3D.gid`, precisam ser adicionadas no próprio GiD, para se definir os padrões de geração dos arquivos, o que é realizado adicionando essas duas pastas à pasta `\problemtypes`, presente nos aquivos de programa do próprio GiD. (e.g. `C:\Program Files\GiD\GiD 16.0\problemtypes`)
+>>>>>>> a9130f73de9a684f90b984fee0c1bfddefed16ea
 
 Os arquivos do projeto podem ser baixado em `.zip`, por meio do botão verde sobre a parte direita da árvore de aquivos deste repositório. 
 
