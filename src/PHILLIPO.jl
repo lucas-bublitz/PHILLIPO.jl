@@ -36,10 +36,11 @@ module PHILLIPO
             output_path::String # Arquivo de saida (.post.res, formato do GiD)
         )
         IOfiles.header_prompt()
-        print("Lendo arquivo JSON...                 ")
-        println(string(@__DIR__, "/input.json"))
-        input_dict = string(input_path) |> IOfiles.open_parse_input_file
-
+        println("Número de threads: $(Threads.nthreads())")
+        print("Lendo arquivo JSON...                                                 ")
+        
+        @time input_dict = string(input_path) |> IOfiles.open_parse_input_file
+        
         problem_type = input_dict["type"]
         nodes = input_dict["nodes"]
         materials = input_dict["materials"]
@@ -88,10 +89,9 @@ module PHILLIPO
             end
         end
 
-        println("Número de threads: $(Threads.nthreads())")
-        
+
         # CONSTRUÇÃO DOS ELEMENTOS
-        print("Construindo os elementos e a matrix de rigidez global paralelamente... ")
+        print("Construindo os elementos e a matrix de rigidez global paralelamente...")
         @time if problem_type == "3D"
             pop!(input_dict["elements"]["linear"]["tetrahedrons"])
             elements_length = length(input_dict["elements"]["linear"]["tetrahedrons"])
@@ -131,15 +131,17 @@ module PHILLIPO
             Elements.assemble_force_surface!(Fg, nodes, constraints_forces_surfaces, dimensions)
         end
 
-        print("Montando a matrix global de rigidez...")
+        print("Montando a matrix global de rigidez...                                ")
         @time Kg = Matrices.sum(Kg_vector)
-        print("Resolvendo o sistema...               ")
+
+        print("Resolvendo o sistema...                                               ")
         @time Solver.direct_solve!(Kg, Ug, Fg, dof_free, dof_prescribe)
 
-        println("Recuperando as tensões...")
-        σ, σvm = Stress.recovery(elements, Ug)
 
-        print("Imprimindo o arquivo de saída...      ")
+        print("Recuperando as tensões...                                             ")
+        @time σ, σvm = Stress.recovery(elements, Ug)
+
+        print("Imprimindo o arquivo de saída...                                      ")
         output_file = open(string(output_path), "w")
         IOfiles.write_header(output_file)
 
