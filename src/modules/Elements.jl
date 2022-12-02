@@ -169,7 +169,7 @@ module Elements
         nodes_j = nodes[[i[2] for i in nodes_index]]
 
 
-        L = LinearAlgebra.norm(nodes_i .- nodes_j)
+        L = LinearAlgebra.norm.(nodes_i .- nodes_j)
         F = 1/2 * L .* forces_vector
         
         Fe = reduce(vcat, F)
@@ -200,7 +200,7 @@ module Elements
         vector_ij = nodes_j .- nodes_i
         vector_ik = nodes_k .- nodes_i
         
-        Δ =  1/2 * LinearAlgebra.norm(LinearAlgebra.cross.(vector_ij, vector_ik))
+        Δ =  1/2 * LinearAlgebra.norm.(LinearAlgebra.cross.(vector_ij, vector_ik))
 
         F =  1/3 * Δ .* forces_vector
         
