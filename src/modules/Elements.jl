@@ -45,7 +45,7 @@ module Elements
 
             Δ::Real = 1/2 *  LinearAlgebra.det(interpolation_function_coeff)
 
-            B::Matrix{Real} = 1/(2Δ) * [
+            B::Matrix{Real} = [
                 b[1] 0    b[2] 0    b[3] 0   ;
                 0    c[1] 0    c[2] 0    c[3];
                 c[1] b[1] c[2] b[2] c[3] b[3]
