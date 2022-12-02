@@ -125,6 +125,7 @@ module Elements
         # Gera a matrix da lei de Hook
         E::Float64 = material[2] # Módulo de young
         ν::Float64 = material[3] # Coeficiente de Poisson
+
         if problem_type == "plane_strain"
             return E / ((1 + ν) * (1 - 2ν)) * [
                 (1 - ν) ν       0           ;
@@ -155,15 +156,14 @@ module Elements
             Fg::Vector{<:Real}, 
             nodes::Vector, 
             forces::Vector, 
-            d::Integer
         )
 
         elements_index = [i[1] for i in forces]
         nodes_index    = [i[2:3] for i in forces]
-        forces_vector  = [i[4:(3 + d)] for i in forces]
+        forces_vector  = [i[4:5] for i in forces]
 
-        dof_i = mapreduce(el -> [d * el[1] - i for i in d-1:-1:0], vcat , nodes_index)
-        dof_j = mapreduce(el -> [d * el[2] - i for i in d-1:-1:0], vcat, nodes_index) 
+        dof_i = mapreduce(el -> [2 * el[1] - i for i in 1:-1:0], vcat , nodes_index)
+        dof_j = mapreduce(el -> [2 * el[2] - i for i in 1:-1:0], vcat, nodes_index) 
 
         nodes_i = nodes[[i[1] for i in nodes_index]]
         nodes_j = nodes[[i[2] for i in nodes_index]]
@@ -182,16 +182,15 @@ module Elements
     function assemble_force_surface!(
             Fg::Vector{<:Real}, 
             nodes::Vector, 
-            forces::Vector, 
-            d::Integer
+            forces::Vector
         )
         elements_index = [i[1] for i in forces]
         nodes_index    = [i[2:4] for i in forces]
-        forces_vector  = [i[5:(4 + d)] for i in forces]
+        forces_vector  = [i[5:7] for i in forces]
 
-        dof_i = mapreduce(el -> [d * el[1] - i for i in d-1:-1:0], vcat , nodes_index)
-        dof_j = mapreduce(el -> [d * el[2] - i for i in d-1:-1:0], vcat, nodes_index) 
-        dof_k = mapreduce(el -> [d * el[3] - i for i in d-1:-1:0], vcat, nodes_index)
+        dof_i = mapreduce(el -> [3 * el[1] - i for i in 2:-1:0], vcat , nodes_index)
+        dof_j = mapreduce(el -> [3 * el[2] - i for i in 2:-1:0], vcat, nodes_index) 
+        dof_k = mapreduce(el -> [3 * el[3] - i for i in 2:-1:0], vcat, nodes_index)
 
         nodes_i = nodes[[i[1] for i in nodes_index]]
         nodes_j = nodes[[i[2] for i in nodes_index]]

@@ -124,11 +124,11 @@ module PHILLIPO
         
         # RESTRIÇÃO DE FORÇAS SOBRE LINHAS (somente TriangleLinear)
         if !isempty(constraints_forces_lines)
-            Elements.assemble_force_line!(Fg, nodes, constraints_forces_lines, dimensions)
+            Elements.assemble_force_line!(Fg, nodes, constraints_forces_lines)
         end
         # RESTRIÇÃO DE FORÇAS SOBRE SUPERFÍCIES (somente TetrahedronLinear)
         if !isempty(constraints_forces_surfaces)
-            Elements.assemble_force_surface!(Fg, nodes, constraints_forces_surfaces, dimensions)
+            Elements.assemble_force_surface!(Fg, nodes, constraints_forces_surfaces)
         end
 
         print("Montando a matrix global de rigidez...                                ")
@@ -172,7 +172,7 @@ module PHILLIPO
 
             # ESTADO TENSÃO
             IOfiles.write_result_gauss_center(output_file,
-                "Result \"Stress\" \"Load Analysis\" 0 $( problem_type == "3d" ? "matrix" : "PlainDeformationMatrix") OnGaussPoints \"gpoints\"", 
+                "Result \"Stress\" \"Load Analysis\" 0 $( problem_type == "3D" ? "matrix" : "PlainDeformationMatrix") OnGaussPoints \"gpoints\"", 
                 σ
             )
 
