@@ -174,8 +174,8 @@ module Elements
         
         Fe = reduce(vcat, F)
 
-        Fg[dof_i] = Fe
-        Fg[dof_j] = Fe
+        Fg[dof_i] += Fe
+        Fg[dof_j] += Fe
 
     end
 
@@ -208,9 +208,9 @@ module Elements
 
         Fe = reduce(vcat, F)
 
-        Fg[dof_i] = Fe
-        Fg[dof_j] = Fe
-        Fg[dof_k] = Fe
+        Fg[dof_i] += Fe
+        Fg[dof_j] += Fe
+        Fg[dof_k] += Fe
     
     end
 
