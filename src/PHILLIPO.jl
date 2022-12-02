@@ -142,44 +142,46 @@ module PHILLIPO
         @time σ, σvm = Stress.recovery(elements, Ug)
 
         print("Imprimindo o arquivo de saída...                                      ")
-        output_file = open(string(output_path), "w")
-        IOfiles.write_header(output_file)
+        @time begin
+            output_file = open(string(output_path), "w")
+            IOfiles.write_header(output_file)
 
-        # Pontos gaussianos
-        if "tetrahedrons" in keys(input_dict["elements"]["linear"])
-            write(output_file,
-                "GaussPoints \"gpoints\" ElemType Tetrahedra \n",
-                " Number Of Gauss Points: 1 \n",
-                " Natural Coordinates: internal \n",
-                "end gausspoints \n",
+            # Pontos gaussianos
+            if "tetrahedrons" in keys(input_dict["elements"]["linear"])
+                write(output_file,
+                    "GaussPoints \"gpoints\" ElemType Tetrahedra \n",
+                    " Number Of Gauss Points: 1 \n",
+                    " Natural Coordinates: internal \n",
+                    "end gausspoints \n",
+                )
+            end
+            if "triangles" in keys(input_dict["elements"]["linear"])
+                write(output_file,
+                    "GaussPoints \"gpoints\" ElemType Triangle \n",
+                    " Number Of Gauss Points: 1 \n",
+                    " Natural Coordinates: internal \n",
+                    "end gausspoints \n",
+                )
+            end
+
+            # DESLOCAMENTOS
+            IOfiles.write_result_nodes(output_file,
+                "Result \"Displacements\" \"Load Analysis\" 0 Vector OnNodes",
+                dimensions, Ug
             )
-        end
-        if "triangles" in keys(input_dict["elements"]["linear"])
-            write(output_file,
-                "GaussPoints \"gpoints\" ElemType Triangle \n",
-                " Number Of Gauss Points: 1 \n",
-                " Natural Coordinates: internal \n",
-                "end gausspoints \n",
+
+            # ESTADO TENSÃO
+            IOfiles.write_result_gauss_center(output_file,
+                "Result \"Stress\" \"Load Analysis\" 0 $( problem_type == "3d" ? "matrix" : "PlainDeformationMatrix") OnGaussPoints \"gpoints\"", 
+                σ
             )
+
+            # VON MISSES
+            IOfiles.write_result_gauss_center(output_file,
+                "Result \"Von Misses\" \"Load Analysis\" 0 scalar OnGaussPoints \"gpoints\"",
+                σvm
+            )
+            close(output_file)
         end
-
-        # DESLOCAMENTOS
-        IOfiles.write_result_nodes(output_file,
-            "Result \"Displacements\" \"Load Analysis\" 0 Vector OnNodes",
-            dimensions, Ug
-        )
-
-        # ESTADO TENSÃO
-        IOfiles.write_result_gauss_center(output_file,
-            "Result \"Stress\" \"Load Analysis\" 0 $( problem_type == "3d" ? "matrix" : "PlainDeformationMatrix") OnGaussPoints \"gpoints\"", 
-            σ
-        )
-
-        # VON MISSES
-        IOfiles.write_result_gauss_center(output_file,
-            "Result \"Von Misses\" \"Load Analysis\" 0 scalar OnGaussPoints \"gpoints\"",
-            σvm
-        )
-        close(output_file)
     end
 end
