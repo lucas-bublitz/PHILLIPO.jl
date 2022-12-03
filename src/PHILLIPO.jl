@@ -72,21 +72,11 @@ module PHILLIPO
             dof_free = filter(x -> x ∉ dof_prescribe, 1:dimensions*nodes_length)
             # RESTRIÇÃO DE DESLOCAMENTO
             Ug[dof_prescribe] = reduce(vcat, map((x) -> [x[2], x[3], x[4]], constraints_displacments))
-            # RESTRIÇÕES DE FORÇA SOBRE NÓS
-            if !isempty(constraints_forces_nodes)
-                dof_constraints_forces_nodes = reduce(vcat, map((x) -> [3 * x[1] - 2, 3 * x[1] - 1, 3 * x[1]], constraints_forces_nodes))
-                Fg[dof_constraints_forces_nodes] = reduce(vcat, map((x) -> [x[2], x[3], x[4]], constraints_forces_nodes))
-            end
         else
             dof_prescribe = reduce(vcat, map((x) -> [2 * x[1] - 1, 2 * x[1]], constraints_displacments))
             dof_free = filter(x -> x ∉ dof_prescribe, 1:dimensions*nodes_length)
             # RESTRIÇÃO DE DESLOCAMENTO
             Ug[dof_prescribe] = reduce(vcat, map((x) -> [x[2], x[3]], constraints_displacments))
-            # RESTRIÇÕES DE FORÇA SOBRE NÓS
-            if !isempty(constraints_forces_nodes)
-                dof_constraints_forces_nodes = reduce(vcat, map((x) -> [2 * x[1] - 1, 2 * x[1]], constraints_forces_nodes))
-                Fg[dof_constraints_forces_nodes] = reduce(vcat, map((x) -> [x[2], x[3]], constraints_forces_nodes))
-            end
         end
 
 
@@ -122,14 +112,29 @@ module PHILLIPO
             end
         end
         
-        # RESTRIÇÃO DE FORÇAS SOBRE LINHAS (somente TriangleLinear)
-        if !isempty(constraints_forces_lines)
-            Elements.assemble_force_line!(Fg, nodes, constraints_forces_lines)
+        print("Aplicando as restrições de força...                                   ")
+        @time if problem_type == "3D"
+            # RESTRIÇÕES DE FORÇA SOBRE NÓS
+            if !isempty(constraints_forces_nodes)
+                dof_constraints_forces_nodes = reduce(vcat, map((x) -> [3 * x[1] - 2, 3 * x[1] - 1, 3 * x[1]], constraints_forces_nodes))
+                Fg[dof_constraints_forces_nodes] = reduce(vcat, map((x) -> [x[2], x[3], x[4]], constraints_forces_nodes))
+            end
+            # RESTRIÇÃO DE FORÇAS SOBRE SUPERFÍCIES (somente TetrahedronLinear)
+            if !isempty(constraints_forces_surfaces)
+                Elements.assemble_force_surface!(Fg, nodes, constraints_forces_surfaces)
+            end
+        else
+            # RESTRIÇÕES DE FORÇA SOBRE NÓS
+            if !isempty(constraints_forces_nodes)
+                dof_constraints_forces_nodes = reduce(vcat, map((x) -> [2 * x[1] - 1, 2 * x[1]], constraints_forces_nodes))
+                Fg[dof_constraints_forces_nodes] = reduce(vcat, map((x) -> [x[2], x[3]], constraints_forces_nodes))
+            end
+            # RESTRIÇÃO DE FORÇAS SOBRE LINHAS (somente TriangleLinear)
+            if !isempty(constraints_forces_lines)
+                Elements.assemble_force_line!(Fg, nodes, constraints_forces_lines)
+            end
         end
-        # RESTRIÇÃO DE FORÇAS SOBRE SUPERFÍCIES (somente TetrahedronLinear)
-        if !isempty(constraints_forces_surfaces)
-            Elements.assemble_force_surface!(Fg, nodes, constraints_forces_surfaces)
-        end
+
 
         print("Montando a matrix global de rigidez...                                ")
         @time Kg = Matrices.sum(Kg_vector)
@@ -137,6 +142,10 @@ module PHILLIPO
         print("Resolvendo o sistema...                                               ")
         @time Solver.direct_solve!(Kg, Ug, Fg, dof_free, dof_prescribe)
 
+        print("Calculando as reações...                                              ")
+        @time Re, Re_sum = Stress.reactions(Kg, Ug, dimensions)
+
+        println("Somatório das reações: $(Re_sum)")
 
         print("Recuperando as tensões...                                             ")
         @time σ, σvm = Stress.recovery(elements, Ug)
@@ -176,12 +185,20 @@ module PHILLIPO
                 σ
             )
 
+            # REAÇÕES
+            IOfiles.write_result_nodes(output_file,
+                "Result \"Reactions\" \"Load Analysis\" 0 Vector OnNodes", 
+                dimensions, Re
+            )
             # VON MISSES
             IOfiles.write_result_gauss_center(output_file,
                 "Result \"Von Misses\" \"Load Analysis\" 0 scalar OnGaussPoints \"gpoints\"",
                 σvm
             )
+
             close(output_file)
+
         end
+        print("Tempo total de execução: ")
     end
 end

@@ -4,6 +4,7 @@
 module Stress
 
     import ..Elements
+    using SparseArrays
 
     function recovery(elements::Vector{<:Elements.Element}, Ug::Vector{<:Real})
         σ   = Vector{Vector{Float64}}(map(e ->  e.D * e.B * Ug[e.degrees_freedom], elements))
@@ -20,4 +21,12 @@ module Stress
     function von_misses_3D(σ::Vector{<:Real})
         √(((σ[1] - σ[2])^2 + (σ[2] - σ[3])^2 + (σ[3] - σ[1])^2 + 6 * (σ[4]^2 + σ[5]^2 + σ[6]^2)) / 2)
     end
+
+    function reactions(Kg::SparseMatrixCSC, Ug::Vector{<:Real}, d::Integer)
+        nodes_length = length(Ug)
+        Re = Kg * Ug
+        Re_sum = sum.([Re[i:d:nodes_length] for i in 1:d])
+        return Re, Re_sum
+    end
+
 end
