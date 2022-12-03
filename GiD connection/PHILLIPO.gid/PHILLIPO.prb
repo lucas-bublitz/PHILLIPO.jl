@@ -1,7 +1,7 @@
 PROBLEM DATA
 
-QUESTION: type#CB#(plane_stress, plane_strain)
-value: plane_stress
+QUESTION: type#CB#(plane_stress,plane_strain)
+value: plane_strain
 QUESTION: thickness
 VALUE: 1.0
 

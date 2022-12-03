@@ -56,7 +56,7 @@
         "forces_surfaces":[
 *Set Cond Constraint_force_surface *elems 
 *loop elems *OnlyInCond
-*format "%i%i,%i,%i%f%f%f"
+*format "%i%i,%i,%i%e%e%e"
             [*ElemsNum, *globalnodes, *cond(1), *cond(2), *cond(3)],
 *end elems
             null

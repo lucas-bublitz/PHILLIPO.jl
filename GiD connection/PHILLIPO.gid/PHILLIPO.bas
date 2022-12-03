@@ -1,7 +1,7 @@
 
 {
     "title": "PHILLIPO: arquivo de entrada",
-    "type": "plane_strain",
+    "type": "*GenData(1)",
     "materials":[
 *loop materials
         ["*Matprop(0)", *Matprop(1), *Matprop(2)], 
@@ -53,7 +53,7 @@
         "forces_lines":[
 *Set Cond Constraint_force_line *elems 
 *loop elems *OnlyInCond
-*format "%i%i,%i%f%f%f"
+*format "%i%i,%i%e%e%e"
             [*ElemsNum, *globalnodes, *cond(1), *cond(2), *cond(3)],
 *end elems
             null

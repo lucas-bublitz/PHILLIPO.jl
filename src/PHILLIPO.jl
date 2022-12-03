@@ -49,6 +49,8 @@ module PHILLIPO
         constraints_forces_surfaces = input_dict["constraints"]["forces_surfaces"]
         constraints_displacments    = input_dict["constraints"]["displacements"]
         
+        println("Tipo de problema: $(problem_type)")
+
         pop!(nodes)
         pop!(materials)
         pop!(constraints_forces_nodes)

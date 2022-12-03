@@ -1,6 +1,6 @@
 MATERIAL: AISI_4340_Steel
 QUESTION: Young_Modulus
-VALUE: 21E+9
+VALUE: 210E+9
 QUESTION: Poisson_Ratio
 VALUE: 0.3
 QUESTION: Density
