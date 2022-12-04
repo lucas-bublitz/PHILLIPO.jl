@@ -8,15 +8,12 @@
     (Linus Trovalds)  
 \end{quote}
 
-O Método de Elementos Finitos 
-
-O Método dos Elementos Finitos e a programação andam lado a lado, ambos impulsionados pelo avanço do processamento computacional. Portanto, é de se esperar que uma aplicação do método seja acompanhada de um projeto de software estruturado, entretanto, a abordagem desse tema na graduação de engenharia mecânica é focada, fortemente, na aplicação direta dos algoritmos, sem muita observação de assuntos relacionados a programação funcional ou processamento paralelo, o que é devido, dentre outros aspectos, pela falta de cadeiras abordando o desenvolvimento de aplicações. 
+O Método dos Elementos Finitos e a programação andam lado a lado, ambos impulsionados pelo avanço do processamento computacional \cite{Zin}. Portanto, é de se esperar que uma aplicação desse método seja acompanhada de um projeto de software conciso, entretanto, a abordagem desse tema na graduação de engenharia mecânica é focada, fortemente, na aplicação direta dos algoritmos, sem muita observação de assuntos relacionados a programação funcional ou processamento paralelo, o que é devido, dentre outros aspectos, pela falta de cadeiras abordando o desenvolvimento de aplicações, ou mesmo de programação no geral (com exceção de algumas matérias propedêuticas que ensinam introdução à lógica de programação com C).
 
 \section{Motivação}
 
-A iniciativa do projeto surgiu quando o autor se deparou com a tarefa de adicionar uma nova funcionalidade em outro programa de elementos finitos. E, ao analisar o código, o autor 
 
-O projeto de PHILLIPO foi motivado, primeiramente, para realizar a aplicação do MEF na análise estática de estruturas metálicas quaisquer. Entretanto, com o avanço da construção do código, optou-se por, além de implementar esses algoritmos, desenvolver uma base em Julia que pudesse, ao mesmo tempo que fosse legível, ser modular o suficiente a ponto de 
+O início do projeto de PHILLIPO foi motivado pela aplicação do MEF na análise estática de estruturas metálicas quaisquer. Entretanto, com o avanço da construção do código, optou-se por, além de implementar esses algoritmos, desenvolver uma base em Julia que pudesse, ao mesmo tempo que fosse legível, ser modular o suficiente a ponto de 
 
 \section{Objetivos}
 
@@ -26,5 +23,10 @@ O principal objetivo deste trabalho foi desenvolver uma aplicação, escrita em 
 
 \begin{enumerate}
     \item Estudar o MEF aplicado na determinação de deformações de estruturas rígidas em regime elástico e linear.
-    \item Estudar as características da linguagem Julia, e como ela pode ser uma boa alternativa para programação científica de alta performance.
+    \item Programar os algoritmos de MEF em Julia.
+    \item Desenvolver um módulo que seja distribuído pelo gerenciador de pacotes Pkg.jl, em um repositório público hospedado no GitHub.
+    \item Aplicar processamento paralelo em determinados pontos do programa, a fim de utilizar mais da capacidade de processamento do computador que um código feito sobre o paradigma estruturado.
+    \item Estudar as características da linguagem Julia, e como ela pode ser uma boa alternativa para C e FORTRAN em programação científica de alta performance.
+    \item Propagar a linguagem Julia no meio acadêmico brasileiro, principalmente nas áreas de ciências naturais.
 \end{enumerate}
+
