@@ -4,6 +4,13 @@
     "As far as the laws of mathematics refer to reality, they are not certain; and as far as they are certain, they do not refer to reality." (Albert Einstein)
 \end{quote}
 
-O Método dos Elementos Finitos (MEF), ou \textit{Finite Element Method} (FEM) é um procedimento utilizado para encontrar soluções numéricas de equações que modelam a natureza, por meio da discretização do domínio contínuo em elementos finitos, que são integrados entre si por nós. No que tange a análise estrutural, o MEF é aplicado na determinação do campo de deformações, assumindo que cada elemento, discretizado da sua geometria, comporta-se de modo simplificado em relação ao problema contínuo. \cite{LIU}
 
-Os elementos são, por sua vez, discretizados por nós.
+O Método dos Elementos Finitos (MEF), \emph{Finite Element Method} (FEM), é um método numérico, e tem como finalidade aproximar a solução de funções de campo numericamente, o domínios que são difíceis de se obter repostas diretas algebricamente. Para tanto, esse domínio é discretizado em vários elementos, ou sub-domínios, de tamanho finito, cujos comportamentos já são conhecidos da aplicação de leis físicas. A função de campo desconhecida é aproximada em cada elemento por meio de funções interpoladoras, calculadas sobre o valor de campo em cada nó, que são os pontos do domínio sobre os quais os elementos são construídos (o campo, portanto, passa a ser definido não mais pelo conjunto de valores do contínuo, mais sim por essas variáveis desconhecidas discretizadas). Para cada elemento, são definidas equações, por meio das quais eles se relacionam entre si e com o campo. Isso leva à formação de um grande sistema linear, que pode ser resolvido facilmente, e obter-se, dessa forma, a aproximação da função de campo. \cite{Onate}
+
+. A continuous function of an unknown field variable is approximated
+using piecewise linear functions in each sub-domain, called an element formed by nodes.
+The unknowns are then the discrete values of the field variable at the nodes. 
+
+. A continuous function of an unknown field variable is approximated
+using piecewise linear functions in each sub-domain, called an element formed by nodes.
+The unknowns are then the discrete values of the field variable at the nodes. 
