@@ -8,16 +8,21 @@
     (Linus Trovalds)  
 \end{quote}
 
-O Método dos Elementos Finitos e a programação andam lado a lado, ambos impulsionados pelo avanço do processamento computacional \cite{Zin}. Portanto, é de se esperar que uma aplicação desse método seja acompanhada de um projeto de software conciso, entretanto, a abordagem desse tema na graduação de engenharia mecânica é focada, fortemente, na aplicação direta dos algoritmos, sem muita observação de assuntos relacionados a programação funcional ou processamento paralelo, o que é devido, dentre outros aspectos, pela falta de cadeiras abordando o desenvolvimento de aplicações, ou mesmo de programação no geral (com exceção de algumas matérias propedêuticas que ensinam introdução à lógica de programação com C).
+A limitação do ser humano em captar, integralmente, os fenômenos ao seu redor é evidente, a ponto de não conseguir compreender como eles se dão; portanto, analisar um fenômeno, separando-o em pequenas partes (ou elementos) cujo comportamento já é conhecido, e, a partir da justaposição delas, reconstruir o funcionamento do próprio fenômeno, é um modo intuitivo que engenheiros e cientistas procedem em seus estudos, criando modelos matemáticos sobre a natureza \cite{Zin}.
+
+
+O Método dos Elementos Finitos, ou os métodos numéricos em geral, e a programação andam lado a lado, ambos impulsionados pelo avanço do processamento computacional \cite{Onate}. Então, é de se esperar que uma aplicação desse método seja acompanhada de um projeto de software conciso; a abordagem do tema na graduação de engenharia mecânica, entretanto, é focada, fortemente, na aplicação direta dos algoritmos, sem muita observação de assuntos relacionados a programação funcional ou processamento paralelo, o que é devido, dentre outros aspectos, pela falta de cadeiras abordando o desenvolvimento de aplicações, ou mesmo de programação no geral (com exceção de algumas matérias propedêuticas que ensinam introdução à lógica de programação em C).
 
 \section{Motivação}
 
+Os métodos numéricos são fundamentais para, e não somente, a engenharia, visto que soluções analíticas de problemas complexos são, senão impossíveis em muitos casos, difíceis de se obter \cite{Onate}. Dentre eles, o método de elementos finitos é bem conhecido, e tem destaque em duas áreas muito nobres da engenharia mecânica: a análise estrutural e a transferência de calor.
 
-O início do projeto de PHILLIPO foi motivado pela aplicação do MEF na análise estática de estruturas metálicas quaisquer. Entretanto, com o avanço da construção do código, optou-se por, além de implementar esses algoritmos, desenvolver uma base em Julia que pudesse, ao mesmo tempo que fosse legível, ser modular o suficiente a ponto de 
+O tema surgiu quando o autor se encontrou na tarefa de adicionar uma funcionalidade em um software já existente de elementos finitos, e percebeu que, mesmo tendo visto o assunto na graduação, não detinha o conhecimento necessário para compreender o seu funcionamento. Então resolveu por criar seu próprio programa, com o paradigma funcional, aplicando seus conhecimento prévios de projeto de software, desenvolvendo mais o seu entendimento sobre o Método dos Elementos Finitos.
+
 
 \section{Objetivos}
 
-O principal objetivo deste trabalho foi desenvolver uma aplicação, escrita em Julia, de elementos finitos para a análise de estruturas rígidas sobre carregamento estático em regime elástico linear, utilizando para tanto, um paradigma de programação funcional com alguns aspectos de paralelismo, e focando em características modulares de implementação e de legibilidade do código.
+O objetivo geral deste trabalho foi desenvolver uma aplicação de elementos finitos para a análise de estruturas rígidas sobre carregamentos estáticos em regime elástico linear, utilizando para tanto, um paradigma de programação funcional com alguns aspectos de paralelismo, e focando em características modulares de implementação e de legibilidade do código, com o intuito secundário de demonstrar as facilidades e vantagens da linguagem Julia no âmbito da programação científica.
 
 \subsection{Objetivos específicos}
 
@@ -29,4 +34,8 @@ O principal objetivo deste trabalho foi desenvolver uma aplicação, escrita em 
     \item Estudar as características da linguagem Julia, e como ela pode ser uma boa alternativa para C e FORTRAN em programação científica de alta performance.
     \item Propagar a linguagem Julia no meio acadêmico brasileiro, principalmente nas áreas de ciências naturais.
 \end{enumerate}
+
+\section{Organização do documento}
+
+Este documento é organizo em quatro grandes partes, que tratam: (1) sobre o método de elementos finitos aplicado no equilíbrio estático de estruturas; (2) sobre a linguagem de programação Julia; (3) sobre PHILLIPO, o módulo desenvolvido; (4) sobre validação e verificação dos resultados.
 

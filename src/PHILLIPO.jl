@@ -63,10 +63,8 @@ module PHILLIPO
         # VARIÁVEIS do PROBLEMA
         dimensions = input_dict["type"] == "3D" ? 3 : 2
         nodes_length = length(nodes)
-        elements = Vector{Elements.Element}()
         Fg = zeros(Float64, dimensions * nodes_length)
         Ug = zeros(Float64, dimensions * nodes_length)
-        Kg_vector = [Matrices.SparseMatrixCOO() for i = 1:Threads.nthreads()]
 
         # GRAUS DE LIBERDADE: LIVRES E PRESCRITOS
         if problem_type == "3D"
@@ -84,35 +82,7 @@ module PHILLIPO
 
         # CONSTRUÇÃO DOS ELEMENTOS
         print("Construindo os elementos e a matrix de rigidez global paralelamente...")
-        @time if problem_type == "3D"
-            pop!(input_dict["elements"]["linear"]["tetrahedrons"])
-            elements_length = length(input_dict["elements"]["linear"]["tetrahedrons"])
-            elements = Vector{Elements.Element}(undef, elements_length)
-            if "tetrahedrons" in keys(input_dict["elements"]["linear"])
-                Threads.@threads for j in 1:elements_length
-                    elements[j] = Elements.TetrahedronLinear(input_dict["elements"]["linear"]["tetrahedrons"][j], materials, nodes)
-                    Matrices.add!(
-                        Kg_vector[Threads.threadid()],
-                        elements[j].degrees_freedom, 
-                        elements[j].K
-                    )
-                end
-            end
-        else
-            pop!(input_dict["elements"]["linear"]["triangles"])
-            elements_length = length(input_dict["elements"]["linear"]["triangles"])
-            elements = Vector{Elements.Element}(undef, elements_length)
-            if "triangles" in keys(input_dict["elements"]["linear"])
-                Threads.@threads for j in 1:elements_length
-                    elements[j] = Elements.TriangleLinear(input_dict["elements"]["linear"]["triangles"][j], materials, nodes, problem_type)
-                    Matrices.add!(
-                        Kg_vector[Threads.threadid()],
-                        elements[j].degrees_freedom, 
-                        elements[j].K
-                    )
-                end
-            end
-        end
+        @time Kg, elements = Elements.assemble_stiffness_matrix(input_dict["elements"]["linear"], materials, nodes, problem_type)
         
         print("Aplicando as restrições de força...                                   ")
         @time if problem_type == "3D"
@@ -138,8 +108,6 @@ module PHILLIPO
         end
 
 
-        print("Montando a matrix global de rigidez...                                ")
-        @time Kg = Matrices.sum(Kg_vector)
 
         print("Resolvendo o sistema...                                               ")
         @time Solver.direct_solve!(Kg, Ug, Fg, dof_free, dof_prescribe)

@@ -167,11 +167,47 @@ module Elements
         
     end
 
-    # function assemble_stiffness_matrix!(K_global_matrix::Matrix{Float64}, elements::Vector{Element})::SparseMatrixCSC
-    #     for element in elements
-    #         K_global_matrix[element.degrees_freedom, element.degrees_freedom] += element.K
-    #     end
-    # end
+    function assemble_stiffness_matrix(input_elements, materials, nodes, problem_type)
+        # Realiza a criação dos elementos e já aplica os valores de rigez sobre a matriz global
+
+        # O paralelismo é realizado reservando para cada thread uma matriz separada
+        Kg_vector = [Matrices.SparseMatrixCOO() for i = 1:Threads.nthreads()]
+
+        if problem_type == "3D"
+            if "tetrahedrons" in keys(input_elements)
+                pop!(input_elements["tetrahedrons"])
+                elements_length = length(input_elements["tetrahedrons"])
+                elements = Vector{Element}(undef, elements_length)
+                Threads.@threads for j in 1:elements_length
+                    elements[j] = TetrahedronLinear(input_elements["tetrahedrons"][j], materials, nodes)
+                    Matrices.add!(
+                        Kg_vector[Threads.threadid()],
+                        elements[j].degrees_freedom, 
+                        elements[j].K
+                    )
+                end
+            end
+        else
+            if "triangles" in keys(input_elements)
+                pop!(input_elements["triangles"])
+                elements_length = length(input_elements["triangles"])
+                elements = Vector{Element}(undef, elements_length)
+                Threads.@threads for j in 1:elements_length
+                    elements[j] = TriangleLinear(input_elements["triangles"][j], materials, nodes, problem_type)
+                    Matrices.add!(
+                        Kg_vector[Threads.threadid()],
+                        elements[j].degrees_freedom, 
+                        elements[j].K
+                    )
+                end
+            end
+        end
+
+        # A matriz global de rigidez é a soma das matrizes globais calculadas em cada thread
+        Kg = Matrices.sum(Kg_vector)
+
+        return Kg, elements
+    end
     
     function assemble_force_line!(
             Fg::Vector{<:Real}, 
