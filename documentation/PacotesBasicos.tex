@@ -3,8 +3,7 @@
 % ----------------------------------------------------------
 \usepackage{amsmath}							% Pacote matemático
 \usepackage{amssymb}							% Pacote matemático
-\usepackage{amsfonts}							% Pacote matemático
-%\usepackage{lmodern}							% Usa a fonte Latin Modern		
+\usepackage{amsfonts}							% Pacote matemático	
 \usepackage{mathptmx} 							% Usa a fonte Times New Roman	 (UDESC/CCT)
 \usepackage[T1]{fontenc}						% Selecao de codigos de fonte.
 \usepackage[utf8]{inputenc}						% Codificacao do documento (conversão automática dos acentos)
@@ -13,7 +12,6 @@
 \usepackage[dvipsnames,table]{xcolor}			% Controle das cores
 \usepackage{graphicx}							% Inclusão de gráficos
 \usepackage{microtype} 							% para melhorias de justificação
-\usepackage{lipsum}								% para geração de dummy text
 \usepackage[brazilian,hyperpageref]{backref}	% Paginas com as citações na bibl
 \usepackage[alf,abnt-emphasize=bf,abnt-full-initials=yes,abnt-etal-list=0]{abntex2cite}					% Citações padrão ABNT
 \usepackage{adjustbox}							% Pacote de ajuste de boxes
@@ -30,8 +28,6 @@
 \usepackage{xstring}							% Manipulação de strings
 \usepackage{pgfplots}							% Pacote de Gráficos
 \usepackage{tikz}								% Pacote de Figuras
-\usepackage[american, cuteinductors,smartlabels, fulldiode, siunitx, americanvoltages, oldvoltagedirection, smartlabels]{circuitikz}						% Pacote de circuitos elétricos
-\usepackage{chemformula}						% Pacote para fórmulas químicas
 \usepackage{chngcntr}							% Pacte usado para deixar numeração de equações sequencial (UDESC/CCT)
 \counterwithout{equation}{chapter}
 % fonte: https://latex.org/forum/viewtopic.php?t=15392
@@ -78,42 +74,6 @@
 %\tikzexternaldisable
 %\tikzset{external/force remake}
 %\tikzexternalize[shell escape=-enable-write18]
-
-% Configurações do CircuiTiKz
-\ctikzset{bipoles/thickness=1}
-%\ctikzset{bipoles/length=1.2cm}
-\ctikzset{monopoles/ground/width/.initial=.2}
-\ctikzset{bipoles/resistor/height=0.25}
-\ctikzset{bipoles/resistor/width=0.6}
-\ctikzset{bipoles/capacitor/height=0.5}
-\ctikzset{bipoles/capacitor/width=0.15}
-\ctikzset{bipoles/generic/height=0.25}
-\ctikzset{bipoles/generic/width=0.6}
-%\ctikzset{bipoles/capacitor polar/length=0.5}
-%\ctikzset{bipoles/diode/height=.375}
-%\ctikzset{bipoles/diode/width=.3}
-%\ctikzset{tripoles/thyristor/height=.8}
-%\ctikzset{tripoles/thyristor/width=1}
-\ctikzset{bipoles/vsourcesin/height=.5}
-\ctikzset{bipoles/vsourcesin/width=.5}
-\ctikzset{bipoles/cvsourceam/height=.6}
-\ctikzset{bipoles/cvsourceam/width=.6}
-%\ctikzset{tripoles/european controlled voltage source/width=.4}
-
-\tikzstyle{every node}=[font=\footnotesize]
-\tikzstyle{every path}=[line width=0.25pt,line cap=round,line join=round]
-%\tikzstyle{every path}=[line cap=round,line join=round]
-
-
-% Definição de cores MATLAB
-\definecolor{matlab_blue}{rgb}	{         0,    0.4470,    0.7410}
-\definecolor{matlab_orange}{rgb}{    0.8500,    0.3250,    0.0980}
-\definecolor{matlab_yellow}{rgb}{    0.9290,    0.6940,    0.1250}
-\definecolor{matlab_violet}{rgb}{    0.4940,    0.1840,    0.5560}
-\definecolor{matlab_green}{rgb}	{	 0.4660,    0.6740,    0.1880}
-\definecolor{matlab_lblue}{rgb}	{    0.3010,    0.7450,    0.9330}
-\definecolor{matlab_red}{rgb}	{    0.6350,    0.0780,    0.1840}
-
 % Personalização das legendas
 \usepackage[format = plain, %hang
 			justification = centering,
