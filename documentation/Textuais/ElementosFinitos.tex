@@ -47,7 +47,7 @@ O Método dos Elementos Finitos (MEF), \emph{Finite Element Method} (FEM), é um
 No âmbito da análise estrutural aqui aplicada, a função de campo é o deslocamento sobre a estrutura, cuja geometria é o próprio domínio. A equação que rege os elementos é derivada do princípios dos trabalhos virtuais, em que há o balanço de energia entre o trabalho realizado pela deformação do elemento e pelas forças que atuam sobre ele. O sistema formado pelo conjunto dessas equações, aplicadas previamente em cada elemento, tem três termos, que se relacionam assim:
 
 \begin{equation} \label{eq:sistema_global}
-    [K_g] \{U\} = \{F\}
+    K_g \delta u = F
 \end{equation}
 
 O primeiro termo, $[K_g]$, relaciona as deformações dos nós com as forças externas aplicadas sobre a estrura. $\{U\}$ e $\{F\}$, por sua vez, são, respectivamento, o pseuvetor das deformações dos nós e o pseudovetor das forças externas.
@@ -58,6 +58,8 @@ São dois os tipos de elementos tratados aqui: o triângulo de tensão constante
 
 \subsection{Relação entre tensão, deformação e deslocamento}
 
+Quando sólidos são postos sobre carregamentos, eles deforamam, criando tensões internas. A relaçaõ entre a tensão e a deformação
+
 As componentes de tensão de sólidos em qualquer ponto são definidas sobre a superfície de um cubo infinitesimal, como mostrado na figura. Em cada superfície opera uma componente normal e duas tangenciais, denominadas, respectivamente, por tensão normal e de cisalhamento (o primeiro termo do índice subescrito indica a o plano de atuação da tensão, o segundo, a sua direção). O conjunto dessas tensões, de acordo com \citeshort{popov}, quando posto em forma matricial, é chamado de tensor de Couchy, em que as linhas indicam a superfície de atuação da tensão, e a coluna, a direção. Aplicando o somatório de momento no interior desse cubo, é fácil mostrar que, segundo \citeshort{LIU}:
 
 \begin{equation}
@@ -66,7 +68,7 @@ As componentes de tensão de sólidos em qualquer ponto são definidas sobre a s
     \sigma_{zy} = \sigma_{yz} \\
 \end{equation}
 
-Portanto, há somente um total de seis componentes distintas de tensão, permitindo que o tensor de Cauchy, possa ser reescrito de forma mais compacta:
+Portanto, há somente um total de seis componentes distintas de tensão, permitindo que o tensor de Cauchy, possa ser reescrito de forma vetorial, mais compacta:
 
 \begin{equation} \label{eq:vetor_tensao}
     \sigma^t =  \begin{bmatrix}
@@ -82,7 +84,7 @@ A mesma estratégia pode, também, ser aplicada à matriz de deformação. Para 
      \end{bmatrix}
 \end{equation}
 
-A deformação é a variação da função de deslocamento por unidade de comprimento, desse modo, os componentes do vector de deformação podem ser calculado em função das derivadas da do desclocamento, da seguinte mandeira, de acordo com \citeshort{LIU}:
+A deformação é a variação da função de deslocamento por unidade de comprimento, desse modo, os componentes do vetor de deformação podem definidos em função das derivadas da do desclocamento, da seguinte mandeira, de acordo com \citeshort{LIU}:
 
 \begin{equation} \label{eq:defomacoes}
     \begin{matrix}
@@ -97,7 +99,7 @@ A deformação é a variação da função de deslocamento por unidade de compri
 
 Nessas expressões, as funções $u$, $v$ e $w$ correspondem às componentes nas direções de $x$, $y$ e $z$, respectivamento, do vector de deslocamento sobre o sólido, que é definido como:
 
-\begin{equation}
+\begin{equation} \label{eq:funcao_deslocamento}
     \mathbf{\varphi} = \begin{Bmatrix}
         u(x,y,z) \\
         v(x,y,z) \\
@@ -105,10 +107,11 @@ Nessas expressões, as funções $u$, $v$ e $w$ correspondem às componentes nas
     \end{Bmatrix}
 \end{equation}
 
-O cojunto de equaçãoes \ref{eq:defomacoes} pode ser reescrito em termos do vector de deformações e do vetor de deslocamentos do sólido, obtendo assim a relação deslocamento-deformação em forma matricial, como consta na equação \ref{eq:relacao_deformacao_deslocamento}.
+
+O cojunto de equaçãoes \ref{eq:defomacoes} pode ser reescrito em termos do vector de deformações e do vetor de deslocamentos do sólido, obtendo assim a relação deslocamento-deformação em forma matricial, como consta na expressão \ref{eq:relacao_deformacao_deslocamento}.
 
 \begin{equation} \label{eq:relacao_deformacao_deslocamento}
-    \epsilon = \mathbf{L} \mathbf{\varphi}
+    \epsilon = \mathbf{L} \mathbf{U}
 \end{equation}
 
 em que a matrix $\mathbf{L}$ é composta pelos operadores diferenciais parciais, da seguinte maneira:
@@ -124,13 +127,11 @@ em que a matrix $\mathbf{L}$ é composta pelos operadores diferenciais parciais,
     \end{bmatrix}
 \end{equation}
 
-A relação entre tensão e deformação, ou equações constitutivas, é comumente denomianda Lei de Hook, e é dada de acordo com \citeshort{Logan}, para um material isotrópico, em termos do módulo de Young ($E$) e o coeficiente de Poisson ($\nu$), ambos obtidos experimentalmente para cada mateiral. Forma similar à relação dentre deformação e deslocamento, a relação de tensão e deformação é expressa por:
+A relação entre tensão e deformação, ou equações constitutivas, é comumente denomianda Lei de Hook, e é dada de acordo com \citeshort{Logan}, para um material isotrópico, em termos do módulo de Young ($E$) e o coeficiente de Poisson ($\nu$), ambos obtidos experimentalmente. De forma similar à relação dentre deformação e deslocamento, a relação tensão-deformação é expressa por:
 
 \begin{equation}
     \sigma = \mathbf{D} \epsilon
 \end{equation}
-
-em que o termo $D$ é denominado matriz constitutiva.
 
 \begin{equation} \label{eq:matriz_constitutiva}
     \mathbf{D} = \frac{E}{(1+\nu)(1 - 2\nu)} \begin{bmatrix}
@@ -143,9 +144,98 @@ em que o termo $D$ é denominado matriz constitutiva.
     \end{bmatrix}
 \end{equation}
 
-Vale ressaltar que a matriz constitutiva é constante ao longo do sólido, não de pendendo da localização do ponto infinitesimal em análise.
+em que o termo $D$ é denominado matriz constitutiva, que é constante ao longo de todo o sólido.
+
+\subsection{As funções de interpolação}
+
+\begin{figure} \label{fig:tetraedro}
+    \centering
+    \caption{Elemento tetraédrico}
+    \begin{tikzpicture}
+            \coordinate (i) at (1,0,3);
+            \coordinate (j) at (4,0,6);
+            \coordinate (k) at (8,0,3);
+            \coordinate (m) at (6,9,7);
+            
+            \draw[blue, ultra thick, fill=blue, fill opacity = 0.2] 
+                (j) 
+                -- (m) -- (k)  
+                -- cycle;
+            \draw[blue, ultra thick, fill=blue, fill opacity = 0.2] 
+            (i) -- (m) -- (j) -- cycle;
+            \draw [->] (0,0,0) -- (8,0,0) node[anchor = west] {$x$};
+            \draw [->] (0,0,0) -- (0,8,0) node[anchor = south] {$y$};
+            \draw [->] (0,0,0) -- (0,0,8) node[anchor = east] {$z$};
+            \draw[dashed, blue, ultra thick] (i) -- (k);
+            \draw (i) node[blue, circle, draw, inner sep=1pt, fill=white, thin, scale = 1.1, fill opacity = 1] {$i$};
+            \draw (j) node[blue, circle, draw, inner sep=1pt, fill=white, thin, scale = 1.1, fill opacity = 1] {$k$};
+            \draw (k) node[blue, circle, draw, inner sep=1pt, fill=white, thin, scale = 1.1, fill opacity = 1] {$k$};
+            \draw (m) node[blue, circle, draw, inner sep=1pt, fill=white, thin, scale = 1.1, fill opacity = 1] {$m$};
+    \end{tikzpicture}
+    \fonte{\me (2022)}
+\end{figure}
+
+Como já mencionado, a função de campo tratada aqui é o deslocamento sobre o sólido. Para cada elemento discretizado, essa função é interpolada por um polinômio, definido pelo valor do próprio campo nos nós do elemento. Em um elemento tetraédico, como o da figura \ref{fig:tetraedro}, há quatro nós ($i$, $j$, $k$ e $m$), e em cada um o campo de deslocamento tem três componentes. Essa liberdade do deslocamento que o campo tem nos nós é chamada de grau de liberdade. As funções de deslocamento, expressão \ref{eq:funcao_deslocamento}, como ditas anteriormes, são defnidas como lineares, o que garate a compatibilidade entre cada elemento, fazendo com que não existam desconitnuidades no campo de deslocamentos de acordo com \citeshort{Logan}. A função $\varphi$, portanto, pode ser decomposta em termos de suas variáveis da seguinte forma:
+
+\begin{equation} \label{eq:linear}
+    \mathbf{\varphi} = 
+    \begin{Bmatrix}
+        u(x,y,z) \\ v(x,y,z) \\ w(x,y,z)
+    \end{Bmatrix} 
+    = \begin{Bmatrix}
+        a_1 + a_2 x + a_3 y + a_4 z\\
+        b_1 + b_2 x + b_3 y + b_4 z\\
+        c_1 + c_2 x + c_3 y + c_4 z\\
+    \end{Bmatrix}
+\end{equation}
+
+Para encotrar esses fatores, basta aplicar as funções em cada nó.
+
+\begin{equation}
+    \begin{cases}
+        u_i = a_1 + a_2 x_i + a_3 y_i + a_4 z_i \\
+        u_j = a_1 + a_2 x_j + a_3 y_j + a_4 z_j \\
+        u_k = a_1 + a_2 x_k + a_3 y_k + a_4 z_k \\
+        u_m = a_1 + a_2 x_m + a_3 y_m + a_4 z_i
+    \end{cases}
+\end{equation}
+
+Esse sistema pode ser rearranjado na seguinte forma matricial:
+
+\begin{equation}
+    \{\mathbf{u}\} = \begin{Bmatrix}
+        u_i \\
+        u_j \\
+        u_k \\
+        u_m
+    \end{Bmatrix} = 
+    \begin{bmatrix}
+        1 & x_i & y_i & z_i \\
+        1 & x_j & y_j & z_j \\
+        1 & x_k & y_k & z_k \\
+        1 & x_m & y_m & z_m \\
+    \end{bmatrix}
+    \begin{bmatrix}
+        a_1 \\ a_2 \\ a_3 \\ a_4
+    \end{bmatrix} 
+\end{equation}
+
+Portanto,
+
+\begin{equation}
+    \begin{bmatrix}
+        a_1 \\ a_2 \\ a_3 \\ a_4
+    \end{bmatrix}
+    = \begin{bmatrix}
+        1 & x_i & y_i & z_i \\
+        1 & x_j & y_j & z_j \\
+        1 & x_k & y_k & z_k \\
+        1 & x_m & y_m & z_m \\
+    \end{bmatrix}^{-1} \{\mathbf{u}\}
+\end{equation}
+
+O mesmo procedimento pode ser aplicado às outras funções de deslocamento ($v$ e $w$).
 
 
-\subsection{A função de interpolação}
 
-Como já mencionado, a função de campo tratada aqui é o deslocamento sobre o sólido. Para cada elemento discretizado, essa função é interpolada por um polinômio, definido pelo valor do próprio campo nos nós do elemento. Em um elemento tetraédico, como o da figura 12, há quatro nós, que podem se deslocar em três direções cada. Essa liberdade de movimento que os nós têm é chamada de grau de liberdade, que se correspoende a cada compomente de deslocamento de cada nó na malha. 
+
