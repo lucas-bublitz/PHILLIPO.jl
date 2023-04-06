@@ -4,21 +4,18 @@
 \chapter{INTRODUÇÃO}
 
 \begin{quote}
-    I think of myself as an engineer, not as a visionary or 'big thinker.' I don't have any lofty goals.
+    I think of myself as an engineer, not as a visionary or 'big thinker.' I don't have sany lofty goals.
     (Linus Trovalds)  
 \end{quote}
 
-Por que essa citação? Como o leitor pode perceber na abertura de cada capítulo, como também de alguns subcapítulos, há uma citação que resume, pelo menos em parte, a motivação sobre a qual o texto foi construído. Neste caso, a citação é de Linus Torvalds, o criador do kernel Linux, e que, em 1991, criou o sistema operacional GNU/Linux, que é hoje o sistema operacional mais utilizado no mundo, principalmente em servidores. Mas, no caso desse capítulo, essa citação não têm o intuito de ser sobre sistemas operacionais, mas sim sobre a visão realista que, na perspectiva de Linus (e do próprio Autor), o engenheiro deve buscar: aquele que encontra soluções.
-
-
-
 A limitação do ser humano em captar, integralmente, os fenômenos ao seu redor é evidente, a ponto de não conseguir compreender como eles se dão; portanto, analisar um fenômeno, separando-o em pequenas partes (ou elementos) cujo comportamento já é conhecido, e, a partir da justaposição delas, reconstruir o funcionamento do próprio fenômeno, é um modo intuitivo que engenheiros e cientistas procedem em seus estudos, criando modelos matemáticos sobre a natureza \cite{Zin}.
 
-
-O Método dos Elementos Finitos, ou os métodos numéricos em geral, e a programação andam lado a lado, ambos impulsionados pelo avanço do processamento computacional \cite{Onate}. Então, é de se esperar que uma aplicação desse método seja acompanhada de um projeto de software conciso; a abordagem do tema na graduação de engenharia mecânica, entretanto, é focada, fortemente, na aplicação direta dos algoritmos, sem muita observação de assuntos relacionados a programação funcional ou processamento paralelo, o que é devido, dentre outros aspectos, pela falta de cadeiras abordando o desenvolvimento de aplicações, ou mesmo de programação no geral (com exceção de algumas matérias propedêuticas que ensinam introdução à lógica de programação em C).
+O Método dos Elementos Finitos, ou os métodos numéricos em geral, e a programação andam lado a lado, ambos impulsionados pelo avanço do processamento computacional \cite{Onate}. Então, é de se esperar que uma aplicação desse método seja acompanhada de um projeto de software conciso; a abordagem do tema na graduação de engenharia mecânica, entretanto, é focada, fortemente, na aplicação direta dos algoritmos, sem muita observação de assuntos relacionados programação funcional ou processamento paralelo, o que é devido, dentre outros aspectos, pela falta de cadeiras abordando o desenvolvimento de aplicações, ou mesmo de programação no geral (com exceção de algumas matérias propedêuticas que ensinam introdução à lógica de programação em C).
 
 
 \section{Motivação}
+
+A motivação
 
 Os métodos numéricos são fundamentais para, e não somente, a engenharia, visto que soluções analíticas de problemas complexos são, senão impossíveis em muitos casos, difíceis de se obter \cite{Onate}. Dentre eles, o método de elementos finitos é bem conhecido, e tem destaque em duas áreas muito nobres da engenharia mecânica: a análise estrutural e a transferência de calor.
 
@@ -31,16 +28,26 @@ O objetivo geral deste trabalho foi desenvolver uma aplicação de elementos fin
 
 \subsection{Objetivos específicos}
 
+Constituem objetivos específicos deste trabalho:
+
 \begin{enumerate}
-    \item Estudar o MEF aplicado na determinação de deformações de estruturas sólidas em regime elástico e linear, sob carregamentos estáticos.
-    \item Programar os algoritmos de MEF em Julia.
-    \item Desenvolver um módulo que seja distribuível pelo gerenciador de pacotes Pkg.jl, em um repositório público hospedado no GitHub.
-    \item Aplicar processamento paralelo em determinadas partes do programa em que as funções nativas não o fazem, a fim de utilizar mais da capacidade de processamento do computador que um código feito sobre o paradigma estruturado.
-    \item Estudar as características da linguagem Julia, e como ela pode ser uma boa alternativa para C e FORTRAN em programação científica de alta performance.
-    \item Propagar a linguagem Julia no meio acadêmico brasileiro, principalmente nas áreas de ciências naturais.
+    \item estudar o MEF aplicado na determinação de deformações de estruturas sólidas em regime elástico e linear, sob carregamentos estáticos;
+    \item programar os algoritmos de MEF em Julia;
+    \item desenvolver um módulo que seja distribuível pelo gerenciador de pacotes Pkg.jl, em um repositório público hospedado no GitHub;
+    \item aplicar processamento paralelo em determinadas partes do programa em que as funções nativas não o fazem, a fim de utilizar mais da capacidade de processamento do computador que um código feito sobre o paradigma estruturado;
+    \item estudar as características da linguagem Julia, e como ela pode ser uma boa alternativa para C e FORTRAN em programação científica de alta performance;
+    \item propagar a linguagem Julia no meio acadêmico brasileiro, principalmente no campus CCT da UDESC.
 \end{enumerate}
 
 \section{Organização do documento}
 
-Este documento é organizado em quatro grandes partes, que tratam: (1) sobre o método de elementos finitos aplicado no equilíbrio estático de estruturas; (2) sobre a linguagem de programação Julia; (3) sobre PHILLIPO, o módulo desenvolvido; (4) sobre validação e verificação dos resultados. (*) Como o ChatGPT e o GitHub influenciaram e influenciaram o desenvolvimento deste documento e de PHILLIPO.jl.
+Este documento aborda o projeto e o desenvolvimento de um módulo em Julia, denominado PHILLIPO.jl, que aplica o Método de Elementos Finitos, integrado à ferramenta de pré e pós-processamento GiD, para realizar a análise das tensões em estruturas sólidas e elásticas sobre carregamentos constantes; e é organizado em cinco partes, que tratam sobre:
 
+\begin{enumerate}
+    \item a mecânica dos sólidos: tensão e deformação no regime elástico
+    \item o método de elementos finitos aplicado no equilíbrio estático de estruturas sólidas;
+    \item a linguagem de programação Julia: o processamento paralelo acessível;
+    \item validação e verificação de resultados;
+    \item PHILLIPO.jl, o módulo desenvolvido.
+    \item Comentários sobre o Copilot e o ChatGPT no desenvolvimento de PHILLIPO.jl e deste documento.
+\end{enumerate}
