@@ -19,11 +19,11 @@ module PHILLIPO
 
     include("./modules/includes.jl") # Módulos internos
 
-    # MÓDUgLOS EXTERNOS
+    # MÓDULOS EXTERNOS
     import LinearAlgebra
     import SparseArrays
 
-    # MÓDUgLOS INTERNOS
+    # MÓDULOS INTERNOS
     import .IOfiles
     import .Elements
     import .Solver
@@ -51,6 +51,9 @@ module PHILLIPO
         
         println("Tipo de problema: $(problem_type)")
 
+        # REMOVENDO ELEMENTOS NÃO UTILIZADOS
+        # esses elementos nulos são gerados pelo modo que o arquivo JSON é criado pelo GiD
+        # É uma falha que deve ser corrigida, mas que não é urgente.
         pop!(nodes)
         pop!(materials)
         pop!(constraints_forces_nodes)

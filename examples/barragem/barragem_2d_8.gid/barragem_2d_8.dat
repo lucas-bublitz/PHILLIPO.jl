@@ -1,7 +1,7 @@
 
 {
     "title": "PHILLIPO: arquivo de entrada",
-    "type": "plane_strain",
+    "type": "plane_stress",
     "materials":[
         ["AISI_4340_Steel", 210E+9, 0.3], 
         null
