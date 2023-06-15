@@ -7,20 +7,25 @@ module Stress
     using SparseArrays
 
     function recovery(input_elements, Ug::Vector{<:Real}, materials::Vector{Any}, nodes::Vector{Any}, problem_type)
+        map_function = e -> nothing
         if problem_type == "3D"
             if "tetrahedrons" in keys(input_elements)
                 type = "tetrahedrons"
                 pop!(input_elements["tetrahedrons"])
-                function map_function(e)
-                    el = TetrahedronLinear(e, materials, nodes)
-                    el.D * el.B * Ug[el.degrees_freedom]
+                map_function = e -> begin
+                        el = TetrahedronLinear(e, materials, nodes)
+                        el.D * el.B * Ug[el.degrees_freedom]
+                    end
                 end
             end
         else
             if "triangles" in keys(input_elements)
                 type = "triangles"
                 pop!(input_elements["triangles"])
-             
+                map_function = e -> begin
+                        el = TriangleLinear(e, materials, nodes)
+                        el.D * el.B * Ug[el.degrees_freedom]
+                    end
                 end
             end
         end
