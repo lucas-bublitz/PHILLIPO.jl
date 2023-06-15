@@ -3,4 +3,5 @@
     "cSpell.words": [
         "Edelman"
     ],
+    "latex-workshop.latex.clean.method": "command",
 }

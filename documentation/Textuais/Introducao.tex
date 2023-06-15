@@ -4,27 +4,29 @@
 \chapter{INTRODUÇÃO}
 
 \begin{quote}
-    I think of myself as an engineer, not as a visionary or 'big thinker.' I don't have sany lofty goals.
+    I think of myself as an engineer, not as a visionary or 'big thinker.' I don't have any lofty goals.
     (Linus Trovalds)  
 \end{quote}
 
-A limitação do ser humano em captar, integralmente, os fenômenos ao seu redor é evidente, a ponto de não conseguir compreender como eles se dão; portanto, analisar um fenômeno, separando-o em pequenas partes (ou elementos) cujo comportamento já é conhecido, e, a partir da justaposição delas, reconstruir o funcionamento do próprio fenômeno, é um modo intuitivo que engenheiros e cientistas procedem em seus estudos, criando modelos matemáticos sobre a natureza \cite{Zin}.
+A limitação do ser humano em captar, integralmente, os fenômenos ao seu redor é evidente, a ponto de não conseguir compreender como eles se dão; analisar um fenômeno, portanto, separando-o em pequenas partes (ou elementos) cujo comportamento já é conhecido (simplificado ou não), e, a partir da justaposição delas, reconstruir o funcionamento do próprio fenômeno, é um modo intuitivo que engenheiros e cientistas procedem em seus estudos, criando modelos matemáticos sobre a natureza \cite[p. 2]{Zin}.
 
-O Método dos Elementos Finitos, ou os métodos numéricos em geral, e a programação andam lado a lado, ambos impulsionados pelo avanço do processamento computacional \cite{Onate}. Então, é de se esperar que uma aplicação desse método seja acompanhada de um projeto de software conciso; a abordagem do tema na graduação de engenharia mecânica, entretanto, é focada, fortemente, na aplicação direta dos algoritmos, sem muita observação de assuntos relacionados programação funcional ou processamento paralelo, o que é devido, dentre outros aspectos, pela falta de cadeiras abordando o desenvolvimento de aplicações, ou mesmo de programação no geral (com exceção de algumas matérias propedêuticas que ensinam introdução à lógica de programação em C).
+
+
+O Método dos Elementos Finitos, ou os métodos numéricos em geral, acompanha o desenvolvimento da programação, ambos impulsionados pelo avanço do processamento computacional \cite{Onate}. Então, é de se esperar que uma aplicação desse método seja acompanhada de um projeto de software conciso; a abordagem do tema na graduação de engenharia mecânica, porém, é focada, fortemente, na aplicação direta dos algoritmos, sem muita dedicação em assuntos relacionados à otimização e à programação funcional ou, até mesmo, processamento paralelo, o que pode ser devido, dentre outros aspectos, a falta de cadeiras abordando o desenvolvimento de aplicações, ou mesmo de programação como um todo. Com exceção de algumas matérias propedêuticas que ensinam introdução à lógica de programação em C, a grade curricular do engenheiro mecânico não contempla o projeto de software e portanto faz com os discente que queiram seguir em uma áreas mais computacionais, como simulação de fluidos e estruturas.
+
+O aprofundamento, visto isso, de questões relacionadas à projeto de software é de grande importância para o engenheiro mecânico, pois, além de ser uma ferramenta de trabalho, a programação é uma forma de expressão, e, como tal, deve ser dominada para que o engenheiro possa se comunicar com outros profissionais da área, como programadores e cientistas da computação, e, assim, desenvolver projetos em conjunto. Além disso, o desenvolvimento de um software de elementos finitos é uma forma de estudar o método, e, portanto, de aprofundar o conhecimento sobre o assunto.
 
 
 \section{Motivação}
-
-A motivação
-
-Os métodos numéricos são fundamentais para, e não somente, a engenharia, visto que soluções analíticas de problemas complexos são, senão impossíveis em muitos casos, difíceis de se obter \cite{Onate}. Dentre eles, o método de elementos finitos é bem conhecido, e tem destaque em duas áreas muito nobres da engenharia mecânica: a análise estrutural e a transferência de calor.
 
 O tema surgiu quando o autor se encontrou na tarefa de adicionar uma funcionalidade em um software já existente de elementos finitos, e percebeu que, mesmo tendo visto o assunto na graduação, não detinha o conhecimento necessário para compreender o seu funcionamento. Então resolveu por criar seu próprio programa, com o paradigma funcional, aplicando seus conhecimento prévios de projeto de software, desenvolvendo mais o seu entendimento sobre o Método dos Elementos Finitos.
 
 
 \section{Objetivos}
 
-O objetivo geral deste trabalho foi desenvolver uma aplicação de elementos finitos para a análise de estruturas rígidas sobre carregamentos estáticos em regime elástico linear, utilizando para tanto, um paradigma de programação funcional com alguns aspectos de paralelismo, e focando em características modulares de implementação e de legibilidade do código, com o intuito secundário de demonstrar as facilidades e vantagens da linguagem Julia no âmbito da programação científica.
+O objetivo geral deste trabalho foi desenvolver uma aplicação de elementos finitos para a análise de estruturas sólidas sobre carregamentos estáticos em regime elástico linear, utilizando para tanto, um paradigma de programação funcional\footnotemark[1] com alguns aspectos de processamento paralelo, e focando em características modulares de implementação e de legibilidade do código, com o intuito secundário de demonstrar as facilidades e vantagens da linguagem Julia no âmbito da programação científica.
+
+\footnotetext[1]{O paradigma funcional, tal como é explicado no capítulo \ref{ch:julia} \nameref{ch:julia}, aqui é considerado em \emph{lato senso}, ou seja, admite alguns efeitos colaterais, entretanto, não foge à boa prática estabelecida pela comunidade de Julia.}
 
 \subsection{Objetivos específicos}
 
@@ -46,7 +48,7 @@ Este documento aborda o projeto e o desenvolvimento de um módulo em Julia, deno
 \begin{enumerate}
     \item a mecânica dos sólidos: tensão e deformação no regime elástico
     \item o método de elementos finitos aplicado no equilíbrio estático de estruturas sólidas;
-    \item a linguagem de programação Julia: o processamento paralelo acessível;
+    \item a linguagem de programação Julia: o processamento paralelo acessível a engenheiros;
     \item validação e verificação de resultados;
     \item PHILLIPO.jl, o módulo desenvolvido.
     \item Comentários sobre o Copilot e o ChatGPT no desenvolvimento de PHILLIPO.jl e deste documento.

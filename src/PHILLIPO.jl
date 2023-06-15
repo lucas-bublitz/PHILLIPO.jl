@@ -85,7 +85,7 @@ module PHILLIPO
 
         # CONSTRUÇÃO DOS ELEMENTOS
         print("Construindo os elementos e a matrix de rigidez global paralelamente...")
-        @time Kg, elements = Elements.assemble_stiffness_matrix(input_dict["elements"]["linear"], materials, nodes, problem_type)
+        @time Kg = Elements.assemble_stiffness_matrix(input_dict["elements"]["linear"], materials, nodes, problem_type)
         
         print("Aplicando as restrições de força...                                   ")
         @time if problem_type == "3D"
@@ -111,7 +111,6 @@ module PHILLIPO
         end
 
 
-
         print("Resolvendo o sistema...                                               ")
         @time Solver.direct_solve!(Kg, Ug, Fg, dof_free, dof_prescribe)
 
@@ -121,7 +120,7 @@ module PHILLIPO
         println("Somatório das reações: $(Re_sum)")
 
         print("Recuperando as tensões...                                             ")
-        @time σ, σvm = Stress.recovery(elements, Ug)
+        @time σ, σvm = Stress.recovery(input_dict["elements"]["linear"], Ug, materials, nodes, problem_type)
 
         print("Imprimindo o arquivo de saída...                                      ")
         @time begin

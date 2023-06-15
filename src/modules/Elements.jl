@@ -177,13 +177,12 @@ module Elements
             if "tetrahedrons" in keys(input_elements)
                 pop!(input_elements["tetrahedrons"])
                 elements_length = length(input_elements["tetrahedrons"])
-                elements = Vector{Element}(undef, elements_length)
                 Threads.@threads for j in 1:elements_length
-                    elements[j] = TetrahedronLinear(input_elements["tetrahedrons"][j], materials, nodes)
+                    element = TetrahedronLinear(input_elements["tetrahedrons"][j], materials, nodes)
                     Matrices.add!(
                         Kg_vector[Threads.threadid()],
-                        elements[j].degrees_freedom, 
-                        elements[j].K
+                        element.degrees_freedom, 
+                        element.K
                     )
                 end
             end
@@ -191,13 +190,12 @@ module Elements
             if "triangles" in keys(input_elements)
                 pop!(input_elements["triangles"])
                 elements_length = length(input_elements["triangles"])
-                elements = Vector{Element}(undef, elements_length)
                 Threads.@threads for j in 1:elements_length
-                    elements[j] = TriangleLinear(input_elements["triangles"][j], materials, nodes, problem_type)
+                    element = TriangleLinear(input_elements["triangles"][j], materials, nodes, problem_type)
                     Matrices.add!(
                         Kg_vector[Threads.threadid()],
-                        elements[j].degrees_freedom, 
-                        elements[j].K
+                        element.degrees_freedom, 
+                        element.K
                     )
                 end
             end
@@ -206,7 +204,7 @@ module Elements
         # A matriz global de rigidez é a soma das matrizes globais calculadas em cada thread
         Kg = Matrices.sum(Kg_vector)
 
-        return Kg, elements
+        return Kg
     end
     
     function assemble_force_line!(
