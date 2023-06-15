@@ -13,18 +13,18 @@ module Stress
                 type = "tetrahedrons"
                 pop!(input_elements["tetrahedrons"])
                 map_function = e -> begin
-                        el = TetrahedronLinear(e, materials, nodes)
-                        el.D * el.B * Ug[el.degrees_freedom]
-                    end
+                    el = TetrahedronLinear(e, materials, nodes)
+                    el.D * el.B * Ug[el.degrees_freedom]
+                end
             end
         else
             if "triangles" in keys(input_elements)
                 type = "triangles"
                 pop!(input_elements["triangles"])
                 map_function = e -> begin
-                        el = TriangleLinear(e, materials, nodes)
-                        el.D * el.B * Ug[el.degrees_freedom]
-                    end
+                    el = TriangleLinear(e, materials, nodes)
+                    el.D * el.B * Ug[el.degrees_freedom]
+                end
             end
         end
 
