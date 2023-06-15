@@ -6,8 +6,29 @@ module Stress
     import ..Elements
     using SparseArrays
 
-    function recovery(elements::Vector{<:Elements.Element}, Ug::Vector{<:Real})
-        σ   = Vector{Vector{Float64}}(map(e ->  e.D * e.B * Ug[e.degrees_freedom], elements))
+    function recovery(input_elements, Ug::Vector{<:Real}, materials::Vector{Any}, nodes::Vector{Any}, problem_type)
+        if problem_type == "3D"
+            if "tetrahedrons" in keys(input_elements)
+                type = "tetrahedrons"
+                pop!(input_elements["tetrahedrons"])
+                function map_function(e)
+                    el = TetrahedronLinear(e, materials, nodes)
+                    el.D * el.B * Ug[el.degrees_freedom]
+                end
+            end
+        else
+            if "triangles" in keys(input_elements)
+                type = "triangles"
+                pop!(input_elements["triangles"])
+             
+                end
+            end
+        end
+
+        σ   = Vector{Vector{Float64}}(map(
+            map_function, 
+            input_elements[type]
+        ))
         σvm = von_misses.(σ)
         σ, σvm 
     end
