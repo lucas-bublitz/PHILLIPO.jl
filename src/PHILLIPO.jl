@@ -111,7 +111,7 @@ module PHILLIPO
         end
 
 
-        print("Resolvendo o sistema...                                               ")
+        println("Resolvendo o sistema de $(size(Kg)) ")
         @time Solver.direct_solve!(Kg, Ug, Fg, dof_free, dof_prescribe)
 
         print("Calculando as reações...                                              ")

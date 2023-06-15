@@ -13,7 +13,7 @@ module Stress
                 type = "tetrahedrons"
                 pop!(input_elements["tetrahedrons"])
                 map_function = e -> begin
-                    el = TetrahedronLinear(e, materials, nodes)
+                    el = Elements.TetrahedronLinear(e, materials, nodes)
                     el.D * el.B * Ug[el.degrees_freedom]
                 end
             end
@@ -22,7 +22,7 @@ module Stress
                 type = "triangles"
                 pop!(input_elements["triangles"])
                 map_function = e -> begin
-                    el = TriangleLinear(e, materials, nodes)
+                    el = Elements.TriangleLinear(e, materials, nodes, problem_type)
                     el.D * el.B * Ug[el.degrees_freedom]
                 end
             end
