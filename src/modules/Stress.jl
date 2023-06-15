@@ -16,7 +16,6 @@ module Stress
                         el = TetrahedronLinear(e, materials, nodes)
                         el.D * el.B * Ug[el.degrees_freedom]
                     end
-                end
             end
         else
             if "triangles" in keys(input_elements)
@@ -26,7 +25,6 @@ module Stress
                         el = TriangleLinear(e, materials, nodes)
                         el.D * el.B * Ug[el.degrees_freedom]
                     end
-                end
             end
         end
 
