@@ -1,16 +1,23 @@
-\chapter{A Mecânica dos Sólidos: tensão e deformação no regime elástico}
+\chapter{A Mecânica dos Sólidos: tensão, deformação e deslocamento}
 
-Este capítulo é dividido em:
+A Mecânica dos Sólidos é parte da física que estuda o comportamento de objetos sólidos sobre carregamentos, aplicando métodos analíticos para determinar suas características de resistência, rigidez e estabilidade. Seu conteúdo é notório por ser fundamental para grande parte da vida dos engenheiros, sendo mecânicos, civis ou mesmo eletricistas, ao lado de outras áreas também tão fundamentais, como Mecânica dos Fluidos e Termodinâmica. Sua aplicação é voltada ao projeto de estruturas a fim de que cumpram determinadas exigências, sejam tanto de deformação máxima, capacidade de carga e peso, como também de economia de materiais. E, por meio de ferramentas matemáticas, estuda os efeitos de tensão e deformação no interior de corpos sólidos. \cite{popov}
+
+Este capítulo aborda os seguintes temas de Mecânica dos Sólidos, relevantes para o desenvolvimento inicial do módulo PHILLIPO.jl voltado à análise de estruturas elásticas sobre carregamentos contantes:
 \begin{enumerate}
-    \item introdução;
-    \item força e tensão;
+    \item tensão;
     \item deslocamento e deformação;
+    \item estado de tensão;
     \item lei de Hooke generalizada;
     \item modelo de viga de Euler-Bernoulli;
     \item critérios de tensão máxima admissível.
 \end{enumerate}
 
+Todos os conceitos deste capítulo seguem as definições do livro de \citeauthor{popov}: \emph{Engineering Mechanics of Solids}, de 1990.
 
-A Mecânica dos Sólidos é uma área da física que estuda o comportamento de objetos sólidos.
+\section{Tensão}
 
-Um sólido é todo o corpo que consegue resistir a forças de cisalhamento, deformando-se ou não. 
+Um corpo sólido se deforma quando submetido a carregamentos externos, distribuindo essas cargas ao longo de sua geometria. Tensão define a grandeza dessa distribuição agindo sobre áreas infinitesimais, de modo que qualquer secção do corpo revele forças internas que estejam em equilíbrio entre si, e que sejam balanceadas pelo carregamentos externos. \cite{popov}
+
+Seja um corpo $\bm{K}$, sólido, em equilíbrio e de geometria qualquer, submetido a forças externas $\vec{F}$, a secção $S$ é um corte sobre esse corpo que revela as forças internas $\vec{P}$, conforme a figura \ref{fig:forcas_internas}.
+
+\input{Figuras/forcas_internas.tex}
