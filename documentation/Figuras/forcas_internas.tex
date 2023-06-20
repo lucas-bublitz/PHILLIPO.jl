@@ -1,67 +1,46 @@
 \begin{figure}
-	\centering
-    \caption{Forças internas sobre a secção de um corpo sólido}
-    \tdplotsetmaincoords{70}{30}
-    \usetikzlibrary{intersections,patterns.meta}
-    \begin{tikzpicture}[tdplot_main_coords,scale=1,
-        line cap=butt,line join=round,
-        declare function={R(\u)=1.5+sin(\u*45)/(2+\u/8);},
-        icircle/.style={thick},
-        iplane/.style={fill=white,fill opacity=0.8},
-        iline/.style={semithick},
-        extra/.code={},annot/.code={\tikzset{extra/.code={#1}}}]
-        \newcommand\DrawIntersectingPlane[2][]{%
-        \begin{scope}[canvas is yz plane at x=#2,transform shape,#1]
-            \draw[iplane] (3,3) -- (-3,3) -- (-3,-3)-- (3,-3) -- cycle;
-            \draw[icircle]  (0,0) circle[radius={R(#2)}];
-            \tikzset{extra}
-        \end{scope}} 
-        \newcommand\DrawStretch[2][]{%
-        \draw[ultra thin,domain=#2,#1] foreach \Ang in {0,3,...,357}
-        {
-        plot[smooth,variable=\u] 
-        (\u,{R(\u)*cos(\Ang)},{R(\u)*sin(\Ang)})};
-        }
-        \draw[iline] (-1,{-1.5*5/4},-2.25) -- (0,{-1.5},-2.25);
-        \DrawIntersectingPlane[annot={%
-            \path (2.9,2.9) node[below left,transform shape]{$P$};
-            \draw (2,3) arc[start angle=180,end angle=270,radius=1];
-            \draw[dashed] (-1.5,-2.25) node[below,transform shape=false]{$a$} -- (-1.5,0);
-            }]{0}
-        \draw[iline] (0,{-1.5},-2.25) -- (4,0,-2.25);
-        \DrawStretch{0:4}
-        \DrawIntersectingPlane[icircle/.append style={pattern={Lines[angle=70,distance={3pt}]}},
-        annot={%
-            \draw[dashed] (0,-2.25) node[below,transform shape=false]{$x$} -- (0,-1.5);
-            }]{4}
-        \draw[iline] (4,0,-2.25) -- (8,1.5,-2.25);
-        \DrawStretch{4:8}
-        \DrawIntersectingPlane[annot={%
-            \path (2.9,2.9) node[below left,transform shape]{$Q$};
-            \draw (2,3) arc[start angle=180,end angle=270,radius=1];
-            \draw[dashed] (1.5,-2.25) node[below,transform shape=false]{$b$} -- (1.5,0);
-            }]{8}
-        \draw[iline] (8,1.5,-2.25) -- (9,{1.5*5/4},-2.25) ;
-    \end{tikzpicture}
-    %     \begin{tikzpicture}
-%         \coordinate (i) at (5,0,0);
-%         \coordinate (j) at (5,5,0);
-%         \coordinate (k) at (5,5,10);
-%         \coordinate (m) at (5,0,10);
-
-
-%         \draw[blue, ultra thick, fill=blue, fill opacity = 0.2] 
-%             (i) -- (j) -- (k) -- (m) -- cycle
-%         \draw [->] (0,0,0) -- (8,0,0) node[anchor = west] {$x$};
-%         \draw [->] (0,0,0) -- (0,8,0) node[anchor = south] {$y$};
-%         \draw [->] (0,0,0) -- (0,0,8) node[anchor = east] {$z$};
-%         \draw (i) node[blue, circle, draw, inner sep=1pt, fill=white, thin, scale = 1.1, fill opacity = 1] {$i$};
-%         \draw (j) node[blue, circle, draw, inner sep=1pt, fill=white, thin, scale = 1.1, fill opacity = 1] {$k$};
-%         \draw (k) node[blue, circle, draw, inner sep=1pt, fill=white, thin, scale = 1.1, fill opacity = 1] {$k$};
-%         \draw (m) node[blue, circle, draw, inner sep=1pt, fill=white, thin, scale = 1.1, fill opacity = 1] {$m$};
-% \end{tikzpicture}
-    \label{fig:forcas_internas}
-	\fonte{\me{2022}}
+    \centering
+    \caption{Forças internas: seção em um sólido qualquer}
+    \begin{subfigure}[b]{0.3\textwidth}
+        \centering
+        \begin{tikzpicture}[scale=0.6]
+            \draw [->] (0,0,0) -- (4,0,0) node[anchor = west] {$z$};
+            \draw [->] (0,0,0) -- (0,8,0) node[anchor = south] {$x$};
+            \draw [->] (0,0,0) -- (0,0,4) node[anchor = east] {$y$};
+        \end{tikzpicture}
+        \caption{$y=x$}
+        \label{fig:y equals x}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[b]{0.3\textwidth}
+        \centering
+        \begin{tikzpicture}[scale=0.6]
+            \draw [->] (0,0,0) -- (4,0,0) node[anchor = west] {$x$};
+            \draw [->] (0,0,0) -- (0,8,0) node[anchor = south] {$y$};
+            \draw [->] (0,0,0) -- (0,0,4) node[anchor = east] {$z$};
+            \shade[ball color = blue!60, opacity = 1] (0,4) circle (3cm);
+            \draw[green] (-3,4) arc (180:360:3 and 0.6);
+            \draw[dashed, green] (3,4) arc (0:180:-3 and 0.6);
+            \begin{scope}[canvas is xz plane at y=4]
+                \draw (-3,0) arc (0:360:-3); 
+            \end{scope}
+        \end{tikzpicture}
+        \caption{$y=3\sin x$}
+        \label{fig:three sin x}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[b]{0.3\textwidth}
+        \centering
+        \begin{tikzpicture}[scale=0.6]
+            \draw [->] (0,0,0) -- (4,0,0) node[anchor = west] {$z$};
+            \draw [->] (0,0,0) -- (0,8,0) node[anchor = south] {$x$};
+            \draw [->] (0,0,0) -- (0,0,4) node[anchor = east] {$y$};
+            \shade[ball color = blue!40, opacity = 1] (0,4) circle (3cm);
+            \draw[green] (-3,4) arc (180:360:3 and 0.6);
+            \draw[dashed, green] (3,4) arc (0:180:3 and 0.6);
+        \end{tikzpicture}
+        \caption{$y=5/x$}
+        \label{fig:five over x}
+    \end{subfigure}
+       \label{fig:forcas_internas}
 \end{figure}
-
-
