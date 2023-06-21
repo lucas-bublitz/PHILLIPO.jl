@@ -12,14 +12,22 @@ Este capítulo aborda os seguintes temas de Mecânica dos Sólidos, relevantes p
     \item critérios de tensão máxima admissível.
 \end{enumerate}
 
-Todos os conceitos deste capítulo seguem as definições do livro de \citeauthor{popov}: \emph{Engineering Mechanics of Solids}, de 1990.
+Todos os conceitos deste capítulo seguem as nomenclaturas do livro de \citeauthor{popov}: \emph{Engineering Mechanics of Solids}, de 1990.
 
 \section{Tensão}
 
-Um corpo sólido se deforma quando submetido a carregamentos externos, distribuindo essas cargas ao longo de sua geometria. Tensão define a grandeza dessa distribuição agindo sobre áreas infinitesimais, de modo que qualquer secção do corpo revele forças internas que estejam em equilíbrio entre si, e que sejam balanceadas pelo carregamentos externos. Essas forças, geralmente, variam ao longo do corpo, como também, dependem do plano de seção. E, devido a sua forma vetorial, é conveniente que sejam decompostas em parcelas tangenciais e normais à seção. \cite{popov}
-
-Seja um corpo $\bm{K}$, sólido, em equilíbrio e de geometria qualquer, submetido a forças externas $\vec{F}$, e as seções $S_{1,2,3}$ planos de corte através de esse corpo, ortogonais entre si, em que atuam as forças internas $\vec{P}$:
+Um corpo sólido se deforma quando submetido a carregamentos externos, distribuindo essas cargas ao longo de sua geometria. Tensão define a grandeza dessa distribuição agindo sobre áreas infinitesimais, de modo que qualquer secção do corpo revele forças internas que estejam em equilíbrio entre si, e que sejam balanceadas pels carregamentos externos. Essas forças, geralmente, variam ao longo do corpo, como também, dependem do plano de seção. E, devido a sua forma vetorial, é conveniente que sejam decompostas em parcelas tangenciais e normais à seção. \cite{popov}
 
 \input{Figuras/forcas_internas.tex}
 
-em que $\Delta\vec{P}$ simboliza a força equivalente agindo  sobre uma aréa $\Delta A$ discretizada de $S$.
+Sejam um corpo $\bm{K}$, sólido, em equilíbrio e de geometria qualquer, submetido a forças externas na forma do carregamento $\vec{F}$, e as seções $S_{1,2,3}$, planos de corte através de esse corpo, ortogonais entre si, em que atuam as forças internas $\vec{P}$, conforme a figura \ref{fig:forcas_internas}. 
+
+$\Delta P$ é a resultante de forças que atuam sobre uma área $\Delta A$ discretizada de $S$. O limite da razão entre cada componente de $\Delta P$ (tangenciais e normais) e a área $\Delta A$, quando $\Delta A \to 0$, define a tensão sobre o ponto de análise do corpo. Em notação matemática tensão é
+
+\begin{equation}
+    \tau_{xx} = \lim_{\Delta A \to 0} \frac{\Delta P_x}{\Delta A}, \qquad
+    \tau_{xy} = \lim_{\Delta A \to 0} \frac{\Delta P_y}{\Delta A}, \qquad
+    \tau_{xz} = \lim_{\Delta A \to 0} \frac{\Delta P_z}{\Delta A},
+\end{equation}
+
+em que os índices de $\tau$ indicam, o primeiro, a normal do plano infinitesimal em que a tensão atua, e, o segundo, sua direção. Por conveniência, as tensões normais são representadas por $\sigma$, ao invés de se utilizar $\tau$ com índices repetidos ($\tau_{xx} \equiv \sigma_x$). $tau$, então, é reservado às tensões de cisalhamento, que atuam tangencialmente ao plano infinitesimal. 

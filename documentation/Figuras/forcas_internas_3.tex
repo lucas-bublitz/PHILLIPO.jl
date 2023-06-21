@@ -1,0 +1,71 @@
+\documentclass[border=2mm,12pt,tikz]{standalone}
+\usepackage{tikz-3dplot} 
+\usetikzlibrary{intersections,patterns.meta}
+\begin{document}
+\tdplotsetmaincoords{70}{30}
+\begin{tikzpicture}[tdplot_main_coords,scale=1,
+	line cap=butt,line join=round,
+	declare function={R(\u)=1.5+sin(\u*45)/(2+\u/8);},
+	icircle/.style={thick},
+	iplane/.style={thick, fill=white,fill opacity=0.8},
+	iline/.style={semithick},
+ 	extra/.code={},annot/.code={\tikzset{extra/.code={#1}}}]
+ \newcommand\DrawIntersectingPlane[2][]{%
+  \begin{scope}[canvas is yz plane at x=#2,transform shape,#1]
+	 \draw[icircle, green]  (0,0) circle[radius={R(#2)}];
+	 \draw[dashed] (0,0) node[below,transform shape=false]{$b$} -- (1.5,0);
+	 \tikzset{extra}
+  \end{scope}} 
+ \newcommand\DrawStretch[2][]{%
+  \draw[ultra thin,domain=#2,#1] foreach \Ang in {270,273,...,360}
+   {
+   plot[smooth,variable=\u] 
+   (\u,{R(\u)*cos(\Ang)},{R(\u)*sin(\Ang)})};
+ }
+     \begin{scope}[canvas is yz plane at x = 0, transform shape]
+          \shade[fill =black!10] ({R(4)},0) arc (0:-90:{R(4)}) -- (0,0) -- cycle;
+     \end{scope}
+      \begin{scope}[canvas is yz plane at x = 2, transform shape]
+         \draw (0, 3) node[below,transform shape=false]{$\mathbf{K}$};
+     \end{scope}       
+     \begin{scope}[canvas is xy plane at z = 0, transform shape]
+         \shade[red, fill = black!30] 
+                plot[smooth, variable=\u, domain=0:4] (\u,{R(\u)})
+             -- (4,0)     
+             -- (0,0)
+             -- cycle;
+             \draw[white] (0.5,0.5) node[above]{$S_3$};
+     \end{scope}
+     
+     \begin{scope}[canvas is xz plane at y = 0, transform shape]
+                  \shade[top color = black!30, bottom color = black!80] 
+                plot[smooth, variable=\u, domain=0:4] (\u,{-R(\u)})
+             -- (4,0)     
+             -- (0,0)
+             -- cycle             
+             ;
+             \draw[white] (0.5,-0.5) node[below]{$S_2$};
+     \end{scope}
+     
+     \begin{scope}[canvas is yz plane at x = 4, transform shape]
+         \shade[top color =black!10, bottom color = black!80] ({R(4)},0) arc (0:-91:{R(4)}) -- (0,0) -- cycle;
+         \draw[white] (0.5,-0.5) node[below]{$S_1$};
+     \end{scope}
+     
+     \begin{scope}[canvas is xz plane at y = 0, transform shape]
+      %   \draw[->, thick] (4,0) -- (4.7,0) node[right]{$\Delta \vec{P}$};     
+     \end{scope}
+     
+     \draw[blue, thick, fill = blue, fill opacity = 0.3] (4,0.5,0) -- ++(-0.5,0,0) -- ++(0,-0.5,0) -- ++(0,0,-0.5) -- ++(0.5,0,0) -- ++ (0,0.5,0) -- ++(0,0,0.5) -- cycle;    
+     
+     \draw[->, thick] (4,0.25,-0.25) --++ (0.5,0,0) node[right]{\tiny $\Delta P_x$};
+     \draw[->, thick] (3.75,0,-0.25) --++ (0,-0.5,0) node[left]{\tiny $\Delta P_z$};
+     \draw[->, thick] (3.75,0.25,0)  --++ (0,0,0.5) node[above]{\tiny $\Delta P_y$};     
+     
+     
+     \draw[->] (4,-3,-3) -- (5,-3,-3) node[right]{\tiny $x$};
+     \draw[->] (4,-3,-3) -- (4,-4,-3) node[right]{\tiny $z$};
+     \draw[->] (4,-3,-3) -- (4,-3,-2) node[right]{\tiny $y$};
+     
+\end{tikzpicture}
+\end{document} 

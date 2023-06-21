@@ -27,6 +27,7 @@
      \end{scope}
       \begin{scope}[canvas is yz plane at x = 2, transform shape]
          \draw (0, 3) node[below,transform shape=false]{$\mathbf{K}$};
+         \draw (0,-2) -- (-2,-2.5) node[below,transform shape=false]{$\vec{F}_{\mathbf{K}}$};
      \end{scope}
     \DrawStretch{0:4}
      \begin{scope}[canvas is yz plane at x = 4, transform shape]

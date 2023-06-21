@@ -31,16 +31,17 @@
     \DrawStretch{0:4}
      \begin{scope}[canvas is yz plane at x = 4, transform shape]
          \draw[red, fill=white, fill opacity = 0.5] (3,3) -- (-3,3) -- (-3,-3)-- (3,-3) -- cycle;
-         \draw[icircle, red, fill=black!30, dashed]  (0,0) circle[radius={R(4)}];
+         \shade[top color =black!10, bottom color = black!80]  (0,0) circle[radius={R(4)}];
          \draw[red] (0,-2) node[below]{$S$};
-         \draw[thick, fill = blue, fill opacity = 0.4] (-0.3, -0.3) rectangle (0.3,0.3);
-         \draw (0, 0.3) node[above]{$\Delta A$};
+         \draw[thick, fill = blue, fill opacity = 0.3] (-0.3, -0.3) rectangle (0.3,0.3);
+         \draw[white] (0, -0.3) node[below]{$\Delta A$};
      \end{scope}
-     \begin{scope}[canvas is xz plane at y = 0, transform shape]
-         \draw[->, thick] (4,0) -- (4.7,0) node[right]{$\Delta \vec{P}$};     
-     \end{scope}
+     \draw[->, thick] (4,0,0) --++ (0.8,0,0.6) node[right]{\tiny $\Delta \vec{P}$};   
+
+       
+     
      \draw[->] (4,-3,-3) -- (5,-3,-3) node[right]{\tiny $x$};
-     \draw[->] (4,-3,-3) -- (4,-2,-3) node[right]{\tiny $y$};
-     \draw[->] (4,-3,-3) -- (4,-3,-2) node[right]{\tiny $z$};
+     \draw[->] (4,-3,-3) -- (4,-4,-3) node[right]{\tiny $z$};
+     \draw[->] (4,-3,-3) -- (4,-3,-2) node[right]{\tiny $y$};
 \end{tikzpicture}
 \end{document} 
