@@ -1,0 +1,32 @@
+\begin{figure}
+    \centering
+    \caption{Estado de tensão}
+    \begin{tikzpicture}[3d view = {-60}{-20}, scale=2]
+        \draw[->] (0,0,0) --++ (3,0,0) node[right]{$x$};
+        \draw[->] (0,0,0) --++ (0,3,0) node[left]{$y$};
+        \draw[->] (0,0,0) --++ (0,0,3) node[above]{$z$};
+        
+        \draw[very thick, blue] (0,0,0) --++ (2,0,0) --++ (0,0,2)--++ (-2,0,0) -- cycle;
+        \draw[very thick, blue] (0,2,0) --++ (2,0,0) --++ (0,0,2)--++ (-2,0,0) -- cycle;
+        \draw[very thick, blue] (0,0,0) --++ (0,2,0) --++ (0,0,2) --++ (0,-2,0) -- cycle;
+        \draw[very thick, blue] (2,0,0) --++ (0,2,0) --++ (0,0,2) --++ (0,-2,0) -- cycle;
+        \draw[line width=1mm, blue, fill = blue, fill opacity = 0.5] (2,0,0) --++ (0,0,2) --++ (-2,0,0) --++ (0,2,0) --++ (0,0,-2) --+(2,0,0) -- cycle;
+        
+        
+        \draw[arrows = {-Latex[width=10pt, length=10pt]},very thick, line width = 1mm] (2,1,1) --++ (1,0,0) node[right]{$\sigma_x$};
+        \draw[arrows = {-Latex[width=10pt, length=10pt]},very thick, line width = 1mm] (1,2,1) --++ (0,1,0) node[left]{$\sigma_y$};
+        \draw[arrows = {-Latex[width=10pt, length=10pt]},very thick, line width = 1mm] (1,1,2) --++ (0,0,1) node[right]{$\sigma_z$};
+        
+        \draw[arrows = {-Stealth[harpoon,swap]} ,very thick, line width = 1mm] (2,1,0.1) --++ (0,0,1.8) node[right]{$\tau_{xz}$};
+        \draw[arrows = {-Stealth[harpoon]} ,very thick, line width = 1mm] (2,0.1,1) --++ (0,1.7,0) node[above]{$\tau_{xy}$};
+
+        \draw[arrows = {-Stealth[harpoon]} ,very thick, line width = 1mm] (1,2,0.1) --++ (0,0,1.8) node[left]{$\tau_{yz}$};
+        \draw[arrows = {-Stealth[harpoon,swap]} ,very thick, line width = 1mm] (0.1,2,1) --++ (1.7,0,0) node[below]{$\tau_{yx}$};               
+        
+        \draw[arrows = {-Stealth[harpoon]} ,very thick, line width = 1mm] (0.1,1,2) --++ (1.8,0,0) node[left]{$\tau_{zx}$};
+        \draw[arrows = {-Stealth[harpoon,swap]} ,very thick, line width = 1mm] (1,0.1,2) --++ (0,1.8,0) node[above]{$\tau_{zy}$};        
+        
+        
+    \end{tikzpicture}
+    \label{fig:estado_de_tensao}
+\end{figure}

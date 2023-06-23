@@ -71,7 +71,10 @@ module PHILLIPO
 
         # GRAUS DE LIBERDADE: LIVRES E PRESCRITOS
         if problem_type == "3D"
-            dof_prescribe = reduce(vcat, map((x) -> [3 * x[1] - 2, 3 * x[1] - 1, 3 * x[1]], constraints_displacments))
+            dof_prescribe = reduce(vcat, map(
+                    (x) -> [3 * x[1] - 2, 3 * x[1] - 1, 3 * x[1]], 
+                    constraints_displacments
+                ))
             dof_free = filter(x -> x ∉ dof_prescribe, 1:dimensions*nodes_length)
             # RESTRIÇÃO DE DESLOCAMENTO
             Ug[dof_prescribe] = reduce(vcat, map((x) -> [x[2], x[3], x[4]], constraints_displacments))

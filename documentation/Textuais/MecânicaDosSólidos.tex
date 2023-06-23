@@ -1,33 +1,73 @@
 \chapter{A Mecânica dos Sólidos: tensão, deformação e deslocamento}
 
-A Mecânica dos Sólidos é parte da física que estuda o comportamento de objetos sólidos sobre carregamentos, aplicando métodos analíticos para determinar suas características de resistência, rigidez e estabilidade. Seu conteúdo é notório por ser fundamental para grande parte da vida dos engenheiros, sendo mecânicos, civis ou mesmo eletricistas, ao lado de outras áreas também tão fundamentais, como Mecânica dos Fluidos e Termodinâmica. Sua aplicação é voltada ao projeto de estruturas a fim de que cumpram determinadas exigências, sejam tanto de deformação máxima, capacidade de carga e peso, como também de economia de materiais. E, por meio de ferramentas matemáticas, estuda os efeitos de tensão e deformação no interior de corpos sólidos. \cite{popov}
+A Mecânica dos Sólidos é parte da física que estuda o comportamento de objetos sólidos sobre carregamentos, aplicando métodos analíticos para determinar suas características de resistência, rigidez e estabilidade. Seu conteúdo é notório por ser fundamental para grande parte da vida dos engenheiros, sendo mecânicos, civis ou mesmo eletricistas, ao lado de outras áreas também tão fundamentais, como Mecânica do Contínuo, Mecânica dos Fluidos e Termodinâmica. Sua aplicação é voltada ao projeto de estruturas a fim de que cumpram determinadas exigências, sejam tanto de deformação máxima, capacidade de carga e peso, como também de economia de materiais. E, por meio de ferramentas matemáticas, estuda os efeitos de tensão e deformação no interior de corpos sólidos. \cite{popov}
 
 Este capítulo aborda os seguintes temas de Mecânica dos Sólidos, relevantes para o desenvolvimento inicial do módulo PHILLIPO.jl voltado à análise de estruturas elásticas sobre carregamentos contantes:
 \begin{enumerate}
     \item tensão;
     \item deslocamento e deformação;
-    \item estado de tensão;
-    \item lei de Hooke generalizada;
+    \item a lei de Hooke generalizada;
     \item modelo de viga de Euler-Bernoulli;
-    \item critérios de tensão máxima admissível.
+    \item tensão de von mises.
 \end{enumerate}
-
-Todos os conceitos deste capítulo seguem as nomenclaturas do livro de \citeauthor{popov}: \emph{Engineering Mechanics of Solids}, de 1990.
 
 \section{Tensão}
 
-Um corpo sólido se deforma quando submetido a carregamentos externos, distribuindo essas cargas ao longo de sua geometria. Tensão define a grandeza dessa distribuição agindo sobre áreas infinitesimais, de modo que qualquer secção do corpo revele forças internas que estejam em equilíbrio entre si, e que sejam balanceadas pels carregamentos externos. Essas forças, geralmente, variam ao longo do corpo, como também, dependem do plano de seção. E, devido a sua forma vetorial, é conveniente que sejam decompostas em parcelas tangenciais e normais à seção. \cite{popov}
+Um corpo sólido se deforma quando submetido a carregamentos externos, distribuindo essas cargas ao longo de sua geometria. Tensão define a grandeza dessa distribuição agindo sobre áreas infinitesimais, de modo que qualquer secção do corpo revele forças internas que estejam em equilíbrio entre si, e que sejam balanceadas pelos carregamentos externos. Essas forças, geralmente, variam ao longo do corpo, como também, dependem do plano de seção. E, devido a sua forma vetorial, é conveniente que sejam decompostas em parcelas tangenciais e normais à seção. \cite{popov}
 
 \input{Figuras/forcas_internas.tex}
 
-Sejam um corpo $\bm{K}$, sólido, em equilíbrio e de geometria qualquer, submetido a forças externas na forma do carregamento $\vec{F}$, e as seções $S_{1,2,3}$, planos de corte através de esse corpo, ortogonais entre si, em que atuam as forças internas $\vec{P}$, conforme a figura \ref{fig:forcas_internas}. 
-
-$\Delta P$ é a resultante de forças que atuam sobre uma área $\Delta A$ discretizada de $S$. O limite da razão entre cada componente de $\Delta P$ (tangenciais e normais) e a área $\Delta A$, quando $\Delta A \to 0$, define a tensão sobre o ponto de análise do corpo. Em notação matemática tensão é
+Sejam um corpo $\bm{K}$, sólido, em equilíbrio e de geometria qualquer, submetido a forças externas na forma do carregamento $\vec{F}$, e as seções $S_{1,2,3}$, planos de corte através de esse corpo, ortogonais entre si, em que atuam as forças internas $\vec{P}$, conforme a figura \ref{fig:forcas_internas_1}. $\Delta P$ é a resultante de forças que atuam sobre uma área $\Delta A$ (centrada em um certo ponto $p$) discretizada de $S$. O limite da razão entre cada componente de $\Delta P$ (tangenciais e normais) e a área $\Delta A$, quando $\Delta A \to 0$, define a tensão sobre o ponto de análise do corpo. Em notação matemática tensão:
 
 \begin{equation}
     \tau_{xx} = \lim_{\Delta A \to 0} \frac{\Delta P_x}{\Delta A}, \qquad
     \tau_{xy} = \lim_{\Delta A \to 0} \frac{\Delta P_y}{\Delta A}, \qquad
     \tau_{xz} = \lim_{\Delta A \to 0} \frac{\Delta P_z}{\Delta A},
 \end{equation}
+em que os índices de $\tau$ indicam, o primeiro, a normal do plano infinitesimal em que a tensão atua, e, o segundo, sua direção. Por conveniência, as tensões normais (aquelas que atuam perpendicularmente ao plano) são representadas por $\sigma$, ao invés de se utilizar $\tau$ com índices repetidos ($\tau_{xx} \equiv \sigma_x$). O símbolo $tau$, então, é reservado às tensões de cisalhamento, que atuam tangencialmente ao plano infinitesimal. No SI, a tensão é mensurada em Pascal [Pa](N/m²).
 
-em que os índices de $\tau$ indicam, o primeiro, a normal do plano infinitesimal em que a tensão atua, e, o segundo, sua direção. Por conveniência, as tensões normais são representadas por $\sigma$, ao invés de se utilizar $\tau$ com índices repetidos ($\tau_{xx} \equiv \sigma_x$). $tau$, então, é reservado às tensões de cisalhamento, que atuam tangencialmente ao plano infinitesimal. 
+\input{Figuras/estado_de_tensao.tex}
+
+Se o mesmo procedimento for realizado para cada face de um elemento cúbico, formado por mais três seções paralelas e equidistantes a $S_{1,2,3}$ da figura \ref{fig:forcas_internas_3}, teremos a configuração da tensão em três planos perpendiculares entre si para um certo ponto $p$ em $\bm{K}$,  conforme a figura \ref{fig:estado_de_tensao}, o que descreve o estado de tensão para aquele ponto. É conveniente escrever as componentes do estado de tensão na forma
+
+\begin{equation}
+    [\sigma] =
+    \begin{bmatrix}
+        \sigma_x & \tau_{xy} & \tau_{xz} \\
+        \tau_{yx} & \sigma_{y} & \tau_{yz} \\
+        \tau_{zx} & \tau_{zy} & \sigma_{z} \\
+    \end{bmatrix},
+\end{equation}
+em que a linha indica o plano em que a componente age, e a coluna, sua direção.
+
+!!!continua...!!!
+
+\section{Deslocamento e deformação}
+
+O deslocamento de um sólido por ser descrito por uma função vetorial que mapeia cada ponto do domínio ao seu respectivo deslocamento, de modo que é igual à variação ente a posição original e a deslocada do ponto.
+
+Seja um corpo $\bm{K}$ definido sobre uma região $\Omega$, e a função $\vec{U}(\vec{x})$, a representação de seu deslocamento, que descreve a transformação da posição original em deformada de cada ponto, mapeando $\Omega$ para $\Omega'$.
+
+\begin{equation}
+    T(\vec{x}) = \vec{x} \vec{x} + \vec{U}(\vec{x}),
+    \vec{U}_{\bm{K}}(x,y,z) = \begin{bmatrix}
+        u(x,y,z) \\ v(x,y,z) \\ w(x,y,z) 
+    \end{bmatrix}.
+\end{equation}
+em que $u, v, w$ são as componentes do deslocamento nas direções de $x, y, z$, respectivamente.
+
+\input{Figuras/deslocamento.tex}
+
+\section{A Lei de Hooke}
+
+Em corpos sólidos, a deformação está relacionada diretamente com a tensão em seu interior, de modo que se possa, dentro de certas condições, descrever uma transformação linear entre elas. Essa transformação é nomeada \emph{Lei de Hooke}.
+
+Sejam a barra $\bm{B}$, um corpo sólido, homogêneo, em equilíbrio, de comprimento $L$, engastado em $x=0$, e de seção transversal quadrada $A$, e $F$, uma força constante que atua sobre a face direita de $\bm{B}$, na direção de $x$, que a deforma em $\bm{B}'$ até um comprimento $L+\Delta L$, tal como na figura \ref{fig:barra_deformada}. 
+
+\input{Figuras/barra_deformada.tex}
+
+A tensão desenvolvida em uma seção $S$ de $\bm{B}$, perpendicular à força $\vec{F}$, pode ser descrita em termos do módulo de elasticidade do material que compõe $\bm{B}$, $E$ (denominado também de Módulo de ), e da deformação $\Delta L$, de modo que
+
+\begin{equation}
+    \sigma_x = E \epsilon_x = E \frac{\Delta L}{L}.
+\end{equation}
