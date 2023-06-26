@@ -16,7 +16,6 @@
 
 module PHILLIPO
     # Módulo do escopo principal
-
     include("./modules/includes.jl") # Módulos internos
 
     # MÓDULOS EXTERNOS
