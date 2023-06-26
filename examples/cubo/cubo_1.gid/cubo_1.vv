@@ -1,19 +1,37 @@
-BeginZE C:/DEV/PHILLIPO.jl/examples/cubo/cubo_1.gid/cubo_1.vv
-   x -20.5955 20.5955
-   y 10 -10
-   z -30 30
-   e 10
-   v 2.18557e-008 1.91069e-015 -8.74228e-008
-   r -1
-   m 1 -1.74846e-007 -7.64274e-015 0 1.74846e-007 1 4.37114e-008 0 0 -4.37114e-008 1 0 0 0 0 1
-   c 0 0 0
+BeginZE
+   x -3.79762864112854004 4.70141267776489258
+   y 2.15535712242126465 -1.16571342945098877
+   z -3.09807610511779785 2.09807610511779785
+   e 0.866025388240814209
+   v 0.244432675889588225 -0.218864018310133218 -0.0464822638892213452
+   r -0.94349912961821969
+   m 0.899875879287719727 -0.194706991314888 0.390272438526153564 0 -0.0192830841988325119 0.87618410587310791 0.481590628623962402 0 -0.435719579458236694 -0.440897434949874878 0.784702420234680176 0 0 0 0 1
+   c 0.5 0.5 0.5
    pd 0
    pno 0
    pfo 0
    pf 4
    pv 0
-   NowUse 2
-   DrawingType 3
+   NowUse 1
+   DrawingType 0
    LightVector 90 90 150 0
-EndZE C:/DEV/PHILLIPO.jl/examples/cubo/cubo_1.gid/cubo_1.vv
+   OGLShadow(UseShadows) 0
+   OGLShadow(RenderMode) RenderNice
+   OGLShadow(ShadowBias) -0.002
+   OGLShadow(AmbientShadows) 1
+   OGLShadow(UseFBO) 1
+   OGLShadow(FBOSize) 2048
+   OGLShadow(DimmedLightFactor) 0.02
+   OGLStereo(UseStereo) 0
+   OGLStereo(RelativeEyeDistance) 1
+   OGLStereo(FlipEyes) 0
+   OGLStereo(StereoMode) AnaglyphColors
+   OGLStereo(EyeDistance) 0.075
+   OGLStereo(LeftEyeDistance) 1 0 0 1
+   OGLStereo(RightEyeDistance) 0 1 1 1
+EndZE
+
+BeginMirror
+   Mirror 0 Angle 0.0 AngleFake -15.0 SizeFactor 2.0 HeightOffset 0.25 Color #d9e5f24d Backlight Off EdgeStyle No Type Scene DrawMode Mirror
+EndMirror
 

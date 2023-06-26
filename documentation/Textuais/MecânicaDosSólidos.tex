@@ -24,11 +24,9 @@ Sejam um corpo $\bm{K}$, sólido, em equilíbrio e de geometria qualquer, submet
     \tau_{xy} = \lim_{\Delta A \to 0} \frac{\Delta P_y}{\Delta A}, \qquad
     \tau_{xz} = \lim_{\Delta A \to 0} \frac{\Delta P_z}{\Delta A},
 \end{equation}
-em que os índices de $\tau$ indicam, o primeiro, a normal do plano infinitesimal em que a tensão atua, e, o segundo, sua direção. Por conveniência, as tensões normais (aquelas que atuam perpendicularmente ao plano) são representadas por $\sigma$, ao invés de se utilizar $\tau$ com índices repetidos ($\tau_{xx} \equiv \sigma_x$). O símbolo $tau$, então, é reservado às tensões de cisalhamento, que atuam tangencialmente ao plano infinitesimal. No SI, a tensão é mensurada em Pascal [Pa](N/m²).
+em que os índices de $\tau$ indicam, o primeiro, a normal do plano infinitesimal em que a tensão atua, e, o segundo, sua direção. Por conveniência, as tensões normais (aquelas que atuam perpendicularmente ao plano) são representadas por $\sigma$, ao invés de se utilizar $\tau$ com índices repetidos ($\tau_{xx} \equiv \sigma_x$). O símbolo $tau$, então, é reservado às tensões de cisalhamento, que atuam tangencialmente ao plano infinitesimal. No SI, a tensão é mensurada em Pascal ([Pa] = [N/m²]).
 
-\input{Figuras/estado_de_tensao.tex}
-
-Se o mesmo procedimento for realizado para cada face de um elemento cúbico, formado por mais três seções paralelas e equidistantes a $S_{1,2,3}$ da figura \ref{fig:forcas_internas_3}, teremos a configuração da tensão em três planos perpendiculares entre si para um certo ponto $p$ em $\bm{K}$,  conforme a figura \ref{fig:estado_de_tensao}, o que descreve o estado de tensão para aquele ponto. É conveniente escrever as componentes do estado de tensão na forma
+Se o mesmo procedimento for realizado para cada face de um elemento cúbico, formado por mais três seções paralelas e equidistantes a $S_{1,2,3}$ da figura \ref{fig:forcas_internas_3}, teremos a configuração da tensão em três planos perpendiculares entre si para um certo ponto $p$ em $\bm{K}$,  conforme a figura \ref{fig:estado_de_tensao}, o que descreve o estado de tensão para aquele ponto. As componentes do estado de tensão podem ser dispostas na forma do tensor de segunda ordem, denominado tensor de tensões, de acordo com \citeshort{popov}, na forma matricial
 
 \begin{equation}
     [\sigma] =
@@ -40,16 +38,100 @@ Se o mesmo procedimento for realizado para cada face de um elemento cúbico, for
 \end{equation}
 em que a linha indica o plano em que a componente age, e a coluna, sua direção.
 
-!!!continua...!!!
+O tensor de tensões é simétrico, o que pode ser demonstrado realizado o somatório de momentos sobre o elemento infinitesimal de tensão, de modo que esteja em equilíbrio. Oportunamente, escolhendo o ponto central para a análise de equilíbrio angular, podemos descrever as seguintes relações \cite{roy}:
+
+\begin{equation}
+    \begin{cases}
+        \displaystyle  \vec{i} : \tau_{zy} (dxdy) \frac{dz}{2} - \tau_{yz} (dx dz) \frac{dy}{2} - \tau_{zy} (dydx) \frac{dz}{2}+ \tau_{yz} (dxdy) \frac{dy}{2} = 0 \\
+
+        \displaystyle  \vec{j} : \tau_{xz} (dydz) \frac{dx}{2} - \tau_{zx} (dx dy) \frac{dz}{2} - \tau_{zx} (dx dy) \frac{dz}{2} + \tau_{xz} (dydz) \frac{dx}{2} = 0 \\
+
+        
+        \displaystyle  \vec{k} : \tau_{yx} (dxdz) \frac{dy}{2} - \tau_{xy} (dydz) \frac{dx}{2} - \tau_{xy} (dydz) \frac{dx}{2} + \tau_{yx} (dxdz) \frac{dy}{2} = 0 \\
+
+    \end{cases} \implies
+    \begin{cases}
+        \tau_{zy} = \tau_{yz} \\
+        \tau_{xz} = \tau_{zx} \\
+        \tau_{yx} = \tau_{xy} \\
+    \end{cases}.
+\end{equation}
+Portanto,
+\begin{equation}
+    \tau_{ij} = \tau_{ji} \equiv [\sigma] = [\sigma]^T.
+\end{equation}
+
+Essa propriedade torna com que o tensor de tensões possua apenas seis componentes independentes, ao invés de nove. Aproveitando-se disso, a notação de Voigt reduz a ordem do tensor, de modo que as componentes são dispostas em um vetor coluna de seis elementos, tal que
+
+\begin{equation}
+    \vec{\sigma} = \begin{bmatrix}
+        \sigma_x & \sigma_y & \sigma_z & \tau_{xy} & \tau_{xz} & \tau_{yz}
+    \end{bmatrix}^t.
+\end{equation}
+
+\input{Figuras/estado_de_tensao.tex}
+
+\section{Equações diferenciais governantes do equilíbrio estático}
+
+Outro fato importante sobre o estado de tensão vem do equilíbrio de forças. Assumindo que a distribuição de tensão $[\sigma](x,y,z)$ é contínua e diferenciável ao longo do domínio $\Omega$ do sólido $\bm{K}$, podemos analisar sua variação sobre um elemento cúbico infinitesimal, de modo que a força resultante sobre ele seja nula. Como o tensor de tensões representa a decomposição das forças internas agindo sobre as faces de um cubo infinitesimal, o somatório de forças é a própria integral da tensão ao longo dessas superfícies, ou seja,
+
+\begin{equation}
+    \oiint_A [\sigma] \cdot d\vec{A} = \vec{0},
+    \label{eq:equilibrio}
+\end{equation}
+que é equivalente a 
+\begin{equation}
+    \oiint_A \begin{bmatrix}
+        \sigma_x   \\
+        \tau_{yx}  \\
+        \tau_{zx} 
+    \end{bmatrix} \cdot \vec{u} dA
+    + 
+    \oiint_A \begin{bmatrix}
+        \tau_{xy}  \\
+        \sigma_y   \\
+        \tau_{zy}
+    \end{bmatrix} \cdot \vec{u} dA
+    +
+    \oiint_A \begin{bmatrix}
+        \tau_{xz}  \\
+        \tau_{yz}  \\
+        \sigma_z
+    \end{bmatrix} \cdot \vec{u} dA
+    = \vec{0}.
+\end{equation}
+
+A integração é sobre uma região fechada, fronteira de um subdomínio de $\Omega$, e portanto, como a tensão foi assumida contínua e diferenciável em todo $\Omega$, podemos aplicar o teorema da divergência\footnote{O teorema da divergência, também conhecido como teorema de Gauss, afirma que, dada uma função vetorial contínua e diferenciável sobre uma região fechada: $ \oiint_{\partial \omega} \vec{f} d\vec{A} = \iiint_{\Omega} \nabla \cdot \vec{f} dV$, em que $\partial \Omega$ representa a fronteira da região $\Omega$.} à equação \ref{eq:equilibrio}, obtendo que
+
+\begin{equation}
+    \int_V \nabla \cdot [\sigma] dV = \vec{0}.
+\end{equation}
+
+Essa relação é válida para qualquer volume infinitesimal no sólido, ou seja, o domínio de integração $V$ é um volume arbitrário. Portanto, como a integração deve ser nula independentemente do subdomínio de $\Omega$ escolhido para compor $V$, a função integrada deve ser nula em todo $\Omega$, ou seja,
+
+\begin{equation}
+    \nabla \cdot [\sigma] = \vec{0}.
+\end{equation}
+
+Esse resultado é o sistema de equações diferenciais parciais de equilíbrio, que governa o estado de tensão. A partir dele, é possível obter as funções $\sigma_{ij}(x,y,z)$, desde que sejam conhecidas as condições de contorno (geralmente carregamentos externos e deslocamentos conhecidos), comumente, por métodos numéricos como o MEF. Explicitamente, para três dimensões, o sistema de equações diferenciais parciais de equilíbrio é
+
+\begin{equation}
+    \begin{cases}
+       \displaystyle \frac{\partial \sigma_x}{\partial x} + \frac{\partial \tau_{yx}}{\partial y} + \frac{\partial \tau_{zx}}{\partial z} = 0 \\
+       \displaystyle \frac{\partial \tau_{xy}}{\partial x} + \frac{\partial \sigma_y}{\partial y} + \frac{\partial \tau_{zy}}{\partial z} = 0 \\
+       \displaystyle \frac{\partial \tau_{xz}}{\partial x} + \frac{\partial \tau_{yz}}{\partial y} + \frac{\partial \sigma_z}{\partial z}= 0 \\
+    \end{cases}.
+\end{equation}
+
 
 \section{Deslocamento e deformação}
 
-O deslocamento de um sólido por ser descrito por uma função vetorial que mapeia cada ponto do domínio ao seu respectivo deslocamento, de modo que é igual à variação ente a posição original e a deslocada do ponto.
+O deslocamento de um sólido é uma função vetorial que mapeia cada ponto do domínio ao seu respectivo deslocamento, de modo que é igual à variação ente a posição original e a deslocada do ponto.
 
 Seja um corpo $\bm{K}$ definido sobre uma região $\Omega$, e a função $\vec{U}(\vec{x})$, a representação de seu deslocamento, que descreve a transformação da posição original em deformada de cada ponto, mapeando $\Omega$ para $\Omega'$.
 
 \begin{equation}
-    T(\vec{x}) = \vec{x} \vec{x} + \vec{U}(\vec{x}),
+    T(\vec{x}) = \vec{x} + \vec{U}(\vec{x}),
     \vec{U}_{\bm{K}}(x,y,z) = \begin{bmatrix}
         u(x,y,z) \\ v(x,y,z) \\ w(x,y,z) 
     \end{bmatrix}.
