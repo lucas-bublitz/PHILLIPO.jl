@@ -17,7 +17,6 @@
 module PHILLIPO
     # Módulo do escopo principal
     include("./modules/includes.jl") # Módulos internos
-    print("pipcoa");
     # MÓDULOS EXTERNOS
     import LinearAlgebra
     import SparseArrays
