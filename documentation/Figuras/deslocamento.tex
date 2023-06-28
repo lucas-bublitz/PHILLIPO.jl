@@ -1,17 +1,51 @@
 \begin{figure}
     \centering
     \caption{Função de deslocamento sobre a região de um sólido}
-
     \begin{tikzpicture}[
-        mdomain/.style = {blue, line width = 0.5mm, fill = blue, fill opacity = 0.3}
+        mdomain/.style = {blue, line width = 0.5mm, fill = blue, fill opacity = 0.3},
+        marrow/.style={arrows = {-Stealth[length=8pt, inset=5pt]}, line width = 0.2mm},
+        marrowb/.style={arrows = {-Stealth[length=10pt, inset=1pt]}, line width = 0.5mm, violet},
+        marrowc/.style={arrows = {-Stealth[length=10pt, inset=3pt]}, line width = 0.5mm}
+        ]
     ]
         \draw[mdomain] plot[smooth, variable=\u, domain=0:360]({(5 * cos(\u) + 0.3 * sin(\u))/1.5 + 3.5},{(2 * sin(\u) + 0.4 * cos(3 *\u))/1.5+5});
         \draw[mdomain] plot[smooth, variable=\u, domain=0:360, blue, thick, fill = blue, fill opacity = 0.6]({(5 * cos(\u) + 0.3 * sin(\u))/2 +10},{(2 * sin(\u) + 0.4 * cos(3 *\u))/1.1+3});
 
-        \node[white] (A) at (3.5,5) {\large $\Omega$};
+        \node[white, scale = 4, opacity = 0.5] (Ca) at (3.5,5) {\large $\Omega$};
+
+        \node[white, scale = 4, opacity = 0.5] (Cb) at (10,3) {\large $\Omega'$};
 
         \draw[->] (0,0) -- (12,0) node[above]{$x$};
         \draw[->] (0,0) -- (0,6) node[above]{$y$};
+
+        \node[] (A) at (4,4) {};
+        \draw (A) node[above right]{$A$};
+        \node[] (B) at (3,6) {};
+        \draw (B) node[above]{$B$};
+
+        \node[] (A') at (8,2.8) {};
+        \draw (A') node[above]{$A'$};
+        \node (B') at (11.5,3) {};
+        \draw (B') node[above right]{$B'$};
+        
+        \draw[magenta, line width = 0.5mm] (A.center) -- (B.center);
+        \draw[magenta, line width = 0.5mm] (A'.center) -- (B'.center);
+
+        \draw[marrow]  (0,0) -- (A.center) node[midway,above left]{\large $\vec{a}$};
+        \draw[marrow]  (0,0) -- (B.center) node[midway,above left]{\large $\vec{b}$};
+        \draw[marrow]  (0,0) -- (A'.center) node[midway,above]{\large $\vec{a}'$};
+        \draw[marrow]  (0,0) -- (B'.center) node[midway,below]{\large $\vec{b}'$};
+
+        \draw[marrowb]  (A.center) -- (A'.center) node[midway,below]{$\vec{U}(\vec{A})$};
+        \draw[marrowb]  (B.center) -- (B'.center) node[midway,below]{$\vec{U}(\vec{B})$};
+
+        \foreach \n in {A,B,A',B'}
+             \node at (\n)[circle,fill,inner sep=0.3mm]{};
+
+        \draw[marrowc] (6.4,6) to[out=45, in=125] (9, 5.2); 
+        
+        \node[scale = 2] (T) at (8.5,6.6) {$T$};
+
     \end{tikzpicture}
     \label{fig:deslocamento}
 \end{figure}

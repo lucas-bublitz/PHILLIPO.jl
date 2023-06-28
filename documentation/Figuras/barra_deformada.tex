@@ -1,23 +1,56 @@
 \begin{figure}
-    \caption{Barra deformada por uma força axial}
-    \begin{tikzpicture}[
-            marrow/.style = {arrows = {-Latex[width=8pt, length=10pt]}}
-        ]
-        
-        \draw[->] (0,0) --++ (0,3) node[above]{$y$};
-        \draw[->] (0,0) --++ (10,0) node[above]{$x$};
+    \centering
+    \caption{Barra deformada}
+    \begin{subfigure}[b]{\textwidth}
+        \resizebox{\textwidth}{!}{
+            \begin{tikzpicture}[
+                    marrow/.style = {arrows = {-Latex[width=8pt, length=10pt]}}
+                ]
+                
+                \draw[->] (0,0) --++ (0,3) node[above]{$y$};
+                \draw[->] (0,0) --++ (10,0) node[above]{$x$};
 
-        \draw[thick, blue, fill = blue, fill opacity = 0.3] (0,0) rectangle (8,2);
-        \draw (4,1) node{$\bm{B}$};
-        
-        \draw[thick, blue, fill = blue, fill opacity = 0.3, dashed] (0,0.2) rectangle (8.5,1.8);
-        \draw (4.25,0.9) node{$\bm{B}'$};
+                \draw[thick, blue, fill = blue, fill opacity = 0.3] (0,0) rectangle (8,2);
+                \draw (4,1) node{$\bm{B}$};
+                
+                \draw[thick, blue, fill = blue, fill opacity = 0.3, dashed] (0,0.2) rectangle (8.5,1.8);
 
-        \draw[|<->|] (0,2.1) --++ (8,0) node[above, midway]{$L$};
-        \draw[|<->|] (8,2.1) --++ (0.5,0) node[above,midway]{$\Delta L$};
+                \draw[|<->|] (0,2.1) --++ (8,0) node[above, midway]{$L$};
+                \draw[|<->|] (8,2.1) --++ (0.5,0) node[above,midway]{$\Delta L$};
 
-        \draw[marrow] (8.5,1) --++ (2,0) node[right]{$\vec{F}$};
-        
-    \end{tikzpicture}
-    \label{fig:barra_deformada}
+                \draw[marrow] (8.5,1) --++ (2,0) node[right]{$\vec{F}$};
+                
+            \end{tikzpicture}
+        }
+        \caption{por tração}
+        \label{fig:barra_deformada_1}
+    \end{subfigure}
+    \begin{subfigure}[b]{\textwidth}
+        \resizebox{\textwidth}{!}{
+            \begin{tikzpicture}[
+                marrow/.style = {arrows = {-Latex[width=4pt, length=10pt]}, line width = 0.5mm}
+            ]
+
+            \draw[->] (0,0) --++ (0,3) node[above]{$y$};
+            \draw[->] (0,0) --++ (10,0) node[above]{$x$};
+            \draw[thick] (8,2)-- (8,3.10) (8,0) -- (8.5,2) --++ (0.25, 1);
+            \draw[thick, blue, fill = blue, fill opacity = 0.3, dashed] (0,0) rectangle (8,2);
+
+
+            \draw[thick, red, fill = red, fill opacity = 0.3] (0,0) -- (0.5,2) -- (8.5,2) -- (8,0) -- cycle;
+
+            \draw[|<->|] (0,2.1) --++ (8,0) node[above, midway]{$L$};
+            \foreach \n in {0,1,...,7}{
+                \draw[marrow] ({\n},2) --++ (1.05,0);
+            }
+
+            \draw (1,2) |- (2,3) node[right]{$Q$};
+            \draw (4,1) node{$\bm{B}$};
+
+            \draw[<->] (8,2.7) arc (90:71:2) node[midway, above]{$\gamma$}	;
+            \end{tikzpicture}
+        }
+        \caption{por cisalhamento}
+        \label{fig:barra_deformada_2}
+    \end{subfigure}
 \end{figure}
