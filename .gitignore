@@ -10,7 +10,6 @@
 *.lof
 *.log
 *.lot
-*.pdf
 *.gz
 *.toc
 *.ilg
@@ -22,3 +21,5 @@ output.favia.res
 /GiD
 /FreeCAD_model
 /testes
+build
+/documentation/TCC-Lucas_bublitz

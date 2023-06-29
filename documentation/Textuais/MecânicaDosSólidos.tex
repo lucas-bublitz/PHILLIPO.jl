@@ -28,14 +28,14 @@ Sejam um corpo $\bm{K}$, sólido, em equilíbrio e de geometria qualquer, submet
 \end{equation}
 em que os índices de $\tau$ indicam, o primeiro, a normal do plano infinitesimal em que a tensão atua, e, o segundo, sua direção. Por conveniência, as tensões normais (aquelas que atuam perpendicularmente ao plano) são representadas por $\sigma$, ao invés de se utilizar $\tau$ com índices repetidos ($\tau_{xx} \equiv \sigma_x$). O símbolo $tau$, então, é reservado às tensões de cisalhamento, que atuam tangencialmente ao plano infinitesimal. No SI, a tensão é mensurada em Pascal ([Pa] = [N/m²]).
 
-Se o mesmo procedimento for realizado para cada face de o elemento cúbico, formado por mais três seções paralelas e equidistantes a $S_{1,2,3}$ da figura \ref{fig:forcas_internas_3}, teremos a configuração da tensão em três planos perpendiculares entre si para um certo ponto $p$ em $\bm{K}$,  conforme a figura \ref{fig:estado_de_tensao}, o que descreve o estado de tensão para aquele ponto. As componentes do estado de tensão podem ser dispostas na forma do tensor de segunda ordem, denominado tensor de tensões, e, de acordo com \citeshort{roylance}, é
+Se o mesmo procedimento for realizado para cada face de o elemento cúbico, formado por mais três seções paralelas e equidistantes a $S_{1,2,3}$ da figura \ref{fig:forcas_internas_3}, teremos a configuração da tensão em três planos perpendiculares entre si para um certo ponto $p$ em $\bm{K}$,  conforme a figura \ref{fig:estado_de_tensao}, o que descreve o estado de tensão para aquele ponto. As componentes do estado de tensão podem ser dispostas na forma do tensor de segunda ordem, denominado tensor de tensões, e, de acordo com \citeshort{popov}, é
 
 \begin{equation}
     [\bm{\sigma}] =
     \begin{bmatrix}
-        \sigma_x & \tau_{xy} & \tau_{xz} \\
-        \tau_{yx} & \sigma_{y} & \tau_{yz} \\
-        \tau_{zx} & \tau_{zy} & \sigma_{z} \\
+        \sigma_x & \tau_{yx} & \tau_{zx} \\
+        \tau_{xy} & \sigma_{y} & \tau_{zy} \\
+        \tau_{xz} & \tau_{yz} & \sigma_{z} \\
     \end{bmatrix},
 \end{equation}
 em que a linha indica o plano em que a componente age, e a coluna, sua direção.
@@ -98,11 +98,34 @@ Esse resultado é o sistema de equações diferenciais parciais de equilíbrio, 
 Explicitamente, para três dimensões, o sistema de equações diferenciais de equilíbrio é
 
 \begin{gather}
-       \displaystyle \frac{\partial \sigma_x}{\partial x} + \frac{\partial \tau_{yx}}{\partial y} + \frac{\partial \tau_{zx}}{\partial z} = 0 \\
-       \displaystyle \frac{\partial \tau_{xy}}{\partial x} + \frac{\partial \sigma_y}{\partial y} + \frac{\partial \tau_{zy}}{\partial z} = 0 \\
-       \displaystyle \frac{\partial \tau_{xz}}{\partial x} + \frac{\partial \tau_{yz}}{\partial y} + \frac{\partial \sigma_z}{\partial z} = 0 
+       \displaystyle \frac{\partial \sigma_x}{\partial x} + \frac{\partial \tau_{yx}}{\partial y} + \frac{\partial \tau_{zx}}{\partial z} = 0, \\
+       \displaystyle \frac{\partial \tau_{xy}}{\partial x} + \frac{\partial \sigma_y}{\partial y} + \frac{\partial \tau_{zy}}{\partial z} = 0, \\
+       \displaystyle \frac{\partial \tau_{xz}}{\partial x} + \frac{\partial \tau_{yz}}{\partial y} + \frac{\partial \sigma_z}{\partial z} = 0.
+       \label{eq:equilibrio_governo}
 \end{gather}
 
+
+A direção em que o elemento infinitesimal é orientado altera as componentes do seu estado de tensão, de modo que sua rotação evidencia direções nas quais as tensões não tem componentes tangenciais, ou seja, tem cisalhamento nulo. Essas tensões são chamadas, então, tensões principais.
+
+O tensor de tensões pode ser interpretado como uma transformação linear que recebe um vetor unitário $\hat{n}$ e retorna o vetor da tensão resultante, $\vec{\sigma}_{\hat{n}}$, agindo sobre um plano normal a $\hat{n}$.\footnote{Aplicando um vetor $\hat{n}$ trivial ($\hat{i}, \hat{j}, \hat{k}$) à trasnformação $[\bm{\sigma}]$, obtém-se as próprias tensões mostradas na figura \ref{fig:estado_de_tensao}, como já era de se esperar.} Caso exista uma tensão resultante que tenha a mesma direção $\hat{n}$, a tensão não tera componentes tangenciais, uma vez que, sendo colinear ao vetor unitário, é normal ao plano definido por ele. Em termos matemáticos, é o mesmo que $\vec{\sigma}_{\hat{n}} = \sigma \hat{n}$\footnote{$|\sigma|$, nesse sentido, seria a norma da tensão resultante, uma vez que $\hat{n}$ é unitário e adimensional. $ |\vec{\sigma}_{\hat{n}}| = |\sigma \hat{n}| = |\sigma| |\hat{n}| = |\sigma| $}, ou, aplicando a transformação linear $[\bm{\sigma}]$,
+\begin{equation}
+    [\bm{\sigma}]\hat{n} = \sigma \hat{n}.
+\end{equation}
+Oberservando a forma dessa equação, é evidente que $\hat{n}$ é um autovetor de $[\bm{\sigma}]$, e $\sigma$ é o autovalor correspondente, portanto, determiná-los é equivalente a encontrar as tensões principais, ou seja, as raízas do polinômio característica do tensor de tensões:
+
+\begin{equation}
+    \det{([\bm{\sigma}] - \sigma \bm{I})} = 0, \qquad \text{ou} \qquad \begin{vmatrix}
+        \sigma_x - \sigma & \tau_{yx} & \tau_{zx} \\
+        \tau_{xy} & \sigma_{y} - \sigma & \tau_{zy} \\
+        \tau_{xz} & \tau_{yz} & \sigma_{z} - \sigma \\
+    \end{vmatrix} = 0.
+\end{equation}
+
+Para o caso bidimensional, a solução desses sistema é bem conhecida, sendo dado por:
+
+\begin{equation}
+    \sigma_{1,2} = \frac{\sigma_x + \sigma_y}{2} \pm \sqrt{\left(\frac{\sigma_x - \sigma_y}{2}\right)^2 + \tau_{xy}^2}.
+\end{equation}
 
 \section{Deslocamento e deformação}
 
@@ -231,6 +254,7 @@ Em corpos sólidos e elásticos, a deformação está relacionada diretamente co
 
 \begin{equation}
     \{\sigma\} = [\bm{C}] \{\epsilon\}.
+    \label{eq:lei_de_hooke}
 \end{equation}
 
 $[\bm{C}]$ é denominada \emph{matriz de constitutiva}\footnote{A matriz constituiva é uma forma de notação abrevida para descrever essa relação. Da mesma forma que o tensor de tensões é abreviado por um vetor na notação de Voigt, devido sua simetria, a matriz constituiva é a abreviação de do tensor de elasticidade, um tensor de quarta ordem que mapeia o espaço das deformações no das tensões.}, definida em termos das características do material do corpo, como Módulo de Elasticidade e Coeficiente de Poisson, utilizando o \emph{Princípio de Sobreposição}
@@ -245,10 +269,11 @@ A tensão desenvolvida em uma seção $S$ de $\bm{B}$, perpendicular à força $
 
 \begin{equation}
     \sigma_x = E \epsilon_x.
+    \label{eq:lei_de_hooke_uniaxial}
 \end{equation} 
-A unidade de $E$ é a mesma de $\sigma_x$, o que é coerente, pois $\epsilon_x$ é adimensional, ou seja, o módulo de elasticidade é medido, no SI, em Pascal. O módulo de Young não depende da geometria do corpo, mas do material de que é feito (dentre outras condições mais específicas), entretanto, pode variar conforme a direção da deformação, para materiais que não são isotrópicos, diferentemente, de $\bm{K}$.
+A unidade de $E$ é a mesma de $\sigma_x$, o que é coerente, pois $\epsilon_x$ é adimensional, ou seja, o módulo de elasticidade é medido, no SI, em Pascal. O módulo de Young não depende da geometria do corpo, mas do material de que é feito (dentre outras condições mais específicas), entretanto, pode variar conforme a direção da deformação, para materiais que não são isotrópicos, diferentemente, de $\bm{K}$. Aqui $E$ é tratado como constante.
 
-Essa relação desconsidera outros efeitos de deformação no interior do sólido, como a deformação transversal, $\epsilon_y$, e a por cisalhamento, $\gamma_{xy}$. É, comumente, empregado em casos que essas não são relevantes, como molas, barras e vigas. Vale lembrar que a Lei de Hooke é válida apenas para deformações elásticas, ou seja, que não ultrapassem o limite de elasticidade do material. \footnote{O limite de elasticidade do material é determinado experimentalmente, observando como se deforma sobre carregamentos controlados, determinando a região de deformações em que o material preserva-se na Lei de Hooke, ou seja, mantém uma relação linear entre deformação e tensão, e ao ser aliviado dos carregamentos externos, volta à geometria original.}.
+Essa relação desconsidera outros efeitos de deformação no interior do sólido, como a deformação transversal, $epsilon_y$ (que pode ser observada como o encurtamento da altura da barra na figura \ref{fig:barra_deformada_1}), e a por cisalhamento, $\gamma_{xy}$. É, comumente, empregado em casos que essas não são relevantes, como molas, barras e vigas. Vale lembrar que a Lei de Hooke é válida apenas para deformações elásticas, ou seja, que não ultrapassem o limite de elasticidade do material. \footnote{O limite de elasticidade do material é determinado experimentalmente, observando como se deforma sobre carregamentos controlados, determinando a região de deformações em que o material preserva-se na Lei de Hooke, ou seja, mantém uma relação linear entre deformação e tensão, e ao ser aliviado dos carregamentos externos, volta à geometria original.}.
 
 \subsection{A Lei de Hooke em Cisalhamento}
 
@@ -258,14 +283,184 @@ A tensão desenvolvida em uma seção $S$ de $\bm{B}$, paralela ao carregamento 
 
 \begin{equation}
     \tau_{xy} = G \gamma_{xy}, \qquad = \tau_{xy} = 2G \epsilon_{xy}.
+    \label{eq:lei_de_hooke_cisalhamento}
 \end{equation}
-O módulo de cisalhamento tem a mesma unidade de tensão, e, assim como o módulo de Young (a final, $\gamma$ é adimensional), não depende da geometria do corpo, mas do material de que é feito (dentre outras condições mais específicas), entretanto, pode variar conforme a direção da deformação, para materiais que não são isotrópicos, diferentemente, de $\bm{K}$.
+O módulo de cisalhamento tem a mesma unidade de tensão, e, assim como o módulo de Young (a final, $\gamma$ é adimensional), não depende da geometria do corpo, mas do material de que é feito (dentre outras condições mais específicas), entretanto, pode variar conforme a direção da deformação, para materiais que não são isotrópicos, diferentemente, de $\bm{K}$. Aqui $G$ é tratado como constante.
 
+\subsection{O Coeficiente de Poisson}
 
-\subsection{Coeficiente de Poisson}
+Na deformação uniaxial de um corpo sólido, tal como na figura \ref{fig:barra_deformada_1}, é razoável que o corpo também se deforme em outras direções, perpendiculares a aquela, de forma que existe, dentro de determinados limites do regime elástico, uma relação entre essa deformações. Observa-se, por meio da experiência prática, que a deformação transversal é negativa, o corpo tende a se contrair quando submetido a uma deformação axial. Se o corpo se deforma ao longo de $x$ um $\epsilon_x > 0$, ele se contrai em $y$, ou seja, desenvolve uma deformação $epsilon_y < 0$, de forma que \cite{lub}
 
-Até então, os efeitos de deformação transversal foram desconsiderados, assumindo que a deformação uniaxial não deforma o corpo em outro eixo. Entretanto, a fim de se obter a relação constitutiva, ela deve ser levada em conta.
+\begin{equation}
+    \nu = -\frac{\epsilon_y}{\epsilon_x},
+    \label{eq:coeficiente_de_poisson}
+\end{equation}
+em $\nu$ representa o coeficiente de Poisson, a razão entre a deformação transversal e a deformação axial, uma característica intrínseca do material, e, assim como os módulos de Young e de cisalhamento, não depende da geometria do corpo, mas do material de que é feito (dentre outras condições mais específicas), entretanto, pode variar conforme a direção da deformação, para materiais que não são isotrópicos, diferentemente, de $\bm{K}$. Aqui $\nu$ é tratado como constante.
 
-Sejam a barra $\bm{B}$, um corpo sólido, homogêneo, em equilíbrio, de comprimento $L$, engastado em sua face inferior, e de seção transversal $A$, e $F$, uma força constante que atua sobre a face superior de $\bm{B}$, na direção de $x$, que a deforma em $\bm{B}'$ até um comprimento $L+\Delta L$, tal como na figura \ref{fig:barra_deformada_3}.
+\subsection{O Princípio da Sobreposição \& A Lei de Hooke Generalizada}
 
-\subsection{Estado plano de deformação e de tensão}
+\begin{citacao}
+    O \emph{princípio da sobreposição} permite a aditividade de efeitos (leia-se, deformações) na presença de múltiplas causa (leia-se, tensões). Invocando esse princípio, nós podemos expressão o total de deformação percebida pelo corpo como a soma de todas as deformações devidas aos componentes individuais de tensão presentes no corpo. \cite[pág. 252, tradução livre]{lub}
+\end{citacao}
+
+Esse princípio é válido quando, de acordo com \cite{lub}:
+\begin{enumerate}
+    \item as equações de equilíbrio são lineares nas tensões;
+        
+    Observando a equação \ref{eq:equilibrio_governo}, é possível notar que, dado dois conjuntos de tensões que satisfazem as equações de equilíbrio, a soma desses dois conjuntos também o faz, ou seja, as equações de equilíbrio são lineares nas tensões. Em termos matemáticos, é o mesmo que desmonstrar a linearidade da transformação $T(*) = \nabla \cdot (*)$,
+        \begin{equation}
+            \nabla \cdot (k_1 [\bm{\sigma}]_1 + k_2 [\bm{\sigma}]_2) = 0 \implies \nabla \cdot (k_1 [ \bm{\sigma}]_1) + \nabla \cdot (k_2[\bm{\sigma}]_2) = 0 \implies  k_1 \nabla \cdot [\bm{\sigma}]_1 + k_2 \nabla \cdot [\bm{\sigma}]_2 = 0,
+        \end{equation}
+        em que $k_1, k_2$ são constantes reais, e $[\bm{\sigma}]_1, [\bm{\sigma}]_2$ são conjuntos de tensões arbitrários, que satisfazem as equações de equilíbrio. 
+    \item as relações entre deformação e deslocamento são lineares;
+        
+    Tal como no item anterior, é possível demonstrar essa propriedade tomando dos conjuntos de deslocamentos arbitrários, que, quando somados, levam um conjunto de deformações que equivale ao somatório das deformações de cada conjunto de deslocamentos individualmente.
+    \item as relações entre tensão e deformação são lineares.
+        
+    Observando as relações definidas para o módulo de Young, o módulo de cisalhamento e o coeficiente de Poisson, fica evidente que todas são lineares.
+\end{enumerate}
+
+Assumindo agora que sobre um elemento infinitesimal cúbico, tal qual a figura \ref{fig:estado_de_tensao}, atuam todas as componentes do tensor de tensões, de modo que, utilizando as relações entre deformação e tensão, das equações \ref{eq:lei_de_hooke_uniaxial} e \ref{eq:lei_de_hooke_cisalhamento}, como também a relação entre deformações, equação \ref{eq:coeficiente_de_poisson}, é possível determinar o efeito de deformação causado por cada componente de tensão, tal que, devido à tensão $\sigma_x$, o elemento infinitesimal percebe as deformações
+
+\begin{equation}
+    \epsilon_x =\frac{\sigma_x}{E}, \qquad \epsilon_y = -\nu \frac{\sigma_x}{E}, \qquad \epsilon_z = -\nu \frac{\sigma_x}{E}.
+\end{equation}
+As outras tensões, $\sigma_y$ e $\sigma_z$, se comportam de forma análoga, de modo que
+\begin{gather}
+    \epsilon_x =-\nu \frac{\sigma_y}{E}, \qquad \epsilon_y = \frac{\sigma_y}{E}, \qquad \epsilon_z = -\nu \frac{\sigma_y}{E}, 
+\end{gather}
+\begin{gather}
+    \epsilon_x =-\nu \frac{\sigma_z}{E}, \qquad \epsilon_y = -\nu \frac{\sigma_z}{E}, \qquad \epsilon_z = \frac{\sigma_z}{E}.
+\end{gather}
+
+As tensões de cisalhamento, $\tau_{xy}$, $\tau_{xz}$ e $\tau_{yz}$, por sua vez, causam as deformações angulares,
+\begin{gather}
+    \gamma_{xy} = \frac{\tau_{xy}}, \qquad \gamma_{xz} = \frac{\tau_{xz}}{G}, \qquad \gamma_{yz} = \frac{\tau_{yz}}{G}.
+\end{gather}
+
+Sobrepondo as deformações axiais para cada eixo, e as deformações angulares, é possível determinar as relaçãoes entre todas as tensões e todas as deformações, denominada \emph{lei de Hooke generalizada}:
+\begin{gather}
+    \epsilon_x = \frac{\sigma_x}{E} - \nu \frac{\sigma_y}{E} - \nu \frac{\sigma_z}{E}, \\
+    \epsilon_y = -\nu \frac{\sigma_x}{E} + \frac{\sigma_y}{E} - \nu \frac{\sigma_z}{E}, \\
+    \epsilon_z = -\nu \frac{\sigma_x}{E} - \nu \frac{\sigma_y}{E} + \frac{\sigma_z}{E}, \\
+    \gamma_{xy} = \frac{\tau_{xy}}{G}, \\ 
+    \gamma_{xz} = \frac{\tau_{xz}}{G}, \\
+    \gamma_{yz} = \frac{\tau_{yz}}{G}.
+    \label{eq:lei_de_hooke_generalizada}
+\end{gather}
+O módulo de cisalhamento pode ser determinado em termos da razão de Poisson e do módulo de Young, de modo que\footnote{A demonstração dessa relação se utiliza daas fórmulas de rotação dos tensores de deformações e de tensores, que não são tratadas aqui.}
+\begin{gather}
+    G = \frac{E}{2(1+\nu)}.
+\end{gather}
+
+Em forma matricial, a lei de Hooke generalizada pode ser escrita como, utilizando a notação de Voigt para ${\epsilon}$ e ${\sigma}$, como que $\dfrac{\gamma}{2} = \epsilon$,
+
+\begin{equation}
+    \begin{bmatrix}
+        \epsilon_x \\
+        \epsilon_y \\
+        \epsilon_z \\
+        \epsilon_{xy} \\
+        \epsilon_{xz} \\
+        \epsilon_{yz}
+    \end{bmatrix}
+    =
+    \frac{1}{E}
+    \begin{bmatrix}
+        1 & -\nu & -\nu & 0 & 0 & 0 \\
+        -\nu & 1 & -\nu & 0 & 0 & 0 \\
+        -\nu & -\nu & 1 & 0 & 0 & 0 \\
+        0 & 0 & 0 & (1+\nu) & 0 & 0 \\
+        0 & 0 & 0 & 0 & (1+\nu) & 0 \\
+        0 & 0 & 0 & 0 & 0 & (1+\nu)
+    \end{bmatrix}
+    \begin{bmatrix}
+        \sigma_x \\
+        \sigma_y \\
+        \sigma_z \\
+        \tau_{xy} \\
+        \tau_{xz} \\
+        \tau_{yz}
+    \end{bmatrix},
+    \label{eq:lei_de_hooke_generalizada_matricial}
+\end{equation}
+
+Invertendo esse sistema, obtemos a matriz constitutiva da equação \ref{eq:lei_de_hooke},
+
+\begin{equation}
+    {\sigma} = \frac{E}{(1+\nu)(1-2\nu)}
+    \underbrace{\begin{bmatrix} 1-\nu & \nu & \nu & 0 & 0 & 0 \\
+        \nu & 1-\nu & \nu & 0 & 0 & 0 \\
+        \nu & \nu & 1-\nu & 0 & 0 & 0 \\
+        0 & 0 & 0 & \frac{1-2\nu}{2} & 0 & 0 \\
+        0 & 0 & 0 & 0 & \frac{1-2\nu}{2} & 0 \\
+        0 & 0 & 0 & 0 & 0 & \frac{1-2\nu}{2} 
+    \end{bmatrix}}_{[\bm{C}]}
+    {\epsilon}
+\end{equation}
+Para que essa matriz exista, é necessário que $-1 < \nu < \frac{1}{2}$.\footnote{Materiais com $\nu = 0.5$ são chamados de incompressíveis, pois não sofrem deformações volumétricas.}
+
+\subsection{Estado Plano de Deformação e de Tensão}
+
+O Estado Plano de Tensão (EPT) é quando o corpo é suficientemente flexível em uma direção (como uma chapa ou uma placa), fazendo com que a tensão nessa direção possa ser neglicenciada, ou seja, $\sigma_z = \tau_{xz} = \tau_{yz} = 0$. Nesse caso, a lei de Hooke generalizada se reduz a\footnote{Tanto a matriz consitutiva do EPT e quando do EPD são facilmende deduzidas da lei de Hooke generalizada, apenas atribuindo os valores nulos e trabalhando com as inversas da matriz $[\bm{C}]$.}
+
+\begin{gather}
+    \begin{bmatrix}
+        \epsilon_x \\
+        \epsilon_y \\
+        \epsilon_{xy}
+    \end{bmatrix} = \frac{1}{E} \begin{bmatrix}
+        1 & -\nu & 0 \\
+        -\nu & 1 & 0 \\
+        0 & 0 & (1+\nu)
+    \end{bmatrix}
+    \begin{bmatrix}
+        \sigma_x \\
+        \sigma_y \\
+        \tau_{xy}
+    \end{bmatrix}, \\
+    \epsilon_z = -\nu \frac{\sigma_x}{E} - \nu \frac{\sigma_y}{E}.
+\end{gather}
+$epsilon_z$ passou a ser uma variável dependende, pois é determinada, totalmente, pelas outras deformações.
+
+As Relações que definem a matriz constitutiva para o estado plano de tensão:
+
+\begin{gather}
+    \begin{bmatrix}
+        \sigma_x \\
+        \sigma_y \\
+        \tau_{xy}
+    \end{bmatrix} = \frac{E}{1-\nu^2} 
+    \underbrace{\begin{bmatrix}
+        1 & \nu & 0 \\
+        \nu & 1 & 0 \\
+        0 & 0 & \frac{1-\nu}{2}
+    \end{bmatrix}}_{[\bm{C}]}
+    \begin{bmatrix}
+        \epsilon_x \\
+        \epsilon_y \\
+        \epsilon_{xy}
+    \end{bmatrix}.
+\end{gather}
+
+O Estado de Plano de Deformação (EPD), por sua vez, é quando o corpo é suficientemente rígido em uma direção (como uma barragem ou um muro), fazendo com que a deformação nessa direção possa ser neglicenciada, ou seja, $\epsilon_z = \gamma_{xz} = \gamma_{yz} = 0$. Nesse caso, a lei de Hooke generalizada se reduz a
+
+\begin{gather}
+    \begin{bmatrix}
+        \sigma_x \\
+        \sigma_y \\
+        \tau_{xy}
+    \end{bmatrix} = \frac{E}{1-\nu^2} 
+    \underbrace{\begin{bmatrix}
+        1 & \nu & 0 \\
+        \nu & 1 & 0 \\
+        0 & 0 & \frac{1-\nu}{2}
+    \end{bmatrix}}_{[\bm{C}]}
+    \begin{bmatrix}
+        \epsilon_x \\
+        \epsilon_y \\
+        \epsilon_{xy}
+    \end{bmatrix}, \\
+    \gamma_{xz} = -\nu \frac{\sigma_x}{E} - \nu \frac{\sigma_y}{E}.
+\end{gather}
+$\gamma_{xz}$ passou a ser uma variável dependende, pois é determinada, totalmente, pelas outras deformações. \cite{lub}
