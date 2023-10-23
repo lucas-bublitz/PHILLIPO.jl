@@ -21,16 +21,6 @@ QUESTION: Z
 value: 0.0
 END CONDITION
 
-CONDITION: Constraint_displacement_surface
-CONDTYPE: over surfaces
-CONDMESHTYPE: over nodes
-QUESTION: X
-VALUE: 0.0
-QUESTION: Y
-VALUE: 0.0
-QUESTION: Z
-value: 0.0
-END CONDITION
 
 CONDITION: Constraint_force_point
 CONDTYPE: over points
