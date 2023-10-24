@@ -17,7 +17,7 @@ PHILLIPO foi idealizado para ser modular, implicando em ser encapsulado no senti
 
 \section{Fluxo de execução}
 
-O fluxo de execução é uma ferramenta de projeto que tem como objetivo descrever a ordem e as condições que determinadas seções do código são executadas. A utilização de PHILLIPO.jl segue os digramas das figuras \ref{fig:fluxograma_GID} e \ref{fig:fluxograma_PHILLIPO}
+O fluxo de execução é uma ferramenta de projeto que tem como objetivo descrever a ordem e as condições que determinadas seções do código são executadas. A utilização de PHILLIPO.jl segue os digramas das figuras \ref{fig:fluxograma_GID} e \ref{fig:fluxograma_PHILLIPO}. Vale ressaltar que esses diagramas não expressão, propriamente, 
 
 \begin{figure}
     \centering
@@ -32,3 +32,27 @@ O fluxo de execução é uma ferramenta de projeto que tem como objetivo descrev
     \includegraphics[width = \textwidth]{Figuras/fluxograma_PHILLIPO.pdf}
     \label{fig:fluxograma_PHILLIPO}
 \end{figure}
+
+\section{GID}
+
+O GID é um software utilizado como pré e pós-processamento, neste caso, para PHILLIPO. Nele é possível criar a geometria do problema, definir as propriedades dos materiais, as condições de contorno, as cargas aplicadas, e, principalmente, gerar a malha de elementos. Além de se ser possível sua integração com um \emph{solver} qualquer, por meio de um conjunto de arquivos de entrada e saída (ambos configurados de forma a permitir uma certa flexibilidade nessa integração), cuja execução é controlada por um \emph{script} em Batch, o que possibilita a automatização do processo de simulação. Nesta seção é abordado como é feita e integração entre o GID e PHILLIPO, por meio das pastas \emph{PHILLIPO.gid} e \emph{PHILLIPO3D.gid}, sendo que, como a nomeação dos arquivos sugere, a primeira é utilizada para problemas bidimensionais, e a segunda para problemas tridimensionais.
+
+\subsection{PHILLIPO.gid}
+
+O GID pode ser configurado para operar como pré e pós-processamentos de diversos programas, como o Abaqus, o Ansys, o Calculix..., por meio de um \emph{Problem type}, que é como o GID chama o conjunto de arquivos que configuram o formato de saída dos dados, a criação de determinadas propriedades para as condições de contorno e materiais, como também automatizar a execução da simulação, chamando o programa. Pode-se dizer que o \emph{Problem type} é uma interface para que as informações contidas no arquivo gerado pelo GID (geometria, malha, condições de contorno etc.) sejam salvas em um formato que o programa, o \emph{solver} no caso, possa interpretar, ao passo que o \emph{script} de execução automatiza o chamamento deste, e a simulação seja iniciada. 
+
+Na pasta \emph{PHILLIPO.gid} é possível encontrar os seguinte arquivos:
+
+\begin{enumerate}
+    \item \emph{PHILLIPO.cnd}: define as condições de contorno e como são aplicadas;
+    \item \emph{PHILLIPO.prb}: define as entradas de informações gerais;
+    \item \emph{PHILLIPO.mat}: define as características dos materiais utilizados para os elementos;
+    \item \emph{PHILLIPO.bas}: configura o arquivo de saída do GID para ser interpretado por PHILLIPO.jl;
+    \item \emph{PHILLIPO.bat}: \emph{script} para chamar uma sessão Julia, chamando \emph{link.jl};
+    \item \emph{link.jl}: importa o módulo PHILLIPO e o executa.
+\end{enumerate}
+
+O primeiro arquivo do \emph{Problem type} de PHILLIPO é \emph{PHILLIPO.cnd}, que define as condições de contorno e sobre quais entidades, leia-se nós, elementos ou geometrias (superfícies, volumes, linhas etc.), são aplicadas, por meio de uma sintaxe específica \footnote{No manual do usuário do GID, acessível em \url{https://gidsimulation.atlassian.net/wiki/spaces/GUM/overview}, é possível encontrar a descrição o funcionamento de toda essa sintaxe, que compreende desde esse arquivo de condições de contorno, como também, dos outros que compões a construção do \emph{problem type}.}, uma forma de marcação de texto, que é interpretada pelo GID.
+
+\jlinputlisting[firstline=17]{../GID connection/PHILLIPO.gid/PHILLIPO.cnd}
+
