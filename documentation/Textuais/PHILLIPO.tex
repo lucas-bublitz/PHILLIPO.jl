@@ -10,15 +10,15 @@ PHILLIPO foi idealizado, a princípio, como um projeto de aplicação do método
 
 Um \emph{solver}, ou em melhor português, um solucionador em MEF não é uma novidade no mundo acadêmico, nem no comercial. Softwares como Calculix (que é distribuído integrado com o FreeCAD) e o FreeFEM, que já conta com 7 mil commits em seu repositório, são continuamente produzidos e aprimorados desde antes da virada do milênio, um trabalho que demanda tempo e uma comunidade bem ativa.
 
-Destarte, a pretensão de PHILLIPO não é fornecer uma alternativa a esses softwares, muito menos servir de módulo ou biblioteca para agregar algum deles, além do mais, a elaboração de programas robustos e confiáveis é um trabalho demorado e de muitas pessoas. O próprio FreeFEM já conta com mais de 7 mil commits em seu repositório, com a participação de 41 desenvolvedores. A pretenção de PHILLIPO é construir uma aplicação simples utilizando o MEF que possa aproveitar algumas ferramentas de contrução de código em Julia, como paralelismo e despachos múltiplos, para apresentar mais uma referência de programação em engenharia n
-\section{O Projeto}
+Destarte, a pretensão de PHILLIPO não é fornecer uma alternativa a esses softwares, muito menos servir de módulo ou biblioteca para agregar algum deles, além do mais, a elaboração de programas robustos e confiáveis é um trabalho demorado e de muitas pessoas. O próprio FreeFEM já conta com mais de 7 mil commits em seu repositório, com a participação de 41 desenvolvedores. 
 
-PHILLIPO foi idealizado para ser modular, implicando em ser encapsulado no sentido de que cada parte do código ao mesmo tempo que fosse integrada com o restante, fosse suficientemente independente a ponto de ser reutilizada por novas adições ao programa. Por conta disso, a elaboração de um conjunto de módulos e tipos, dentro do paradigma de despachos múltiplos, foi vital para alcançar essa meta, que não visa só a organização do código, mas sim, construir uma base forte o baste para possibilitar a fácil implementação futura de novas funcionalidades.
+A pretenção de PHILLIPO é construir uma aplicação simples utilizando o MEF, que possa aproveitar algumas ferramentas de contrução de código em Julia, como paralelismo e despachos múltiplos, para apresentar mais uma referência de programação em engenharia para os alunos do campus CCT, da UDESC, e, deste modo, evidenciar que é possível construir programas de engenharia de forma simples e legível, e que, por meio de uma linguagem de programação moderna, como Julia.
+
+Neste capítulo é apresentado o funcionamento de PHILLIPO em duas partes. A primeira, descrevendo o flixo de execuçã normal do programa, isto é, utilizando o GID como interface de pré e pós-processamento, e, a segunda, esmiuçando o código, tanto do módulo PHILLIPO,  
 
 \section{Fluxo de execução}
 
-O fluxo de execução é uma ferramenta de projeto que tem como objetivo descrever a ordem e as condições que determinadas seções do código são executadas. A utilização de PHILLIPO.jl segue os digramas das figuras \ref{fig:fluxograma_GID} e \ref{fig:fluxograma_PHILLIPO}. Vale ressaltar que esses diagramas não expressão, propriamente, 
-
+O fluxo de execução é uma ferramenta de projeto que tem como objetivo descrever a ordem e as condições que determinadas seções do código são executadas. A utilização de PHILLIPO.jl segue os digramas das figuras \ref{fig:fluxograma_GID} e \ref{fig:fluxograma_PHILLIPO}.
 \begin{figure}
     \centering
     \caption{Fluxograma de execução: GID}
@@ -32,6 +32,17 @@ O fluxo de execução é uma ferramenta de projeto que tem como objetivo descrev
     \includegraphics[width = \textwidth]{Figuras/fluxograma_PHILLIPO.pdf}
     \label{fig:fluxograma_PHILLIPO}
 \end{figure}
+
+Nesses diagramas, é possível separar a execução de uma utilização normal do software em três partes principais:
+
+\begin{enumerate}
+    \item Pré-processamento;
+        Parte em que ocorre a criação da geometria, a definição das propriedades dos materiais, das condições de contorno e das cargas aplicadas, assim como a geração da malha e elementos.
+    \item Processamento;
+        Parte em que é chamada uma sessão Julia para carregar o módulo PHILLIPO.jl, que é responsável por ler os arquivos de entrada, e executar o algoritmo de elementos finitos, gerando os arquivos de saída para o GID.
+    \item Pós-processamento;
+        Parte em que o GID lê os arquivos de saída, e gera os gráficos de resultados.
+\end{enumerate}
 
 \section{GID}
 
@@ -55,7 +66,11 @@ Na pasta \emph{PHILLIPO.gid} é possível encontrar os seguinte arquivos:
 O primeiro arquivo do \emph{Problem type} de PHILLIPO é \emph{PHILLIPO.cnd}, que define as condições de contorno e sobre quais entidades, leia-se nós, elementos ou geometrias (superfícies, volumes, linhas etc.), são aplicadas, por meio de uma sintaxe específica \footnote{No manual do usuário do GID, acessível em \url{https://gidsimulation.atlassian.net/wiki/spaces/GUM/overview}, é possível encontrar a descrição o funcionamento de toda essa sintaxe, que compreende desde esse arquivo de condições de contorno, como também, dos outros que compões a construção do \emph{problem type}.}, uma forma de marcação de texto, que é interpretada pelo GID.
 
 \begin{figure}
-    \lstinputlisting[language=html]{../GID connection/PHILLIPO.gid/PHILLIPO.cnd}
-    \caption{Arquivo de condições de contorno: PHILLIPO.cnd}
+    \lstinputlisting[language=json, lastline=10]{../GID connection/PHILLIPO.gid/PHILLIPO.cnd}
+    \caption{Parte do arquivo de condições de contorno: PHILLIPO.cnd}
     \label{fig:PHILLIPO.cnd}
 \end{figure}
+
+Em sua representação parcial, da figura \ref{fig:PHILLIPO.cnd}, é possível notar a construção de uma condição de contorno por meio de um bloco que inicia na linha 1, com a expressão \emph{CONDITION: Constraint_\underline{}displacement\underline{}point}, que também nomeia esta condição, referente a restrição de deslocamento em pontos (entidade geométrica discretizada por um nó), e que acaba com \emph{END CONDITION}. Dentre essas linhas, são definidas as formas e os valores que essa condição vai aplicar sobre a geometria selecionada, neste caso, os pontos. Na linha 2, é definido, justamente, sobre qual entidade geométrica se aplica essa condição: pontos. Na próxima linha, é definido como que essa informação, que foi associada à entidade geométrica se traduz na malha, neste caso, essa condição é aplicada sobre os nós que correspondem aos pontos, ou seja, quando o GID for gerar a malha, vai aplicar essa condição para o nó que corresponde ao ponto.\footnote{Isso se deve porque a malha é criada sobre a geometria, posteriormente à aplicação das condições de contorno sobre aquela.}
+
+As linhas seguintes, 4 a 9, se referem aos valores da condição, neste caso, aos deslocamentos dos nós nas direções de \emph{X}, \emph{Y} e \emph{Z}, e seus valores padrão, nesse caso, 

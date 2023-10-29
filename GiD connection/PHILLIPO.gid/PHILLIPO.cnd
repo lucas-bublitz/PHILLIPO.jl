@@ -1,4 +1,3 @@
-
 CONDITION: Constraint_displacement_point
 CONDTYPE: over points
 CONDMESHTYPE: over nodes
