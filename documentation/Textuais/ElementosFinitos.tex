@@ -4,12 +4,18 @@
     "As far as the laws of mathematics refer to reality, they are not certain; and as far as they are certain, they do not refer to reality." (Albert Einstein)
 \end{quote}
 
-O Método dos Elementos Finitos (MEF), \emph{Finite Element Method} (FEM), é um método numérico, e tem como finalidade aproximar a solução de funções de campo numericamente, o domínios que são difíceis de se obter repostas diretas algebricamente. Para tanto, esse domínio é discretizado em vários elementos, ou sub-domínios (ver Figura \ref{fig:dominio_triangulo}), de tamanho finito, cujos comportamentos já são conhecidos da aplicação de leis físicas. A função de campo desconhecida é aproximada em cada elemento por meio de funções interpoladoras polinomiais, calculadas sobre o valor de campo em cada nó, que são os pontos do domínio sobre os quais os elementos são construídos (o campo, portanto, passa a ser definido não mais pelo conjunto de valores do contínuo, mais sim por essas variáveis desconhecidas discretizadas). Para cada elemento, são definidas equações, por meio das quais eles se relacionam entre si e com o campo. Isso leva à formação de um grande sistema linear, que pode ser resolvido facilmente, e obter-se, dessa forma, a aproximação da função de campo. \cite{Onate} Em sua, o método de elementos finitos segue o seguinte procedimento:
+
+O Método dos Elementos Finitos (MEF), é um procedimento numérico para aproximar soluções 
+
+
+O Método dos Elementos Finitos (MEF), \emph{Finite Element Method} (FEM), é um procedimento numérico para encontra 
+
+Para tanto, esse domínio é discretizado em vários elementos, ou sub-domínios (ver Figura \ref{fig:dominio_triangulo}), de tamanho finito, cujos comportamentos já são conhecidos da aplicação de leis físicas. A função de campo desconhecida é aproximada em cada elemento por meio de funções interpoladoras polinomiais, calculadas sobre o valor de campo em cada nó, que são os pontos do domínio sobre os quais os elementos são construídos (o campo, portanto, passa a ser definido não mais pelo conjunto de valores do contínuo, mais sim por essas variáveis desconhecidas discretizadas). Para cada elemento, são definidas equações, por meio das quais eles se relacionam entre si e com o campo. Isso leva à formação de um grande sistema linear, que pode ser resolvido facilmente, e obter-se, dessa forma, a aproximação da função de campo. \cite{Onate} Em sua, o método de elementos finitos segue o seguinte procedimento:
 
 \begin{enumerate}
     \item definição do domínio ($\Omega$), e das condições de contorno ($\partial\Omega$);
     \item discretização do domínio em uma malha formada por nós que constituem os elementos ($\Omega^{(e)}$);
-    \item aplicação da equação de governo sobre cada elemento;
+    \item aplicação das equações de governo sobre cada elemento;
     \item assemblagem dessas equações em um único grande sistema linear global ($K^{(g)}$);
     \item resolução do sistema, encontrando os valores nodais do campo ($U^{(g)}$).
 \end{enumerate}

@@ -1,6 +1,6 @@
 \begin{figure}
     \centering
-    \caption{Barra deformada}
+    \caption{quadrilátero deformado}
     \begin{subfigure}[b]{\textwidth}
         \resizebox{\textwidth}{!}{
             \begin{tikzpicture}[
@@ -11,14 +11,14 @@
                 \draw[->] (0,0) --++ (10,0) node[above]{$x$};
 
                 \draw[thick, blue, fill = blue, fill opacity = 0.3] (0,0) rectangle (8,2);
-                \draw (4,1) node{$\bm{B}$};
+                \draw (4,1) node{$\mathcal{B}$};
                 
                 \draw[thick, blue, fill = blue, fill opacity = 0.3, dashed] (0,0.2) rectangle (8.5,1.8);
 
                 \draw[|<->|] (0,2.1) --++ (8,0) node[above, midway]{$L$};
                 \draw[|<->|] (8,2.1) --++ (0.5,0) node[above,midway]{$\Delta L$};
 
-                \draw[marrow] (8.5,1) --++ (2,0) node[right]{$\vec{F}$};
+                \draw[marrow] (8.5,1) --++ (2,0) node[right]{$\bm{F}$};
                 
             \end{tikzpicture}
         }
@@ -45,7 +45,7 @@
             }
 
             \draw (1,2) |- (2,3) node[right]{$Q$};
-            \draw (4,1) node{$\bm{B}$};
+            \draw (4,1) node{$\mathcal{B}$};
 
             \draw[<->] (8,2.7) arc (90:71:2) node[midway, above]{$\gamma$}	;
             \end{tikzpicture}

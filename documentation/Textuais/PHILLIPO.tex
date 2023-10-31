@@ -14,7 +14,18 @@ Destarte, a pretensão de PHILLIPO não é fornecer uma alternativa a esses soft
 
 A pretenção de PHILLIPO é construir uma aplicação simples utilizando o MEF, que possa aproveitar algumas ferramentas de contrução de código em Julia, como paralelismo e despachos múltiplos, para apresentar mais uma referência de programação em engenharia para os alunos do campus CCT, da UDESC, e, deste modo, evidenciar que é possível construir programas de engenharia de forma simples e legível, e que, por meio de uma linguagem de programação moderna, como Julia.
 
-Neste capítulo é apresentado o funcionamento de PHILLIPO em duas partes. A primeira, descrevendo o flixo de execuçã normal do programa, isto é, utilizando o GID como interface de pré e pós-processamento, e, a segunda, esmiuçando o código, tanto do módulo PHILLIPO,  
+Neste capítulo é apresentado como é feita a distribuição é como se dá o funcionamento de PHILLIPO, dividido em duas partes. A primeira, descrevendo o fluxo de execução normal do programa, isto é, utilizando o GID como interface de pré e pós-processamento, e, a segunda, esmiuçando o código, tanto do módulo PHILLIPO, quanto dos arquivos de integração com o GID.
+
+\section{Distribuição pelo Pkg.jl}
+
+O Pkg.jl é o gerenciador de pacotes anexado à Julia, tal como PIP é anexado ao Pyhton. Ele é reponsável por distruibuir, gerir e empacotar os módulos da linguagem, permitindo relacionar dependências e controlar versionamento. PHILLIPO é distribuído por meio do Pkg.jl, porém, não pelo repositório oficial\footnote{Há uma série de critérios para que um módulo seja adicionado ao repositório oficial do Pkg.jl, além disso, não é objetivo de PHILLIPO ser distribuido massivamente.}, mas, pelo próprio repositório deste trabalho, utilizando-se de uma função do gerenciador de pacotes: a função \emph{add}.
+
+Como PHILLIPO foi encapsulado em um módulo, pode ser facilmente distribuído iniciando uma sessão Julia e executando:
+\begin{lstlisting}
+    add https://github.com/lucas-bublitz/PHILLIPO.jl
+\end{lstlisting}
+O Pkg.jl então trata de buscar as dependências do módulo, isto é, os módulos que são importados para uso interno de PHILLIPO: o \emph{SparseArrays}, que fornece as estruturas e funções para alocar e manipular eficientemente matrizes esparsas, o \emph{LinearAlgebra}, implementação do LAPACK em Julia, e o \emph{JSON}, um parser de objetos em JSON para dicionários. No arquivo \emph{Projecy.toml} é possível encontrar tanto essa lista de dependência, e no \emph{Manifest.toml}, são listadas as dependências das dependências, isto é, quais módulos cada módulo importado por PHILLIPO importa para si. Isso é devido ao fato de que o versionamento é mantido 
+
 
 \section{Fluxo de execução}
 
@@ -44,6 +55,10 @@ Nesses diagramas, é possível separar a execução de uma utilização normal d
         Parte em que o GID lê os arquivos de saída, e gera os gráficos de resultados.
 \end{enumerate}
 
+\subsection{Pré-processamento}
+
+O pré-processamento é realizado totalmente pelo GID, e consisti na definição da geometria, das condições de contorno e do material.
+
 \section{GID}
 
 O GID é um software utilizado como pré e pós-processamento, neste caso, para PHILLIPO. Nele é possível criar a geometria do problema, definir as propriedades dos materiais, as condições de contorno, as cargas aplicadas, e, principalmente, gerar a malha de elementos. Além de se ser possível sua integração com um \emph{solver} qualquer, por meio de um conjunto de arquivos de entrada e saída (ambos configurados de forma a permitir uma certa flexibilidade nessa integração), cuja execução é controlada por um \emph{script} em Batch, o que possibilita a automatização do processo de simulação. Nesta seção é abordado como é feita e integração entre o GID e PHILLIPO, por meio das pastas \emph{PHILLIPO.gid} e \emph{PHILLIPO3D.gid}, sendo que, como a nomeação dos arquivos sugere, a primeira é utilizada para problemas bidimensionais, e a segunda para problemas tridimensionais.
@@ -66,11 +81,11 @@ Na pasta \emph{PHILLIPO.gid} é possível encontrar os seguinte arquivos:
 O primeiro arquivo do \emph{Problem type} de PHILLIPO é \emph{PHILLIPO.cnd}, que define as condições de contorno e sobre quais entidades, leia-se nós, elementos ou geometrias (superfícies, volumes, linhas etc.), são aplicadas, por meio de uma sintaxe específica \footnote{No manual do usuário do GID, acessível em \url{https://gidsimulation.atlassian.net/wiki/spaces/GUM/overview}, é possível encontrar a descrição o funcionamento de toda essa sintaxe, que compreende desde esse arquivo de condições de contorno, como também, dos outros que compões a construção do \emph{problem type}.}, uma forma de marcação de texto, que é interpretada pelo GID.
 
 \begin{figure}
-    \lstinputlisting[language=json, lastline=10]{../GID connection/PHILLIPO.gid/PHILLIPO.cnd}
+    \lstinputlisting[ lastline=10]{../GID connection/PHILLIPO.gid/PHILLIPO.cnd}
     \caption{Parte do arquivo de condições de contorno: PHILLIPO.cnd}
     \label{fig:PHILLIPO.cnd}
 \end{figure}
 
-Em sua representação parcial, da figura \ref{fig:PHILLIPO.cnd}, é possível notar a construção de uma condição de contorno por meio de um bloco que inicia na linha 1, com a expressão \emph{CONDITION: Constraint_\underline{}displacement\underline{}point}, que também nomeia esta condição, referente a restrição de deslocamento em pontos (entidade geométrica discretizada por um nó), e que acaba com \emph{END CONDITION}. Dentre essas linhas, são definidas as formas e os valores que essa condição vai aplicar sobre a geometria selecionada, neste caso, os pontos. Na linha 2, é definido, justamente, sobre qual entidade geométrica se aplica essa condição: pontos. Na próxima linha, é definido como que essa informação, que foi associada à entidade geométrica se traduz na malha, neste caso, essa condição é aplicada sobre os nós que correspondem aos pontos, ou seja, quando o GID for gerar a malha, vai aplicar essa condição para o nó que corresponde ao ponto.\footnote{Isso se deve porque a malha é criada sobre a geometria, posteriormente à aplicação das condições de contorno sobre aquela.}
+% Em sua representação parcial, da figura \ref{fig:PHILLIPO.cnd}, é possível notar a construção de uma condição de contorno por meio de um bloco que inicia na linha 1, com a expressão \emph{CONDITION: Constraint_\underline{}displacement\underline{}point}, que também nomeia esta condição, referente a restrição de deslocamento em pontos (entidade geométrica discretizada por um nó), e que acaba com \emph{END CONDITION}. Dentre essas linhas, são definidas as formas e os valores que essa condição vai aplicar sobre a geometria selecionada, neste caso, os pontos. Na linha 2, é definido, justamente, sobre qual entidade geométrica se aplica essa condição: pontos. Na próxima linha, é definido como que essa informação, que foi associada à entidade geométrica se traduz na malha, neste caso, essa condição é aplicada sobre os nós que correspondem aos pontos, ou seja, quando o GID for gerar a malha, vai aplicar essa condição para o nó que corresponde ao ponto.\footnote{Isso se deve porque a malha é criada sobre a geometria, posteriormente à aplicação das condições de contorno sobre aquela.}
 
 As linhas seguintes, 4 a 9, se referem aos valores da condição, neste caso, aos deslocamentos dos nós nas direções de \emph{X}, \emph{Y} e \emph{Z}, e seus valores padrão, nesse caso, 
