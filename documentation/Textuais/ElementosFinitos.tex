@@ -4,33 +4,82 @@
     "As far as the laws of mathematics refer to reality, they are not certain; and as far as they are certain, they do not refer to reality." (Albert Einstein)
 \end{quote}
 
+O método dos elementos finitos (MEF) é um procedimento numérica utilizada para encontrar soluções de equações que modelam a natureza. É amplamente utilizado na simulação de fenômenos físicos, como mecânica dos sólidos, transferência de calor, eletromagnetismo e muitos outros. \cite{Onate}
 
-O Método dos Elementos Finitos (MEF), é um procedimento numérico para aproximar soluções 
+A abordagem do MEF envolve a subdivisão de uma estrutura ou domínio contínuo em pequenos elementos geométricos finitos, definidos por nós, caracterizados por suas propriedades físicas e geométricas, em que são aplicadas as equações governantes do problema, cujo campo é aproximado, dentro de cada um, por meio de funções de interpolação, que vão discretizar o campo sobre os valores nodais. Em seguida, essas equações aproximadas são montadas, justapondo os elementos, em um sistema global, levando em consideração as condições de contorno e as restrições do problema. \cite{LIU}
 
-
-O Método dos Elementos Finitos (MEF), \emph{Finite Element Method} (FEM), é um procedimento numérico para encontra 
-
-Para tanto, esse domínio é discretizado em vários elementos, ou sub-domínios (ver Figura \ref{fig:dominio_triangulo}), de tamanho finito, cujos comportamentos já são conhecidos da aplicação de leis físicas. A função de campo desconhecida é aproximada em cada elemento por meio de funções interpoladoras polinomiais, calculadas sobre o valor de campo em cada nó, que são os pontos do domínio sobre os quais os elementos são construídos (o campo, portanto, passa a ser definido não mais pelo conjunto de valores do contínuo, mais sim por essas variáveis desconhecidas discretizadas). Para cada elemento, são definidas equações, por meio das quais eles se relacionam entre si e com o campo. Isso leva à formação de um grande sistema linear, que pode ser resolvido facilmente, e obter-se, dessa forma, a aproximação da função de campo. \cite{Onate} Em sua, o método de elementos finitos segue o seguinte procedimento:
+Em suma, o método de elementos finitos segue o seguinte procedimento, de acordo com \citeshort{Onate}:
 
 \begin{enumerate}
-    \item definição do domínio ($\Omega$), e das condições de contorno ($\partial\Omega$);
-    \item discretização do domínio em uma malha formada por nós que constituem os elementos ($\Omega^{(e)}$);
-    \item aplicação das equações de governo sobre cada elemento;
-    \item assemblagem dessas equações em um único grande sistema linear global ($K^{(g)}$);
-    \item resolução do sistema, encontrando os valores nodais do campo ($U^{(g)}$).
+    \item definição do domínio, e das condições de contorno;
+    \item discretização do domínio em uma malha formada por nós que constituem os elemento;
+    \item aplicação das equações de governo sobre cada elemento, formando um sistema local de rigidez;
+    \item assemblagem dessas equações em um único grande sistema global;
+    \item resolução do sistema, encontrando os valores nodais do campo.
 \end{enumerate}
+
+Na análise estrutural aqui abordada, o objetivo da aplicação do MEF é determinar o deslocamento de um sólido em equilíbrio sujeito a carregamentos e restrições, dentro do regime elástico modelado pela Lei de Hooke, utilizando funções de interpolações lineares em elementos triangulares (na análise 2D: EPT ou EPD) e tetraédricos (na análise 3D). 
+
+Deste modo, convém definir os termos e símbolos dessas entidades matemáticas. Seja um corpo $\mathcal{B}$, definido por uma geometria sobre o domínio $\Omega$, sobre o qual é feito uma série de repartições em pequenos elementos, de domínio $\Omega^{(e)}$, cuja fronteira se denomina $\partial\Omega^{(e)}$. A figura \ref{fig:dominio_triangulos} mostra um domínio bidimensional $\Omega$ discretizado em elementos triangulares, cujos nós são representados por $i, j$ e $k$, e a figura \ref{fig:tetraedro} mostra um domínio tridimensional $\Omega$ discretizado em elementos tetraédricos, cujos nós são representados por $i, j, k$ e $m$.
 
 \input{Figuras/dominio_triangulos.tex}
 
-No âmbito da análise estrutural aqui aplicada, a função de campo é o deslocamento sobre a estrutura, cuja geometria é o próprio domínio. A equação que rege os elementos é derivada do princípios dos trabalhos virtuais, em que há o balanço de energia entre o trabalho realizado pela deformação do elemento e pelas forças que atuam sobre ele. O sistema formado pelo conjunto dessas equações, aplicadas previamente em cada elemento, tem três termos, que se relacionam assim:
 
-\begin{equation} \label{eq:sistema_global}
-    K_g \delta u = F
+
+\section{As Funções de Interpolação}
+
+As funções de interpolação são funções matemáticas que aproximam o campo de interesse, neste caso o deslocamento, dentro de um elemento, por meio de uma combinação linear de funções conhecidas, definidas sobre os nós do elemento. Essas funções são definidas, e depois justapostas, de modo que o campo seja contínuo. \cite{logan} 
+
+
+Defini-se, então, a função de deslocamento sobre um elemento, representado pela figura \ref{fig:dominio_triangulo},
+
+\begin{equation}
+    \mathbf{\varphi} = \begin{Bmatrix}
+        u(x,y) \\ v(x,y) 
+    \end{Bmatrix} = \begin{Bmatrix}
+        a_1 + a_2 x + a_3 y \\ b_1 + b_2 x + b_3 y 
+    \end{Bmatrix}.
 \end{equation}
 
-O primeiro termo, $[K_g]$, relaciona as deformações dos nós com as forças externas aplicadas sobre a estrura. $\{U\}$ e $\{F\}$, por sua vez, são, respectivamento, o pseuvetor das deformações dos nós e o pseudovetor das forças externas.
+Para determinar as constantes $a$ e $b$ basta aplicar a condição de que em cada nó a função deve assumir o valor do deslocamento respectivo. Isto é, analisando somente a componente $x$,
 
-São dois os tipos de elementos tratados aqui: o triângulo de tensão constante, ou \emph{Constant Strain Triangle} (CST) na aplicação bidimensional, e o tetraedro linear, na aplicação tridimensional.
+\begin{align}
+    u_i &= a_1 + a_2 x_i + a_3 y_i, \\
+    u_j &= a_1 + a_2 x_j + a_3 y_j, \\
+    u_k &= a_1 + a_2 x_k + a_3 y_k, \\
+\end{align}
+em que $u_i$ é o valor do deslocamento sobre o nó $i$, assim como $x_i$ e $y_i$ é sua posição sobre o domínio $\Omega$.
+
+Reescrevendo esse sistema na forma matricial, temos que
+
+\begin{equation}
+    \begin{bmatrix}
+        1 & x_i & y_i \\
+        1 & x_j & y_j \\
+        1 & x_k & y_k \\
+    \end{bmatrix}
+    \begin{bmatrix}
+        a_1 \\ a_2 \\ a_3
+    \end{bmatrix}
+    = \begin{bmatrix}
+        u_i \\ u_j \\ u_k
+    \end{bmatrix} \implies
+    \begin{bmatrix}
+        a_1 \\ a_2 \\ a_3
+    \end{bmatrix} =
+    \begin{bmatrix}
+        \alpha_i & \alpha_j & \alpha_k \\
+        \beta_i & \beta_j & \beta_k \\
+        \gamma_i & \gamma_j & \gamma_k \\
+    \end{bmatrix}
+    \begin{bmatrix}
+        u_i \\ u_j \\ u_k
+    \end{bmatrix}
+\end{equation}
+
+
+
+Com algum algebrismo, é possível resolver esse sistema para encontrar uma forma algébrica para a interpolação da função $u(x,y)$,
 
 \section{Análise tridimensional sobre o tetraedro}
 

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<gid version="15.0">
+  <pre>
+    <layer_to_use name="Part-1"/>
+    <groups>
+      <group id="1" name="Set-1" color="#4c1f6dff"/>
+      <group id="2" name="_Surf-2_S1" color="#18604eff"/>
+    </groups>
+    <entities_groups>
+      <entities_group name="nodes">
+        <vector name="entity_ids" length="50" type="integer">1:50</vector>
+        <vector name="entity_num_groups" length="50" type="ushort">1x50</vector>
+        <vector name="entity_groups" length="50" type="ushort">1x50</vector>
+      </entities_group>
+      <entities_group name="elements">
+        <vector name="entity_ids" length="104" type="integer">1:104</vector>
+        <vector name="entity_num_groups" length="104" type="ushort">1x98 2 1 2 1x3</vector>
+        <vector name="entity_groups" length="106" type="ushort">1x99 2 1 1 2 1x3</vector>
+      </entities_group>
+    </entities_groups>
+  </pre>
+</gid>

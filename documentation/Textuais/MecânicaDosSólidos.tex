@@ -111,7 +111,7 @@ O tensor de tensões é um transformação linear que recebe um vetor unitário 
 \begin{equation}
     \bm{\sigma}\bm{\hat{n}} = \sigma \bm{\hat{n}}.
 \end{equation}
-Oberservando a forma dessa equação, é evidente que $\bm{\hat{n}}$ é um autovetor de $\bm{\sigma}$, e $\sigma$ é o autovalor correspondente, portanto, determiná-los é equivalente a encontrar as tensões principais, ou seja, as raízas do polinômio característica do tensor de tensões:
+Observando a forma dessa equação, é evidente que $\bm{\hat{n}}$ é um autovetor de $\bm{\sigma}$, e $\sigma$ é o autovalor correspondente, portanto, determiná-los é equivalente a encontrar as tensões principais, ou seja, as raízes do polinômio característica do tensor de tensões:
 
 \begin{equation}
     \det{(\bm{\sigma} - \sigma \bm{I})} = 0, \qquad \text{ou} \qquad \begin{vmatrix}
@@ -464,3 +464,67 @@ O Estado de Plano de Deformação (EPD), por sua vez, é quando o corpo é sufic
     \epsilon_{xz} = -\nu \frac{\sigma_x}{E} - \nu \frac{\sigma_y}{E}.
 \end{gather}
 $\gamma_{xz}$ passou a ser uma variável dependente, pois é determinada, totalmente, pelas outras deformações.  \cite[pág. 91]{Zin}
+
+
+
+\section{Teoria da Energia de Distorção Máxima: A Tensão Equivalente de Von Mises}
+
+A Teoria da Energia de Distorção máxima propõe que:
+\begin{citacao}
+    o escoamento em um material dúctil ocorre quando a energia de distorção por unidade de volume do material ultrapassa a energia de distorção por unidade de volume do mesmo material quando submetido a escoamento em um ensaio de tração simples. \cite{Hibbeler}
+\end{citacao}
+
+Essa proposição surge da observação que materiais dúcteis sob carregamentos hidrostáticos exibem uma resistência muito maior que em simples ensaios de tração uniaxial, e que, portanto, o escoamento não é um fenômeno compreendido, simplesmente, pela tração ou compressão, mas, majoritariamente, pela distorção do material. \cite{Hibbeler}
+
+A energia por unidade de volume, devida à deformação do material, é definida por um produto da tensão pela deformação. Em um elemento orientado sob tensões principais, de acordo com \cite{Hibbeler}
+\begin{equation}
+    u = \frac{1}{2} (\sigma_1 \epsilon_1 + \sigma_2 \epsilon_2 + \sigma_3 \epsilon_3),
+\end{equation}
+em que $u$ denota a energia por unidade de volume, $\sigma_i$ as tensões principais.
+
+Substituindo as deformações pelas tensões, utilizando a lei de Hooke generalizada, equação \ref{eq:lei_de_hooke_generalizada}, temos que
+
+\begin{equation}
+    u = \frac{1}{2E} \left[ \sigma_1^2 + \sigma_2^2 + \sigma_3^2 - 2\nu(\sigma_1\sigma_2 + \sigma_1\sigma_3 + \sigma_2 \sigma_3) \right].
+    \label{eq:energia_deformacao}
+\end{equation}
+
+Essa energia pode sem compreendia como a soma de duas parcelas: a energia de deformação volumétrica, $u_v$, e a energia de deformação por cisalhamento, $u_d$. A energia de deformação volumétrica é a energia de deformação que tende a alterar o volume do elemento, sem distorcer sua geometria, ou seja, a energia de deformação devido à tensão média das tesões principais. Substituindo, então, as tensões principais pela tensão média na equação anterior, temos que
+\begin{equation}
+    u_v = \frac{3\bar{\sigma}^2}{2E} (1 - 2\nu),
+    \label{eq:energia_deformacao_volumetrica}
+\end{equation}
+em que $\bar{\sigma} = \frac{1}{3} (\sigma_1 + \sigma_2 + \sigma_3)$ é a tensão média. 
+
+A energia de distorção, portanto, é a diferença entre a energia total e a energia volumétrica, de modo que
+
+\begin{equation}
+    u_d = u - u_v = \frac{1 +\nu}{3E} \left[\frac{(\sigma_1 - \sigma_2)^2 + (\sigma_2 - \sigma_3)^2 + (\sigma_3 - \sigma_1)^2}{2} \right].
+    \label{eq:energia_deformacao_distorcao}    
+\end{equation}
+
+Fazendo $\sigma_2 = \sigma_3 = 0$, temos a energia de deformação para o caso de tração uniaxial, de modo que
+\begin{equation}
+    u_d = \frac{1 + \nu}{3}S^2,
+\end{equation}
+em que $S$ é a tensão admissível do material num ensaio de tração. \cite{Hibbeler}
+
+Portanto, de acordo com o princípio da energia de distorção máxima, o escoamento ocorre quando a energia de distorção ultrapassa a energia de distorção de um ensaio de tração simples, ou seja, quando \cite{Hibbeler}
+
+\begin{equation}
+    S \leq \left[\frac{(\sigma_1 - \sigma_2)^2 + (\sigma_2 - \sigma_3)^2 + (\sigma_3 - \sigma_1)^2}{2} \right]^{1/2}.
+\end{equation}
+
+O lado direito dessa inequação pode ser interpretado como uma tensão equivalente ou efetiva do estado de tensão dado pelas tensões principais. De acordo com \cite{Hibbeler}, essa tensão é denominada \emph{tensão equivalente de von Mises}, ou von Mises, definida por
+
+\begin{equation}
+    \sigma_{eq} = \left[\frac{(\sigma_1 - \sigma_2)^2 + (\sigma_2 - \sigma_3)^2 + (\sigma_3 - \sigma_1)^2}{2} \right]^{1/2}.
+    \label{eq:tensao_equivalente_von_mises}
+\end{equation}
+
+Em termos de um sistema $xyz$, e utilizando todas as componentes do tensor de tensões, a tensão equivalente de von Mises pode ser expressa por 
+
+\begin{equation}
+    \sigma_{eq} = \frac{1}{\sqrt{2}} \left[ (\sigma_x - \sigma_y)^2 + (\sigma_y - \sigma_z)^2 + (\sigma_z - \sigma_x)^2 + 6(\tau_{xy}^2 + \tau_{yz}^2 + \tau_{zx}^2)\right].
+    \label{eq:tensao_equivalente_von_mises_xyz}
+\end{equation}
