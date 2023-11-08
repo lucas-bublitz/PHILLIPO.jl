@@ -232,12 +232,13 @@ O tensor de deformações é
         \frac{1}{2} \left(\frac{\partial v}{\partial x}+\frac{\partial u}{\partial y}\right) & \frac{\partial v}{\partial y} & \frac{1}{2} \left(\frac{\partial v}{\partial z}+\frac{\partial w}{\partial y}\right) \\
         \frac{1}{2} \left(\frac{\partial w}{\partial x}+\frac{\partial u}{\partial z}\right) & \frac{1}{2} \left(\frac{\partial w}{\partial y}+\frac{\partial v}{\partial z}\right) & \frac{\partial w}{\partial z} \\
     \end{bmatrix},
+    \label{eq:tensor_de_deformacoes}
 \end{gather}
 ou, em notação indicial
 \begin{equation}
-    \epsilon_{ij} = \frac{1}{2} \left(\frac{\partial \vec{U}_j}{\partial i} + \frac{\partial \vec{U}_i}{\partial j}\right),
+    \epsilon_{ij} = \frac{1}{2} \left(\frac{\partial \bm{U}_j}{\partial i} + \frac{\partial \bm{U}_i}{\partial j}\right),
 \end{equation}
-em que vale o mesmo tipo de notação que as tesões, $\epsilon_{ii} = \epsilon_i$, e que $\vec{U}_x = u, \vec{U}_y = v, \vec{U}_z = w$.
+em que vale o mesmo tipo de notação que as tesões, $\epsilon_{ii} = \epsilon_i$, e que $\bm{U}_x = u, \bm{U}_y = v, \bm{U}_z = w$.
 
 Tal como o tensor de tensões, o tensor de deformações é simétrico, e, portanto, só possui seis componentes independentes. Na notação de Voigt, de acordo com \citeshort{roylance},
 \begin{equation}
