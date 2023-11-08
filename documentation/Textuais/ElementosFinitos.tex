@@ -43,6 +43,8 @@ Neste capítulo é abordado como, na sequência proposta por \citeshort{LOGAN},
 
 As funções de interpolação são funções matemáticas que aproximam o campo de interesse, neste caso o deslocamento, dentro de um elemento, por meio de uma combinação linear de funções conhecidas, definidas sobre os nós do elemento. Essas funções são definidas, e depois justapostas, de modo que o campo seja contínuo. O objetivo dessa ferramente é alterar os valores incógnitos do campo de contínuos para discretos, para que o deslocamento seja bem definido pelo seu valor sobre a posição cada nó, e que, por sobre o domínio de cada elemento, o campo seja interpolado. Esses valores discretos desconhecidos do campo nos nós, em que o campo tem "liberdade" pra variar, denominam-se \emph{graus de liberdade}. \cite{LOGAN}
 
+O CST, por exemplo, tem seis graus de liberdade, uma vez que para cada nó, o vetor de deslocamento tem três componentes. Os problemas abordados aqui tem sempre três graus de liberdade por nó.
+
 Defini-se, então, a função de deslocamento sobre um elemento, representado pela figura \ref{fig:dominio_triangulo}, assim como a proposta linear de interpolação,
 
 \begin{equation}
@@ -54,7 +56,7 @@ Defini-se, então, a função de deslocamento sobre um elemento, representado pe
 \end{equation}
 Nesse sentido, bidimensional, $\bm{\varphi}$ é uma função vetorial de campo que mapeia cada ponto do sólido para seu respectivo deslocamento nos eixos do sistema $xy$ ($u$ e $v$ respectivamente).
 
-Para determinar as constantes $a$ e $b$, e termos dos graus de liberdade, basta aplicar a condição de que em cada nó a função deve assumir o valor do deslocamento respectivo. Isto é, analisando somente a componente $x$, ou seja, $u(x,y)$, temos que
+Para determinar as constantes $a$ e $b$, e termos dos deslocamentos nodais basta aplicar a condição de que em cada nó a função deve assumir o valor do deslocamento respectivo. Isto é, analisando somente a componente $x$, ou seja, $u(x,y)$, temos que
 
 \begin{align}
     u(x_i, y_i) &= u_i &= a_1 + a_2 x_i + a_3 y_i, \\
@@ -109,7 +111,7 @@ sendo que\footnote{É fácil demonstrar que esse sistema sempre é possível e d
 \end{equation}
 em que $A$ é área do elemento triangular. \footnote{Essa forma de escrever a inversa de $\bm{X}$ é interessante pois simplifica os termos $\alpha$, $\beta$ e $\gamma$ pelo determinante $2A$.}
 
-Deste modo, a função de interpolação para $u(x,y)$ pode ser descrita em termos dos graus de liberdade na forma, utilizando o sistema \ref{eq:matriz_x},
+Deste modo, a função de interpolação para $u(x,y)$ pode ser descrita em termos dos deslocamentos nodais na forma, utilizando o sistema \ref{eq:matriz_x},
 
 \begin{equation}
     u(x,y) = \begin{bmatrix}
@@ -153,7 +155,7 @@ Para simplificar a notação das equações \ref{eq:funcao_u} e \ref{eq:funcao_v
 
 Essas funções são denominadas \emph{Funções de forma} e representam a contribuição de cada grau de liberdade sobre o campo de deslocamento.
 
-Por fim, $\bm{\varphi}$ pode ser reescrito na forma matricial, em termos dessas funções $N$ e dos graus de liberdade $u$ e $v$, como
+Por fim, $\bm{\varphi}$ pode ser reescrito na forma matricial, em termos dessas funções $N$ e dos deslocamentos nodais e $u$ e $v$, como
 
 \begin{equation}
     \bm{\varphi} = \begin{Bmatrix}
@@ -165,7 +167,7 @@ Por fim, $\bm{\varphi}$ pode ser reescrito na forma matricial, em termos dessas 
         u_i \\ v_i \\ u_j \\ v_j \\ u_k \\ v_k
     \end{Bmatrix} = \bm{N} \bm{U}^{(e)},
 \end{equation}
-em que $\bm{N}$ é a matrix de funções de interpolação, e $\bm{U}^{(e)}$ é o vetor de graus de liberdade do elemento.
+em que $\bm{N}$ é a matrix de funções de interpolação, e $\bm{U}^{(e)}$ é o vetor de deslocamentos nodais do elemento.
 
 
 \section{As Relações de Tensão-Deformação-Deslocamento}
@@ -287,9 +289,9 @@ Para cada elemento do domínio é realizado o procedimento descrito na seção a
 \begin{equation}
     \bm{K} = \sum_{e} \bm{K}^{(e)}.
 \end{equation}
-Nesse contexto, $\Sigma$ representa, não uma soma ordinária, mas sim a sobreposição dos efeitos de rigidez sobre os graus de liberdade, num procedimento chamado \emph{Direct Stiffness Method}.  \cite{LOGAN}
+Nesse contexto, $\Sigma$ representa, não uma soma ordinária, mas sim a sobreposição dos efeitos de rigidez sobre os os nós, num procedimento chamado \emph{Direct Stiffness Method}.  \cite{LOGAN}
 
-Em cada elemento, a matriz local de rigidez $\bm{K}^{(e)}$ define a interação de forças e deslocamentos entre os graus de liberdade do seu próprio elemento. Analisando a estrutura como um todo, cada nó pode pertencer a vários elementos, pois é assim que a malha é constituída. O efeito de rigidez, então, sobre cada nó é a soma dos efeitos de todos os elementos que o contém. Isso vale para os deslocamentos nodais, como para as forças nodais. O procedimento, portanto, de assemblagem da matriz global de rigidez é a soma das matrizes locais de rigidez sobre as respectivas posições dos graus de liberdade da matriz local.
+Em cada elemento, a matriz local de rigidez $\bm{K}^{(e)}$ define a interação de forças e deslocamentos entre os nós do seu próprio elemento. Analisando a estrutura como um todo, cada nó pode pertencer a vários elementos, pois é assim que a malha é constituída. O efeito de rigidez, então, sobre cada nó é a soma dos efeitos de todos os elementos que o contém. Isso vale para os deslocamentos nodais, como para as forças nodais. O procedimento, portanto, de assemblagem da matriz global de rigidez é a soma das matrizes locais de rigidez sobre as posições sobre os graus de liberdade respectivos  matriz local.
 
 [inserir mais texto aqui!!!]
 
@@ -302,21 +304,19 @@ A condições de contorno, tradas aqui, podem ser dividas em dois tipos:
 
  As condições de Dirichlet são aquelas que definem valores na fronteira do domínio do campo em si. Já as de Neumann, são aquelas que definem valores de contorno sobre a derivada nas fronteiras do domínio. \citeshort{diprima} Aqui, as condições de contorno de Dirichlet são restrições de deslocamento, enquanto as condições de Neumann são carregamentos aplicados sobre a estrutura.
 
-As condições de contorno, então, dividem os graus de liberdade entre 
+As condições de contorno sobre os deslocamentos, então, dividem os graus de liberdade entre 
 
 \begin{enumerate}
     \item livre;
-    Quando não há informação prévia de seus valores, isto é, podem variar livremente.
+    Quando não há informação prévia de seus valores, isto é, o campo pode variar livremente.
     \item prescritos;
     prescritos quando há informação prévia de seus valores, e portanto, não podem variar.
     \cite{LOGAN}
 \end{enumerate}
 
-Um engaste, por exemplo, é uma condição de contorno de Dirichlet que gera graus de liberdade prescritos nos deslocamentos, impondo que o deslocamento naquela região do sólido é nulo. Um carregamento aplicado, por outro lado, é uma condição de contorno de Neumann que gera graus de liberdade prescritos nas forças.
+Um engaste, por exemplo, é uma condição de contorno de Dirichlet que gera graus de liberdade prescritos, pois impõe que o deslocamento naquela região do sólido é nulo. Um deslocamento conhecido, também o faz, determinando que os graus correspondentes recebam o valor deslocado.
 
-As prescrições de deslocamento são fáceis de aplica, uma vez que é mera substituição dos valores prescritos do vetor de deslocamentos dos dos $\bm{U}^{(e)}$, para depois também serem aplicadas sobre o vetor de deslocamentos globais $\bm{U}$; as prescrições devidas a carregamentos, por outro lado, são mais complicadas, pois é necessário transformá-las em forças nodais equivalentes. \cite{LOGAN}
-
-Pode-se encontrar as forças nodais equivalentes utilizando o mesmo método da seção anterior: o princípio dos trabalhos virtuais, fazendo com que o trabalho de carregamentos sobre a fronteira de um elemento $\partial \Omega^{(e)}$, causado por um deslocamento virtual $\delta \bm{U}^{(e)}$, seja igual ao trabalho da forças nodais equivalentes. Em termos matemáticos, de acordo com \citeshort{Zin},
+O vetor de forças $\bm{F}$ é nulo em regra sobre os graus de liberdade livres, pois essa entidade representa as forças externas sobre o elemento. Entretanto, quando se aplica condições de contorno de Neumann, os graus correspondentes devem receber forças nodais equivalentes, de forma que representem os carregamentos por forças externas concentradas nos nó.Pode-se encontrar as forças nodais equivalentes utilizando o mesmo método da seção anterior: o princípio dos trabalhos virtuais, fazendo com que o trabalho de carregamentos sobre a fronteira de um elemento $\partial \Omega^{(e)}$, causado por um deslocamento virtual $\delta \bm{U}^{(e)}$, seja igual ao trabalho da forças nodais equivalentes. Em termos matemáticos, de acordo com \citeshort{Zin},
 \begin{equation}
     \delta (\bm{U}^{(e)})^t \bm{F}^{(e)} = \int_{\partial \Omega^{(e)}} (\bm{N}\bm{U}^{(e)})^t \bm{t} dl,
 \end{equation}
@@ -330,7 +330,7 @@ em que $\bm{t}$ é o vetor do carregamento sobre a fronteira do elemento, na for
 Aqui os carregamentos são constantes sobre as fronteiras dos elementos, isto é, são carregamentos distribuídos e uniformes. Deste modo, a equação anterior pode ser simplificada para
 
 \begin{equation}
-    \delta (\bm{U}^{(e)})^t \bm{F}^{(e)} = \delta \bm{U}^{(e)} \int_{\partial \Omega^{(e)}} \bm{N}^t dl \bm{t}.
+    \delta (\bm{U}^{(e)})^t \bm{F}^{(e)} = \delta \bm{U}^{(e)} \int_{\partial \Omega^{(e)}} \bm{N}^t dl \bm{t}. 
 \end{equation}
 Portanto, as forças nodais equivalentes, devidas a carregamentos uniformes sobre a fronteira do elemento, é dada por
 \begin{equation}
@@ -347,6 +347,39 @@ em que $\bm{F}^{(e)}_{\bm{t}}$ são as forças equivalentes que compreendem a fr
 \subsection{Solução direta do sistema global}
 
 Com a determinação da matriz de rigidez global, as condições de contorno devidamente expressas em graus prescritos e livres (sejam deslocamento ou carregamentos), é possível reescrever o sistema geral da equação \ref{eq:sistema_global} na forma
+
+\begin{equation}
+    \begin{bmatrix}
+        \bm{K}_{LL} & \bm{K}_{LP} \\
+        \bm{K}_{PL} & \bm{K}_{PP}
+    \end{bmatrix} 
+    \begin{Bmatrix}
+        \bm{U}_L \\ \bm{U}_P
+    \end{Bmatrix}
+    = \begin{Bmatrix}
+        \bm{F}_L \\ \bm{F}_P
+    \end{Bmatrix},
+\end{equation}
+em que os símbolos $\bm{K}$, $\bm{U}$ e $\bm{F}$, com índices $L$ e $P$ representam submatrizes correspondes aos graus de liberdade que estão livres ou prescritos. \cite{rao}
+
+Nessa expressão, os graus de liberdade livres dos deslocamentos, em $\bm{U}$, são agrupados em um vetor único, denominado $\bm{U}_L$, o mesmo para os graus de liberdade livres das forças, agrupadas em $\bm{F}_L$. Os graus restantes, os prescritos, são então agrupados em $\bm{U}_P$ e $\bm{F}_P$, respectivamente. A matriz de rigidez global $\bm{K}$, por sua vez, pode ser decomposta em submatrizes correspondentes ao sistema divido em nesses grupos de graus de liberdade liver e restritos, como mostrado na equação acima.
+
+Portanto, o sistema global pode ser reescrito mais uma vez em termos dessas submatrizes, como
+
+\begin{align}
+    \bm{K}_{LL} \bm{U}_L + \bm{K}_{LP} \bm{U}_P &= \bm{F}_L \\
+    \bm{K}_{PL} \bm{U}_L + \bm{K}_{PP} \bm{U}_P &= \bm{F}_P.
+\end{align}
+
+Os valores conhecidos desse sistema são os deslocamentos sobre os graus prescritos, e as forças externas sobre o graus livres, a final, são as próprias condições de contorno definidas matematicamente pelo MEF. Logo, como o objetivo de resolver o sistema é encontrar os deslocamentos nodais, é possível isolar $\bm{U}_L$ na primeira equação, ou seja,
+
+\begin{align}
+    \bm{U}_L &= \bm{K}_{LL}^{-1} (\bm{F}_L - \bm{K}_{LP} \bm{U}_P), \\
+    \bm{F}_P &= \bm{K}_{PL} \bm{U}_L + \bm{K}_{PP} \bm{U}_P.
+\end{align}
+a matriz $\bm{K}_{LL}$ é quadrada, simétrica e sempre possui inversa quando o problema está estaticamente determinado. \cite{rao}
+
+As forças sobre os graus prescritos, $\bm{F}_P$, são denominadas reações, pois se referem às forças de reação do corpo sobre restrições de deslocamento (engastes, mancais etc.).
 
 
 \section{Análise tridimensional sobre o tetraedro}
