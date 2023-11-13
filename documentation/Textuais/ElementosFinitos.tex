@@ -26,7 +26,7 @@ Na análise estrutural aqui abordada, o objetivo da aplicação do MEF é determ
 \end{equation}
 em que $\bm{K}$ é a matriz de rigidez global, $\bm{U}$ é o vetor de deslocamentos nodais, e $\bm{F}$ é o vetor de forças nodais.
 
-Deste modo, convém definir os termos e símbolos dessas entidades matemáticas. Seja um corpo $\mathcal{B}$, definido por uma geometria sobre o domínio $\Omega$, sobre o qual é feito uma série de repartições em pequenos elementos, de domínio $\Omega^{(e)}$, cuja fronteira se denomina $\partial\Omega^{(e)}$. A figura \ref{fig:dominio_triangulos} mostra um domínio bidimensional $\Omega$ discretizado em elementos triangulares, cujos nós são representados por $i, j$ e $k$, e a figura \ref{fig:tetraedro} mostra um domínio tridimensional $\Omega$ discretizado em elementos tetraédricos, cujos nós são representados por $i, j, k$ e $m$. Quando uma entidade é definida sobre um elemento, ela é representada por um superescrito $(e)$, como por exemplo, o deslocamento $\bm{\varphi}^{(e)}$ sobre o elemento $e$. Quando uma entidade é definida sobre um nó, ela é representada por um subescrito $(i)$, como por exemplo, o deslocamento $\bm{\varphi}_i$ sobre o nó $i$. Quando uma entidade é definida sobre um elemento e um nó, ela é representada por um superescrito e um subescrito, como por exemplo, o deslocamento $\bm{\varphi}_i^{(e)}$ sobre o nó $i$ do elemento $e$.
+Deste modo, convém definir os termos e símbolos dessas entidades matemáticas. Seja um corpo $\mathcal{B}$, definido por uma geometria sobre o domínio $\Omega$, sobre o qual é feito uma série de repartições em pequenos elementos, de domínio $\Omega^{(e)}$, cuja fronteira se denomina $\partial\Omega^{(e)}$. A figura \ref{fig:dominio_triangulo} mostra um domínio bidimensional $\Omega$ discretizado em elementos triangulares, cujos nós são representados por $i, j$ e $k$, e a figura \ref{fig:tetraedro} mostra um domínio tridimensional $\Omega$ discretizado em elementos tetraédricos, cujos nós são representados por $i, j, k$ e $m$. Quando uma entidade é definida sobre um elemento, ela é representada por um superescrito $(e)$, como por exemplo, o deslocamento $\bm{\varphi}^{(e)}$ sobre o elemento $e$. Quando uma entidade é definida sobre um nó, ela é representada por um subescrito $(i)$, como por exemplo, o deslocamento $\bm{\varphi}_i$ sobre o nó $i$. Quando uma entidade é definida sobre um elemento e um nó, ela é representada por um superescrito e um subescrito, como por exemplo, o deslocamento $\bm{\varphi}_i^{(e)}$ sobre o nó $i$ do elemento $e$.
 
 Neste capítulo é abordado como, na sequência proposta por \citeshort{LOGAN},
 
@@ -94,7 +94,7 @@ Reescrevendo esse sistema na forma matricial, temos que
     \label{eq:matriz_x}
 \end{equation}
 
-sendo que\footnote{É fácil demonstrar que esse sistema sempre é possível e determinado apenas observando o fato de que as posições dos nós são distintas e não colineares, a final os elementos são triangulares.}
+sendo que\footnote{É fácil demonstrar que esse sistema sempre é possível e determinado apenas observando o fato de que as posições dos nós são distintas e não colineares, a final, os elementos são triangulares.}
 
 \begin{equation}
     \frac{1}{2A}
@@ -232,6 +232,15 @@ $\bm{F}^{(e)}$ é um vetor que armazena as forças aplicadas sobre os nós do el
 
 Um dos métodos para derivar essa matriz é utilizar o \emph{Princípio dos Trabalhos Virtuais} de modo que a energia interna do elemento, devido à sua deformação elástica, seja igual ao trabalho virtual das forças externas. \cite{Zin}
 
+O \emph{Princípio dos Trabalhos virtuais} (PTV), então, pode ser enunciado como:
+
+\begin{citacao}
+    Se um corpo deformável em equilíbrio é submetido a deslocamentos virtuais arbitrários (imaginários) associados a uma deformação compatível do corpo, o trabalho virtual das forças externas no corpo é igual à energia virtual de deformação das tensões internas. \cite[pág. 876, tradução livre]{LOGAN}
+\end{citacao}
+
+Nesse contexto, o trabalho virtual interno é causado por uma deformação do próprio corpo, denotada $\delta \bm{\epsilon}$, enquanto o trabalho virtual externo, por sua vez, é causado diretamente por um deslocamento virtual das forças que atuam sobre as fronteiras do corpo, denotado $\delta \bm{u}$. Em um corpo elástico, modelado pela Lei de Hook, o trabalho virtual interno pode ser descrito em termos do deslocamento, como a energia armazenada na forma elástica, a fim de desenvolver as equações de equilíbrio estático apresentadas a seguir. \footnote{A notação $\delta$ se refere a um variacional, que representa uma variação infinitesimal sobre o todo o contínuo da função, de modo que seja nulo na região em que são aplicadas as condições de contorno. O cálculo variacional, entretanto, não é abordado diretamente nesta monografia.}
+
+
 Seja um elemento triangular, como da figura \ref{fig:dominio_triangulo}, que sofre um deslocamento virtual $\delta \bm{U}^{(e)}$. De acordo com \citeshort{Zin}, o trabalho interno do elemento é dado por\footnote{Poder escrever a energia interna desta forma simples é devido à escolha de que, na notação de Voigt do tensor de deformação, foi utilizado a convenção de $\gamma = 2 \epsilon$.}
 
 \begin{equation}
@@ -279,9 +288,9 @@ em que $V$ é o volume do elemento, definido, no caso bidimensional, por $V = A 
 
 Essa matriz pode ser lida como uma lista de causa e efeito. Enquanto a linha da matriz representa onde que o efeito do deslocamento é aplicado, a força no caso, a coluna informa qual é o deslocamento, o grau de liberdade, que o causa. \cite{LOGAN}
 
-Outra forma de derivar essa relação diretamente da equação de equilíbrio estático é por meio do método de resíduos ponderados, em que as bases da função de deslocamento são as mesmas da função de ponderação. Esse método leva à mesma formulação mostrada acima.
+Outra forma de derivar essa relação diretamente da equação de equilíbrio estático é por meio do método de Galerkin, em que as bases da função de deslocamento são as mesmas da função de ponderação, utilizando a chama formulação fraca da equação de governo. Esse método leva à mesma formulação mostrada acima.
 
-Vale ressaltar que não foi preciso definir um sistema local de coordenadas para derivar essas relações, uma vez que o elemento tradado aqui, como também o tetraedro (tratado mais adiante), é simples o suficiente para que 
+Vale ressaltar que não foi preciso definir um sistema local de coordenadas para derivar essas relações, uma vez que o elemento tradado aqui, como também o tetraedro (tratado mais adiante), tem funções de interpolação simples o suficiente que um sistema orientado a cada elemento não é necessário. Elementos mais sofisticados, com funções de interpolação envolvendo termos não lineares, necessitam, por uma questão de manipulação algébrica, de um sistema de referência local. Esses elementos não são tratados aqui.
 
 \section{Matriz de Rigidez Global e Condições de Contorno}
 
@@ -289,13 +298,98 @@ Para cada elemento do domínio é realizado o procedimento descrito na seção a
 \begin{equation}
     \bm{K} = \sum_{e} \bm{K}^{(e)}.
 \end{equation}
-Nesse contexto, $\Sigma$ representa, não uma soma ordinária, mas sim a sobreposição dos efeitos de rigidez sobre os os nós, num procedimento chamado \emph{Direct Stiffness Method}.  \cite{LOGAN}
+Nesse contexto, $\Sigma$ representa, não uma soma ordinária, mas sim a sobreposição dos efeitos de rigidez sobre os nós, num procedimento chamado \emph{Direct Stiffness Method}.  \cite{LOGAN}
 
-Em cada elemento, a matriz local de rigidez $\bm{K}^{(e)}$ define a interação de forças e deslocamentos entre os nós do seu próprio elemento. Analisando a estrutura como um todo, cada nó pode pertencer a vários elementos, pois é assim que a malha é constituída. O efeito de rigidez, então, sobre cada nó é a soma dos efeitos de todos os elementos que o contém. Isso vale para os deslocamentos nodais, como para as forças nodais. O procedimento, portanto, de assemblagem da matriz global de rigidez é a soma das matrizes locais de rigidez sobre as posições sobre os graus de liberdade respectivos  matriz local.
+Em cada elemento, a matriz local de rigidez $\bm{K}^{(e)}$ define a interação de forças e deslocamentos entre os graus de liberdade dos nós. Analisando a estrutura como um todo, cada nó pode pertencer a vários elementos, pois é assim que a malha é constituída. O efeito de rigidez, então, sobre cada nó é a soma dos efeitos de todos os elementos que o contém. Isso vale para os deslocamentos nodais, como para as forças nodais. O procedimento, portanto, de assemblagem da matriz global de rigidez é a soma das matrizes locais de rigidez sobre as posições dos graus de liberdade respectivos das matrizes locais.
 
-[inserir mais texto aqui!!!]
+\input{Figuras/exemplo_matriz_global.tex}
 
-A condições de contorno, tradas aqui, podem ser dividas em dois tipos: 
+Seja um sólido $\mathcal{B}$ discretizado por uma malha composta de cinco nós, formando três elementos, conforme a figura \ref{fig:exemplo_matriz_global}, engastado na superfície inferior do elemento azulado e sujeito a uma força \textcolor{purple}{$f$} concentrada no nó $2$, como também um carregamento distribuído \textcolor{orange}{$t$} na superfície entre os nós $4$ e $5$.
+
+As matrizes locais de rigidez desses elementos são quadradas $6 \times 6$, pois no CST existem três graus de liberdade, dois para cada nó, referente ao deslocamento nas direções de $x$ e $y$. Os sistemas locas, então, para elemento da figura \ref{fig:exemplo_matriz_global}, têm a forma
+
+\begin{align}
+    \color{blue} \begin{bmatrix}
+        k_{11} & k_{12} & k_{13} & k_{14} & k_{15} & k_{16} \\
+        k_{21} & k_{22} & k_{23} & k_{24} & k_{25} & k_{26} \\
+        k_{31} & k_{32} & k_{33} & k_{34} & k_{35} & k_{36} \\
+        k_{41} & k_{42} & k_{43} & k_{44} & k_{45} & k_{46} \\
+        k_{51} & k_{52} & k_{53} & k_{54} & k_{55} & k_{56} \\
+        k_{61} & k_{62} & k_{63} & k_{64} & k_{65} & k_{66} \\
+    \end{bmatrix}
+    \color{black}
+    \begin{Bmatrix}
+        u_1 \\ v_1 \\ u_2 \\ v_2 \\ u_3 \\ v_3
+    \end{Bmatrix}
+    &=
+    \begin{Bmatrix}
+        f_{x1} \\ f_{y1} \\ f_{x2} \\ f_{y2} \\ f_{x3} \\ f_{y3}
+    \end{Bmatrix} \iff \color{blue} \bm{K}^{(e)} \bm{U}^{(e)} = \bm{F}^{(e)}, \\
+    \color{red} \begin{bmatrix}
+        k_{11} & k_{12} & k_{13} & k_{14} & k_{15} & k_{16} \\
+        k_{21} & k_{22} & k_{23} & k_{24} & k_{25} & k_{26} \\
+        k_{31} & k_{32} & k_{33} & k_{34} & k_{35} & k_{36} \\
+        k_{41} & k_{42} & k_{43} & k_{44} & k_{45} & k_{46} \\
+        k_{51} & k_{52} & k_{53} & k_{54} & k_{55} & k_{56} \\
+        k_{61} & k_{62} & k_{63} & k_{64} & k_{65} & k_{66} \\
+    \end{bmatrix}
+    \color{black}
+    \begin{Bmatrix}
+        u_2 \\ v_2 \\ u_3 \\ v_3 \\ u_4 \\ v_4
+    \end{Bmatrix}
+    &=
+    \begin{Bmatrix}
+        f_{x2} \\ f_{y2} \\ f_{x3} \\ f_{y3} \\ f_{x4} \\ f_{y4}
+    \end{Bmatrix} \iff \color{red} \bm{K}^{(e)} \bm{U}^{(e)} = \bm{F}^{(e)}, \\
+    \color{green} \begin{bmatrix}
+        k_{11} & k_{12} & k_{13} & k_{14} & k_{15} & k_{16} \\
+        k_{21} & k_{22} & k_{23} & k_{24} & k_{25} & k_{26} \\
+        k_{31} & k_{32} & k_{33} & k_{34} & k_{35} & k_{36} \\
+        k_{41} & k_{42} & k_{43} & k_{44} & k_{45} & k_{46} \\
+        k_{51} & k_{52} & k_{53} & k_{54} & k_{55} & k_{56} \\
+        k_{61} & k_{62} & k_{63} & k_{64} & k_{65} & k_{66} \\
+    \end{bmatrix}
+    \color{black}
+    \begin{Bmatrix}
+        u_3 \\ v_3 \\ u_4 \\ v_4 \\ u_5 \\ v_5
+    \end{Bmatrix}
+    &=
+    \begin{Bmatrix}
+        f_{x3} \\ f_{y3} \\ f_{x4} \\ f_{y4} \\ f_{x5} \\ f_{y5}
+    \end{Bmatrix} \iff \color{green} \bm{K}^{(e)} \bm{U}^{(e)} = \bm{F}^{(e)}.
+\end{align}
+
+Aplicar o \emph{Direct Stiffness Method} é somar essas matrizes de rigidez sobre os graus de liberdade. Observemos que o primeiro nó só faz parte de um elemento, o \textcolor{blue}{azul}, portanto sua rigidez só tem contribuição desse elemento; o nó $3$, por sua vez, pertence aos três elementos (\textcolor{blue}{azul}, \textcolor{red}{vermelho} e \textcolor{green}{verde}), e, portanto, seu termo de rigidez tem contribuição de todos eles. Realizando esse procedimento, é possível montar a matriz global de rigidez, utilizando, para tanto, a notação dos vetores de deslocamentos nodais $\bm{U}$ e de forças nodais $\bm{F}$.
+
+A matriz de rigidez global é quadrada $10 \times 10$, pois existem cinco nós, com dois graus de liberdade cada, e é dada por
+
+\begin{equation}
+    \rotatebox{90}{
+    \begin{bmatrix}
+        \textcolor{blue}{k_{11}} &  \textcolor{blue}{k_{12}} &  \textcolor{blue}{k_{13}} &  \textcolor{blue}{k_{14}} &  \textcolor{blue}{k_{15}} &  \textcolor{blue}{k_{16}} & 0 & 0 & 0 & 0 & \\
+        \textcolor{blue}{k_{21}} &  \textcolor{blue}{k_{22}} &  \textcolor{blue}{k_{23}} &  \textcolor{blue}{k_{24}} &  \textcolor{blue}{k_{25}} &  \textcolor{blue}{k_{26}} & 0 & 0 & 0 & 0 & \\
+        \textcolor{blue}{k_{31}} &  \textcolor{blue}{k_{32}} &  \textcolor{blue}{k_{33}} + \textcolor{red}{k_{11}} &  \textcolor{blue}{k_{34}} + \textcolor{red}{k_{12}} &  \textcolor{blue}{k_{35}} + \textcolor{red}{k_{13}} &  \textcolor{blue}{k_{36}} + \textcolor{red}{k_{14}} &  \textcolor{red}{k_{15}} &  \textcolor{red}{k_{16}} & 0 & 0 & \\
+        \textcolor{blue}{k_{41}} &  \textcolor{blue}{k_{42}} &  \textcolor{blue}{k_{43}} + \textcolor{red}{k_{21}} &  \textcolor{blue}{k_{44}} + \textcolor{red}{k_{22}} &  \textcolor{blue}{k_{45}} + \textcolor{red}{k_{23}} &  \textcolor{blue}{k_{46}} + \textcolor{red}{k_{24}} &  \textcolor{red}{k_{25}} &  \textcolor{red}{k_{26}} & 0 & 0 & \\
+        \textcolor{blue}{k_{51}} &  \textcolor{blue}{k_{52}} &  \textcolor{blue}{k_{53}} + \textcolor{red}{k_{31}} &  \textcolor{blue}{k_{54}} + \textcolor{red}{k_{32}} &  \textcolor{blue}{k_{55}} + \textcolor{red}{k_{33}} + \textcolor{green}{k_{11}} &  \textcolor{blue}{k_{56}} + \textcolor{red}{k_{34}} + \textcolor{green}{k_{12}} &  \textcolor{red}{k_{35}} + \textcolor{green}{k_{13}} &  \textcolor{red}{k_{36}} + \textcolor{green}{k_{14}} &  \textcolor{green}{k_{15}} &  \textcolor{green}{k_{16}} & \\
+        \textcolor{blue}{k_{61}} &  \textcolor{blue}{k_{62}} &  \textcolor{blue}{k_{63}} + \textcolor{red}{k_{41}} &  \textcolor{blue}{k_{64}} + \textcolor{red}{k_{42}} &  \textcolor{blue}{k_{65}} + \textcolor{red}{k_{43}} + \textcolor{green}{k_{21}} &  \textcolor{blue}{k_{66}} + \textcolor{red}{k_{44}} + \textcolor{green}{k_{22}} &  \textcolor{red}{k_{45}} + \textcolor{green}{k_{23}} &  \textcolor{red}{k_{46}} + \textcolor{green}{k_{24}} &  \textcolor{green}{k_{25}} &  \textcolor{green}{k_{26}} & \\
+       0 & 0 &  \textcolor{red}{k_{51}} &  \textcolor{red}{k_{52}} &  \textcolor{red}{k_{53}} + \textcolor{green}{k_{31}} &  \textcolor{red}{k_{54}} + \textcolor{green}{k_{32}} &  \textcolor{red}{k_{55}} + \textcolor{green}{k_{33}} &  \textcolor{red}{k_{56}} + \textcolor{green}{k_{34}} &  \textcolor{green}{k_{35}} &  \textcolor{green}{k_{36}} & \\
+       0 & 0 &  \textcolor{red}{k_{61}} &  \textcolor{red}{k_{62}} &  \textcolor{red}{k_{63}} + \textcolor{green}{k_{41}} &  \textcolor{red}{k_{64}} + \textcolor{green}{k_{42}} &  \textcolor{red}{k_{65}} + \textcolor{green}{k_{43}} &  \textcolor{red}{k_{66}} + \textcolor{green}{k_{44}} &  \textcolor{green}{k_{45}} &  \textcolor{green}{k_{46}} & \\
+       0 & 0 & 0 & 0 &  \textcolor{green}{k_{51}} &  \textcolor{green}{k_{52}} &  \textcolor{green}{k_{53}} &  \textcolor{green}{k_{54}} &  \textcolor{green}{k_{55}} &  \textcolor{green}{k_{56}} & \\
+       0 & 0 & 0 & 0 &  \textcolor{green}{k_{61}} &  \textcolor{green}{k_{62}} &  \textcolor{green}{k_{63}} &  \textcolor{green}{k_{64}} &  \textcolor{green}{k_{65}} &  \textcolor{green}{k_{66}} & \\ 
+    \end{bmatrix}
+    \begin{Bmatrix}
+        0 \\ 0 \\ u_2 \\ v_2 \\ 0 \\ 0 \\ u_4 \\ v_4 \\ u_5 \\ v_5
+    \end{Bmatrix} = 
+    \begin{Bmatrix}
+        R_{x1} \\ R_{y1} \\ 0 \\ \textcolor{purple}{f} \\ R_{x3} \\ R_{y3} \\ \frac{1}{2} \ell_{4-5} \textcolor{orange}{t} \\ 0 \\ \frac{1}{2} \ell_{4-5} \textcolor{orange}{t} \\ 0
+    \end{Bmatrix}.
+    }
+    \label{eq:sistema_global_montado}
+\end{equation}
+
+Nas duas primeiras linhas do sistema, que representam as forças nodais sobre o primeiro nó, é possível notar que somente os deslocamentos do elemento azulado que impactam diretamente. Nos graus de $u_3$ e $u_v$, fica evidente que todos os elementos contribuem para as forças nodais do nó $3$, conforme descrito anteriormente.
+
+Um outro passo nessa montagem do sistema global é a aplicação das condições de contorno. As condições de contorno, tradas aqui, podem ser dividas em dois tipos: 
 
 \begin{enumerate}
     \item de Dirichlet, ou de primeiro tipo, e
@@ -316,7 +410,7 @@ As condições de contorno sobre os deslocamentos, então, dividem os graus de l
 
 Um engaste, por exemplo, é uma condição de contorno de Dirichlet que gera graus de liberdade prescritos, pois impõe que o deslocamento naquela região do sólido é nulo. Um deslocamento conhecido, também o faz, determinando que os graus correspondentes recebam o valor deslocado.
 
-O vetor de forças $\bm{F}$ é nulo em regra sobre os graus de liberdade livres, pois essa entidade representa as forças externas sobre o elemento. Entretanto, quando se aplica condições de contorno de Neumann, os graus correspondentes devem receber forças nodais equivalentes, de forma que representem os carregamentos por forças externas concentradas nos nó.Pode-se encontrar as forças nodais equivalentes utilizando o mesmo método da seção anterior: o princípio dos trabalhos virtuais, fazendo com que o trabalho de carregamentos sobre a fronteira de um elemento $\partial \Omega^{(e)}$, causado por um deslocamento virtual $\delta \bm{U}^{(e)}$, seja igual ao trabalho da forças nodais equivalentes. Em termos matemáticos, de acordo com \citeshort{Zin},
+O vetor de forças $\bm{F}$ é nulo em regra sobre os graus de liberdade livres, pois essa entidade representa as forças externas sobre o elemento. Entretanto, como no MEF os deslocamentos são discretizados nos nós, o mesmo é feito com os carregamentos. Quando se aplica condições de contorno de Neumann, os graus correspondentes devem receber forças nodais equivalentes, de forma que representem os carregamentos por forças externas concentradas nos nó. Pode-se encontrar as forças nodais equivalentes utilizando o mesmo método da seção anterior: o princípio dos trabalhos virtuais, fazendo com que o trabalho de carregamentos sobre a fronteira de um elemento $\partial \Omega^{(e)}$, causado por um deslocamento virtual $\delta \bm{U}^{(e)}$, seja igual ao trabalho da forças nodais equivalentes. Em termos matemáticos, de acordo com \citeshort{Zin},
 \begin{equation}
     \delta (\bm{U}^{(e)})^t \bm{F}^{(e)} = \int_{\partial \Omega^{(e)}} (\bm{N}\bm{U}^{(e)})^t \bm{t} dl,
 \end{equation}
@@ -344,9 +438,13 @@ Essa integração é por vezes trabalhosa, e não pode ser feita algebricamente,
 \end{equation}
 em que $\bm{F}^{(e)}_{\bm{t}}$ são as forças equivalentes que compreendem a fronteira em que o carregamento $\bm{t}$ é aplicado, $l^{(e)}$ é o comprimento da fronteira do elemento, e $d$ é a espessura do elemento.
 
+Na equação \ref{eq:sistema_global_montado}, em que foi montado o sistema global, já foi aplicada essas condições de contorno. Pode-se notar que os deslocamentos vinculados à fronteira compostas pelos nós $1$ e $3$ são nulos, pois alí se faz um engaste. A força roxeada \textcolor{purple}{$f$}, agindo sobre o nó $2$, faz-se presente diretamente no vetor de forças nodais, pois já é uma força concentrada em um nó. O carregamento alaranjado \textcolor{orange}{$t$}, por sua vez, foi decomposto em duas parcelas, para os nós $5$ e $4$, seguindo a expressão da equação anterior. 
+
+Vale ressaltar que nos graus de liberdade prescritos as forças nodais desconhecidas são as reações das estruturas, isto é, as forças de reação que as restrições fazem sobre o corpo que se mantenha em equilíbrio. Por conta disso, na equação \ref{eq:sistema_global_montado}, as forças sobre os graus prescritos foram denominadas $R$, de reação.
+
 \subsection{Solução direta do sistema global}
 
-Com a determinação da matriz de rigidez global, as condições de contorno devidamente expressas em graus prescritos e livres (sejam deslocamento ou carregamentos), é possível reescrever o sistema geral da equação \ref{eq:sistema_global} na forma
+Com a determinação da matriz de rigidez global, as condições de contorno devidamente expressas em graus prescritos e livres (sejam deslocamento ou carregamentos), é possível reescrever o sistema geral da equação \ref{eq:sistema_global} na forma, de acordo com \citeshort{rao},
 
 \begin{equation}
     \begin{bmatrix}
@@ -360,9 +458,7 @@ Com a determinação da matriz de rigidez global, as condições de contorno dev
         \bm{F}_L \\ \bm{F}_P
     \end{Bmatrix},
 \end{equation}
-em que os símbolos $\bm{K}$, $\bm{U}$ e $\bm{F}$, com índices $L$ e $P$ representam submatrizes correspondes aos graus de liberdade que estão livres ou prescritos. \cite{rao}
-
-Nessa expressão, os graus de liberdade livres dos deslocamentos, em $\bm{U}$, são agrupados em um vetor único, denominado $\bm{U}_L$, o mesmo para os graus de liberdade livres das forças, agrupadas em $\bm{F}_L$. Os graus restantes, os prescritos, são então agrupados em $\bm{U}_P$ e $\bm{F}_P$, respectivamente. A matriz de rigidez global $\bm{K}$, por sua vez, pode ser decomposta em submatrizes correspondentes ao sistema divido em nesses grupos de graus de liberdade liver e restritos, como mostrado na equação acima.
+Nessa expressão, os graus de liberdade subdividem os vetores $\bm{U}$ e $\bm{F}$ em dois cada um, em prescritos ($\bm{U}_P$ e $\bm{F}_P$), e livres ($\bm{U}_L$ e $\bm{F}_L$). A matriz de rigidez, então, é subdividida em quatro, que relacionam os graus de liberdade prescritos e livros dos deslocamentos e das forças nodais, respectivamente.
 
 Portanto, o sistema global pode ser reescrito mais uma vez em termos dessas submatrizes, como
 
@@ -371,7 +467,7 @@ Portanto, o sistema global pode ser reescrito mais uma vez em termos dessas subm
     \bm{K}_{PL} \bm{U}_L + \bm{K}_{PP} \bm{U}_P &= \bm{F}_P.
 \end{align}
 
-Os valores conhecidos desse sistema são os deslocamentos sobre os graus prescritos, e as forças externas sobre o graus livres, a final, são as próprias condições de contorno definidas matematicamente pelo MEF. Logo, como o objetivo de resolver o sistema é encontrar os deslocamentos nodais, é possível isolar $\bm{U}_L$ na primeira equação, ou seja,
+Os valores conhecidos desse sistema são os deslocamentos sobre os graus prescritos $\bm{U}_P$, e as forças externas sobre o graus livres $\bm{F}_L$, a final, são as próprias condições de contorno definidas matematicamente pelo MEF. Logo, como o objetivo de resolver o sistema é encontrar os deslocamentos nodais, é possível isolar $\bm{U}_L$ na primeira equação, ou seja,
 
 \begin{align}
     \bm{U}_L &= \bm{K}_{LL}^{-1} (\bm{F}_L - \bm{K}_{LP} \bm{U}_P), \\
@@ -379,8 +475,57 @@ Os valores conhecidos desse sistema são os deslocamentos sobre os graus prescri
 \end{align}
 a matriz $\bm{K}_{LL}$ é quadrada, simétrica e sempre possui inversa quando o problema está estaticamente determinado. \cite{rao}
 
-As forças sobre os graus prescritos, $\bm{F}_P$, são denominadas reações, pois se referem às forças de reação do corpo sobre restrições de deslocamento (engastes, mancais etc.).
-
+Aplicando essas expressões à equação \ref{eq:sistema_global_montado}, referente ao exemplo da figura \ref{fig:exemplo_matriz_global}, temos que
+\rotatebox{90}{
+\begin{aligned}
+    \begin{bmatrix}
+        \textcolor{blue}{k_{33}} + \textcolor{red}{k_{11}} &  \textcolor{blue}{k_{34}} + \textcolor{red}{k_{12}} &  \textcolor{red}{k_{15}} &  \textcolor{red}{k_{16}} & 0 & 0 & \\ 
+        \textcolor{blue}{k_{43}} + \textcolor{red}{k_{21}} &  \textcolor{blue}{k_{44}} + \textcolor{red}{k_{22}} &  \textcolor{red}{k_{25}} &  \textcolor{red}{k_{26}} & 0 & 0 & \\ 
+        \textcolor{red}{k_{51}} &  \textcolor{red}{k_{52}} &  \textcolor{red}{k_{55}} + \textcolor{green}{k_{33}} &  \textcolor{red}{k_{56}} + \textcolor{green}{k_{34}} &  \textcolor{green}{k_{35}} &  \textcolor{green}{k_{36}} & \\ 
+        \textcolor{red}{k_{61}} &  \textcolor{red}{k_{62}} &  \textcolor{red}{k_{65}} + \textcolor{green}{k_{43}} &  \textcolor{red}{k_{66}} + \textcolor{green}{k_{44}} &  \textcolor{green}{k_{45}} &  \textcolor{green}{k_{46}} & \\ 
+       0 & 0 &  \textcolor{green}{k_{53}} &  \textcolor{green}{k_{54}} &  \textcolor{green}{k_{55}} &  \textcolor{green}{k_{56}} & \\ 
+       0 & 0 &  \textcolor{green}{k_{63}} &  \textcolor{green}{k_{64}} &  \textcolor{green}{k_{65}} &  \textcolor{green}{k_{66}} & \\ 
+    \end{bmatrix}
+    \begin{Bmatrix}
+        u_2 \\ v_2 \\ u_4 \\ v_4 \\ u_5 \\ v_5
+    \end{Bmatrix} +
+    \begin{bmatrix}
+        \textcolor{blue}{k_{31}} &  \textcolor{blue}{k_{32}} &  \textcolor{blue}{k_{35}} + \textcolor{red}{k_{13}} &  \textcolor{blue}{k_{36}} + \textcolor{red}{k_{14}} & \\ 
+        \textcolor{blue}{k_{41}} &  \textcolor{blue}{k_{42}} &  \textcolor{blue}{k_{45}} + \textcolor{red}{k_{23}} &  \textcolor{blue}{k_{46}} + \textcolor{red}{k_{24}} & \\ 
+       0 & 0 &  \textcolor{red}{k_{53}} + \textcolor{green}{k_{31}} &  \textcolor{red}{k_{54}} + \textcolor{green}{k_{32}} & \\ 
+       0 & 0 &  \textcolor{red}{k_{63}} + \textcolor{green}{k_{41}} &  \textcolor{red}{k_{64}} + \textcolor{green}{k_{42}} & \\ 
+       0 & 0 &  \textcolor{green}{k_{51}} &  \textcolor{green}{k_{52}} & \\ 
+       0 & 0 &  \textcolor{green}{k_{61}} &  \textcolor{green}{k_{62}} & \\ 
+    \end{bmatrix}
+    \begin{Bmatrix}
+        0 \\ 0 \\ 0 \\ 0
+    \end{Bmatrix} &=
+    \begin{Bmatrix}
+        0 \\ \textcolor{purple}{f} \\ \frac{1}{2} \ell_{4-5} \textcolor{orange}{t} \\ 0 \\ \frac{1}{2} \ell_{4-5} \textcolor{orange}{t} \\ 0
+    \end{Bmatrix} \\
+    \begin{bmatrix}
+        \textcolor{blue}{k_{13}} &  \textcolor{blue}{k_{14}} & 0 & 0 & 0 & 0 & \\ 
+        \textcolor{blue}{k_{23}} &  \textcolor{blue}{k_{24}} & 0 & 0 & 0 & 0 & \\ 
+        \textcolor{blue}{k_{53}} + \textcolor{red}{k_{31}} &  \textcolor{blue}{k_{54}} + \textcolor{red}{k_{32}} &  \textcolor{red}{k_{35}} + \textcolor{green}{k_{13}} &  \textcolor{red}{k_{36}} + \textcolor{green}{k_{14}} &  \textcolor{green}{k_{15}} &  \textcolor{green}{k_{16}} & \\ 
+        \textcolor{blue}{k_{63}} + \textcolor{red}{k_{41}} &  \textcolor{blue}{k_{64}} + \textcolor{red}{k_{42}} &  \textcolor{red}{k_{45}} + \textcolor{green}{k_{23}} &  \textcolor{red}{k_{46}} + \textcolor{green}{k_{24}} &  \textcolor{green}{k_{25}} &  \textcolor{green}{k_{26}} & \\ 
+    \end{bmatrix} 
+    \begin{Bmatrix}
+        u_2 \\ v_2 \\ u_4 \\ v_4 \\ u_5 \\ v_5
+    \end{Bmatrix} + 
+    \begin{bmatrix}
+        \textcolor{blue}{k_{11}} &  \textcolor{blue}{k_{12}} &  \textcolor{blue}{k_{15}} &  \textcolor{blue}{k_{16}} & \\ 
+        \textcolor{blue}{k_{21}} &  \textcolor{blue}{k_{22}} &  \textcolor{blue}{k_{25}} &  \textcolor{blue}{k_{26}} & \\ 
+        \textcolor{blue}{k_{51}} &  \textcolor{blue}{k_{52}} &  \textcolor{blue}{k_{55}} + \textcolor{red}{k_{33}} + \textcolor{green}{k_{11}} &  \textcolor{blue}{k_{56}} + \textcolor{red}{k_{34}} + \textcolor{green}{k_{12}} & \\ 
+        \textcolor{blue}{k_{61}} &  \textcolor{blue}{k_{62}} &  \textcolor{blue}{k_{65}} + \textcolor{red}{k_{43}} + \textcolor{green}{k_{21}} &  \textcolor{blue}{k_{66}} + \textcolor{red}{k_{44}} + \textcolor{green}{k_{22}} & \\ 
+    \end{bmatrix}
+    \begin{Bmatrix}
+        0 \\ 0 \\ 0 \\ 0
+    \end{Bmatrix}  &=
+    \begin{Bmatrix}
+        R_{x1} \\ R_{y1} \\ R_{x3} \\ R_{y3}
+    \end{Bmatrix}
+\end{aligned}
+}
 
 \section{Análise tridimensional sobre o tetraedro}
 
