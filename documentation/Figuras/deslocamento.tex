@@ -31,13 +31,13 @@
         \draw[magenta, line width = 0.5mm] (A.center) -- (B.center);
         \draw[magenta, line width = 0.5mm] (A'.center) -- (B'.center);
 
-        \draw[marrow]  (0,0) -- (A.center) node[midway,above left]{\large $\vec{a}$};
-        \draw[marrow]  (0,0) -- (B.center) node[midway,above left]{\large $\vec{b}$};
-        \draw[marrow]  (0,0) -- (A'.center) node[midway,above]{\large $\vec{a}'$};
-        \draw[marrow]  (0,0) -- (B'.center) node[midway,below]{\large $\vec{b}'$};
+        \draw[marrow]  (0,0) -- (A.center) node[midway,above left]{\large $\bm{a}$};
+        \draw[marrow]  (0,0) -- (B.center) node[midway,above left]{\large $\bm{b}$};
+        \draw[marrow]  (0,0) -- (A'.center) node[midway,above]{\large $\bm{a}'$};
+        \draw[marrow]  (0,0) -- (B'.center) node[midway,below]{\large $\bm{b}'$};
 
-        \draw[marrowb]  (A.center) -- (A'.center) node[midway,below]{$\vec{U}(\vec{A})$};
-        \draw[marrowb]  (B.center) -- (B'.center) node[midway,below]{$\vec{U}(\vec{B})$};
+        \draw[marrowb]  (A.center) -- (A'.center) node[midway,below]{$\bm{U}(\bm{A})$};
+        \draw[marrowb]  (B.center) -- (B'.center) node[midway,below]{$\bm{U}(\bm{B})$};
 
         \foreach \n in {A,B,A',B'}
              \node at (\n)[circle,fill,inner sep=0.3mm]{};

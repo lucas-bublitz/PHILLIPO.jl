@@ -363,31 +363,29 @@ As matrizes locais de rigidez desses elementos são quadradas $6 \times 6$, pois
 Aplicar o \emph{Direct Stiffness Method} é somar essas matrizes de rigidez sobre os graus de liberdade. Observemos que o primeiro nó só faz parte de um elemento, o \textcolor{blue}{azul}, portanto sua rigidez só tem contribuição desse elemento; o nó $3$, por sua vez, pertence aos três elementos (\textcolor{blue}{azul}, \textcolor{red}{vermelho} e \textcolor{green}{verde}), e, portanto, seu termo de rigidez tem contribuição de todos eles. Realizando esse procedimento, é possível montar a matriz global de rigidez, utilizando, para tanto, a notação dos vetores de deslocamentos nodais $\bm{U}$ e de forças nodais $\bm{F}$.
 
 A matriz de rigidez global é quadrada $10 \times 10$, pois existem cinco nós, com dois graus de liberdade cada, e é dada por
-
-\begin{equation}
-    \rotatebox{90}{
-    \begin{bmatrix}
-        \textcolor{blue}{k_{11}} &  \textcolor{blue}{k_{12}} &  \textcolor{blue}{k_{13}} &  \textcolor{blue}{k_{14}} &  \textcolor{blue}{k_{15}} &  \textcolor{blue}{k_{16}} & 0 & 0 & 0 & 0 & \\
-        \textcolor{blue}{k_{21}} &  \textcolor{blue}{k_{22}} &  \textcolor{blue}{k_{23}} &  \textcolor{blue}{k_{24}} &  \textcolor{blue}{k_{25}} &  \textcolor{blue}{k_{26}} & 0 & 0 & 0 & 0 & \\
-        \textcolor{blue}{k_{31}} &  \textcolor{blue}{k_{32}} &  \textcolor{blue}{k_{33}} + \textcolor{red}{k_{11}} &  \textcolor{blue}{k_{34}} + \textcolor{red}{k_{12}} &  \textcolor{blue}{k_{35}} + \textcolor{red}{k_{13}} &  \textcolor{blue}{k_{36}} + \textcolor{red}{k_{14}} &  \textcolor{red}{k_{15}} &  \textcolor{red}{k_{16}} & 0 & 0 & \\
-        \textcolor{blue}{k_{41}} &  \textcolor{blue}{k_{42}} &  \textcolor{blue}{k_{43}} + \textcolor{red}{k_{21}} &  \textcolor{blue}{k_{44}} + \textcolor{red}{k_{22}} &  \textcolor{blue}{k_{45}} + \textcolor{red}{k_{23}} &  \textcolor{blue}{k_{46}} + \textcolor{red}{k_{24}} &  \textcolor{red}{k_{25}} &  \textcolor{red}{k_{26}} & 0 & 0 & \\
-        \textcolor{blue}{k_{51}} &  \textcolor{blue}{k_{52}} &  \textcolor{blue}{k_{53}} + \textcolor{red}{k_{31}} &  \textcolor{blue}{k_{54}} + \textcolor{red}{k_{32}} &  \textcolor{blue}{k_{55}} + \textcolor{red}{k_{33}} + \textcolor{green}{k_{11}} &  \textcolor{blue}{k_{56}} + \textcolor{red}{k_{34}} + \textcolor{green}{k_{12}} &  \textcolor{red}{k_{35}} + \textcolor{green}{k_{13}} &  \textcolor{red}{k_{36}} + \textcolor{green}{k_{14}} &  \textcolor{green}{k_{15}} &  \textcolor{green}{k_{16}} & \\
-        \textcolor{blue}{k_{61}} &  \textcolor{blue}{k_{62}} &  \textcolor{blue}{k_{63}} + \textcolor{red}{k_{41}} &  \textcolor{blue}{k_{64}} + \textcolor{red}{k_{42}} &  \textcolor{blue}{k_{65}} + \textcolor{red}{k_{43}} + \textcolor{green}{k_{21}} &  \textcolor{blue}{k_{66}} + \textcolor{red}{k_{44}} + \textcolor{green}{k_{22}} &  \textcolor{red}{k_{45}} + \textcolor{green}{k_{23}} &  \textcolor{red}{k_{46}} + \textcolor{green}{k_{24}} &  \textcolor{green}{k_{25}} &  \textcolor{green}{k_{26}} & \\
-       0 & 0 &  \textcolor{red}{k_{51}} &  \textcolor{red}{k_{52}} &  \textcolor{red}{k_{53}} + \textcolor{green}{k_{31}} &  \textcolor{red}{k_{54}} + \textcolor{green}{k_{32}} &  \textcolor{red}{k_{55}} + \textcolor{green}{k_{33}} &  \textcolor{red}{k_{56}} + \textcolor{green}{k_{34}} &  \textcolor{green}{k_{35}} &  \textcolor{green}{k_{36}} & \\
-       0 & 0 &  \textcolor{red}{k_{61}} &  \textcolor{red}{k_{62}} &  \textcolor{red}{k_{63}} + \textcolor{green}{k_{41}} &  \textcolor{red}{k_{64}} + \textcolor{green}{k_{42}} &  \textcolor{red}{k_{65}} + \textcolor{green}{k_{43}} &  \textcolor{red}{k_{66}} + \textcolor{green}{k_{44}} &  \textcolor{green}{k_{45}} &  \textcolor{green}{k_{46}} & \\
-       0 & 0 & 0 & 0 &  \textcolor{green}{k_{51}} &  \textcolor{green}{k_{52}} &  \textcolor{green}{k_{53}} &  \textcolor{green}{k_{54}} &  \textcolor{green}{k_{55}} &  \textcolor{green}{k_{56}} & \\
-       0 & 0 & 0 & 0 &  \textcolor{green}{k_{61}} &  \textcolor{green}{k_{62}} &  \textcolor{green}{k_{63}} &  \textcolor{green}{k_{64}} &  \textcolor{green}{k_{65}} &  \textcolor{green}{k_{66}} & \\ 
-    \end{bmatrix}
-    \begin{Bmatrix}
-        0 \\ 0 \\ u_2 \\ v_2 \\ 0 \\ 0 \\ u_4 \\ v_4 \\ u_5 \\ v_5
-    \end{Bmatrix} = 
-    \begin{Bmatrix}
-        R_{x1} \\ R_{y1} \\ 0 \\ \textcolor{purple}{f} \\ R_{x3} \\ R_{y3} \\ \frac{1}{2} \ell_{4-5} \textcolor{orange}{t} \\ 0 \\ \frac{1}{2} \ell_{4-5} \textcolor{orange}{t} \\ 0
-    \end{Bmatrix}.
-    }
-    \label{eq:sistema_global_montado}
-\end{equation}
-
+\begin{landscape}
+    \begin{equation}
+            \begin{bmatrix}
+                \textcolor{blue}{k_{11}} &  \textcolor{blue}{k_{12}} &  \textcolor{blue}{k_{13}}                           &  \textcolor{blue}{k_{14}}                             &  \textcolor{blue}{k_{15}}                                                       &  \textcolor{blue}{k_{16}}                                                       & 0                                                    & 0                                                    & 0                          & 0                          \\
+                \textcolor{blue}{k_{21}} &  \textcolor{blue}{k_{22}} &  \textcolor{blue}{k_{23}}                           &  \textcolor{blue}{k_{24}}                             &  \textcolor{blue}{k_{25}}                                                       &  \textcolor{blue}{k_{26}}                                                       & 0                                                    & 0                                                    & 0                          & 0                          \\
+                \textcolor{blue}{k_{31}} &  \textcolor{blue}{k_{32}} &  \textcolor{blue}{k_{33}} + \textcolor{red}{k_{11}} &  \textcolor{blue}{k_{34}} + \textcolor{red}{k_{12}}   &  \textcolor{blue}{k_{35}} + \textcolor{red}{k_{13}}                             &  \textcolor{blue}{k_{36}} + \textcolor{red}{k_{14}}                             &  \textcolor{red}{k_{15}}                             &  \textcolor{red}{k_{16}}                             & 0                          & 0                          \\
+                \textcolor{blue}{k_{41}} &  \textcolor{blue}{k_{42}} &  \textcolor{blue}{k_{43}} + \textcolor{red}{k_{21}} &  \textcolor{blue}{k_{44}} + \textcolor{red}{k_{22}}   &  \textcolor{blue}{k_{45}} + \textcolor{red}{k_{23}}                             &  \textcolor{blue}{k_{46}} + \textcolor{red}{k_{24}}                             &  \textcolor{red}{k_{25}}                             &  \textcolor{red}{k_{26}}                             & 0                          & 0                          \\
+                \textcolor{blue}{k_{51}} &  \textcolor{blue}{k_{52}} &  \textcolor{blue}{k_{53}} + \textcolor{red}{k_{31}} &  \textcolor{blue}{k_{54}} + \textcolor{red}{k_{32}}   &  \textcolor{blue}{k_{55}} + \textcolor{red}{k_{33}} + \textcolor{green}{k_{11}} &  \textcolor{blue}{k_{56}} + \textcolor{red}{k_{34}} + \textcolor{green}{k_{12}} &  \textcolor{red}{k_{35}} + \textcolor{green}{k_{13}} &  \textcolor{red}{k_{36}} + \textcolor{green}{k_{14}} &  \textcolor{green}{k_{15}} &  \textcolor{green}{k_{16}} \\
+                \textcolor{blue}{k_{61}} &  \textcolor{blue}{k_{62}} &  \textcolor{blue}{k_{63}} + \textcolor{red}{k_{41}} &  \textcolor{blue}{k_{64}} + \textcolor{red}{k_{42}}   &  \textcolor{blue}{k_{65}} + \textcolor{red}{k_{43}} + \textcolor{green}{k_{21}} &  \textcolor{blue}{k_{66}} + \textcolor{red}{k_{44}} + \textcolor{green}{k_{22}} &  \textcolor{red}{k_{45}} + \textcolor{green}{k_{23}} &  \textcolor{red}{k_{46}} + \textcolor{green}{k_{24}} &  \textcolor{green}{k_{25}} &  \textcolor{green}{k_{26}} \\
+                0                        & 0                         &  \textcolor{red}{k_{51}} &  \textcolor{red}{k_{52}} &  \textcolor{red}{k_{53}} + \textcolor{green}{k_{31}}  &  \textcolor{red}{k_{54}} + \textcolor{green}{k_{32}}                            &  \textcolor{red}{k_{55}} + \textcolor{green}{k_{33}}                            &  \textcolor{red}{k_{56}} + \textcolor{green}{k_{34}} &  \textcolor{green}{k_{35}}                           &  \textcolor{green}{k_{36}} & 0                          \\
+                0                        & 0                         &  \textcolor{red}{k_{61}} &  \textcolor{red}{k_{62}} &  \textcolor{red}{k_{63}} + \textcolor{green}{k_{41}}  &  \textcolor{red}{k_{64}} + \textcolor{green}{k_{42}}                            &  \textcolor{red}{k_{65}} + \textcolor{green}{k_{43}}                            &  \textcolor{red}{k_{66}} + \textcolor{green}{k_{44}} &  \textcolor{green}{k_{45}}                           &  \textcolor{green}{k_{46}} & 0                          \\
+                0                        & 0                         & 0                                                   & 0                                                     &  \textcolor{green}{k_{51}}                                                      &  \textcolor{green}{k_{52}}                                                      &  \textcolor{green}{k_{53}}                           &  \textcolor{green}{k_{54}}                           &  \textcolor{green}{k_{55}} &  \textcolor{green}{k_{56}} \\
+                0                        & 0                         & 0                                                   & 0                                                     &  \textcolor{green}{k_{61}}                                                      &  \textcolor{green}{k_{62}}                                                      &  \textcolor{green}{k_{63}}                           &  \textcolor{green}{k_{64}}                           &  \textcolor{green}{k_{65}} &  \textcolor{green}{k_{66}} 
+            \end{bmatrix}
+            \begin{Bmatrix}
+                0 \\ 0 \\ u_2 \\ v_2 \\ 0 \\ 0 \\ u_4 \\ v_4 \\ u_5 \\ v_5
+            \end{Bmatrix} = 
+            \begin{Bmatrix}
+                R_{x1} \\ R_{y1} \\ 0 \\ \textcolor{purple}{f} \\ R_{x3} \\ R_{y3} \\ \frac{1}{2} \ell_{4-5} \textcolor{orange}{t} \\ 0 \\ \frac{1}{2} \ell_{4-5} \textcolor{orange}{t} \\ 0
+            \end{Bmatrix}.
+        \label{eq:sistema_global_montado}
+    \end{equation}
+\end{landscape}
 Nas duas primeiras linhas do sistema, que representam as forças nodais sobre o primeiro nó, é possível notar que somente os deslocamentos do elemento azulado que impactam diretamente. Nos graus de $u_3$ e $u_v$, fica evidente que todos os elementos contribuem para as forças nodais do nó $3$, conforme descrito anteriormente.
 
 Um outro passo nessa montagem do sistema global é a aplicação das condições de contorno. As condições de contorno, tradas aqui, podem ser dividas em dois tipos: 
@@ -477,56 +475,56 @@ Os valores conhecidos desse sistema são os deslocamentos sobre os graus prescri
 a matriz $\bm{K}_{LL}$ é quadrada, simétrica e sempre possui inversa quando o problema está estaticamente determinado. \cite{rao}
 
 Aplicando essas expressões à equação \ref{eq:sistema_global_montado}, referente ao exemplo da figura \ref{fig:exemplo_matriz_global}, temos que
-\rotatebox{90}{
-\begin{aligned}
-    \begin{bmatrix}
-        \textcolor{blue}{k_{33}} + \textcolor{red}{k_{11}} &  \textcolor{blue}{k_{34}} + \textcolor{red}{k_{12}} &  \textcolor{red}{k_{15}} &  \textcolor{red}{k_{16}} & 0 & 0 & \\ 
-        \textcolor{blue}{k_{43}} + \textcolor{red}{k_{21}} &  \textcolor{blue}{k_{44}} + \textcolor{red}{k_{22}} &  \textcolor{red}{k_{25}} &  \textcolor{red}{k_{26}} & 0 & 0 & \\ 
-        \textcolor{red}{k_{51}} &  \textcolor{red}{k_{52}} &  \textcolor{red}{k_{55}} + \textcolor{green}{k_{33}} &  \textcolor{red}{k_{56}} + \textcolor{green}{k_{34}} &  \textcolor{green}{k_{35}} &  \textcolor{green}{k_{36}} & \\ 
-        \textcolor{red}{k_{61}} &  \textcolor{red}{k_{62}} &  \textcolor{red}{k_{65}} + \textcolor{green}{k_{43}} &  \textcolor{red}{k_{66}} + \textcolor{green}{k_{44}} &  \textcolor{green}{k_{45}} &  \textcolor{green}{k_{46}} & \\ 
-       0 & 0 &  \textcolor{green}{k_{53}} &  \textcolor{green}{k_{54}} &  \textcolor{green}{k_{55}} &  \textcolor{green}{k_{56}} & \\ 
-       0 & 0 &  \textcolor{green}{k_{63}} &  \textcolor{green}{k_{64}} &  \textcolor{green}{k_{65}} &  \textcolor{green}{k_{66}} & \\ 
-    \end{bmatrix}
-    \begin{Bmatrix}
-        u_2 \\ v_2 \\ u_4 \\ v_4 \\ u_5 \\ v_5
-    \end{Bmatrix} +
-    \begin{bmatrix}
-        \textcolor{blue}{k_{31}} &  \textcolor{blue}{k_{32}} &  \textcolor{blue}{k_{35}} + \textcolor{red}{k_{13}} &  \textcolor{blue}{k_{36}} + \textcolor{red}{k_{14}} & \\ 
-        \textcolor{blue}{k_{41}} &  \textcolor{blue}{k_{42}} &  \textcolor{blue}{k_{45}} + \textcolor{red}{k_{23}} &  \textcolor{blue}{k_{46}} + \textcolor{red}{k_{24}} & \\ 
-       0 & 0 &  \textcolor{red}{k_{53}} + \textcolor{green}{k_{31}} &  \textcolor{red}{k_{54}} + \textcolor{green}{k_{32}} & \\ 
-       0 & 0 &  \textcolor{red}{k_{63}} + \textcolor{green}{k_{41}} &  \textcolor{red}{k_{64}} + \textcolor{green}{k_{42}} & \\ 
-       0 & 0 &  \textcolor{green}{k_{51}} &  \textcolor{green}{k_{52}} & \\ 
-       0 & 0 &  \textcolor{green}{k_{61}} &  \textcolor{green}{k_{62}} & \\ 
-    \end{bmatrix}
-    \begin{Bmatrix}
-        0 \\ 0 \\ 0 \\ 0
-    \end{Bmatrix} &=
-    \begin{Bmatrix}
-        0 \\ \textcolor{purple}{f} \\ \frac{1}{2} \ell_{4-5} \textcolor{orange}{t} \\ 0 \\ \frac{1}{2} \ell_{4-5} \textcolor{orange}{t} \\ 0
-    \end{Bmatrix} \\
-    \begin{bmatrix}
-        \textcolor{blue}{k_{13}} &  \textcolor{blue}{k_{14}} & 0 & 0 & 0 & 0 & \\ 
-        \textcolor{blue}{k_{23}} &  \textcolor{blue}{k_{24}} & 0 & 0 & 0 & 0 & \\ 
-        \textcolor{blue}{k_{53}} + \textcolor{red}{k_{31}} &  \textcolor{blue}{k_{54}} + \textcolor{red}{k_{32}} &  \textcolor{red}{k_{35}} + \textcolor{green}{k_{13}} &  \textcolor{red}{k_{36}} + \textcolor{green}{k_{14}} &  \textcolor{green}{k_{15}} &  \textcolor{green}{k_{16}} & \\ 
-        \textcolor{blue}{k_{63}} + \textcolor{red}{k_{41}} &  \textcolor{blue}{k_{64}} + \textcolor{red}{k_{42}} &  \textcolor{red}{k_{45}} + \textcolor{green}{k_{23}} &  \textcolor{red}{k_{46}} + \textcolor{green}{k_{24}} &  \textcolor{green}{k_{25}} &  \textcolor{green}{k_{26}} & \\ 
-    \end{bmatrix} 
-    \begin{Bmatrix}
-        u_2 \\ v_2 \\ u_4 \\ v_4 \\ u_5 \\ v_5
-    \end{Bmatrix} + 
-    \begin{bmatrix}
-        \textcolor{blue}{k_{11}} &  \textcolor{blue}{k_{12}} &  \textcolor{blue}{k_{15}} &  \textcolor{blue}{k_{16}} & \\ 
-        \textcolor{blue}{k_{21}} &  \textcolor{blue}{k_{22}} &  \textcolor{blue}{k_{25}} &  \textcolor{blue}{k_{26}} & \\ 
-        \textcolor{blue}{k_{51}} &  \textcolor{blue}{k_{52}} &  \textcolor{blue}{k_{55}} + \textcolor{red}{k_{33}} + \textcolor{green}{k_{11}} &  \textcolor{blue}{k_{56}} + \textcolor{red}{k_{34}} + \textcolor{green}{k_{12}} & \\ 
-        \textcolor{blue}{k_{61}} &  \textcolor{blue}{k_{62}} &  \textcolor{blue}{k_{65}} + \textcolor{red}{k_{43}} + \textcolor{green}{k_{21}} &  \textcolor{blue}{k_{66}} + \textcolor{red}{k_{44}} + \textcolor{green}{k_{22}} & \\ 
-    \end{bmatrix}
-    \begin{Bmatrix}
-        0 \\ 0 \\ 0 \\ 0
-    \end{Bmatrix}  &=
-    \begin{Bmatrix}
-        R_{x1} \\ R_{y1} \\ R_{x3} \\ R_{y3}
-    \end{Bmatrix}
-\end{aligned}
-}
+\begin{landscape}
+    \begin{align*}
+        \begin{bmatrix}
+            \textcolor{blue}{k_{33}} + \textcolor{red}{k_{11}} &  \textcolor{blue}{k_{34}} + \textcolor{red}{k_s{12}} &  \textcolor{red}{k_{15}} &  \textcolor{red}{k_{16}} & 0 & 0 & \\ 
+            \textcolor{blue}{k_{43}} + \textcolor{red}{k_{21}} &  \textcolor{blue}{k_{44}} + \textcolor{red}{k_{22}} &  \textcolor{red}{k_{25}} &  \textcolor{red}{k_{26}} & 0 & 0 & \\ 
+            \textcolor{red}{k_{51}} &  \textcolor{red}{k_{52}} &  \textcolor{red}{k_{55}} + \textcolor{green}{k_{33}} &  \textcolor{red}{k_{56}} + \textcolor{green}{k_{34}} &  \textcolor{green}{k_{35}} &  \textcolor{green}{k_{36}} & \\ 
+            \textcolor{red}{k_{61}} &  \textcolor{red}{k_{62}} &  \textcolor{red}{k_{65}} + \textcolor{green}{k_{43}} &  \textcolor{red}{k_{66}} + \textcolor{green}{k_{44}} &  \textcolor{green}{k_{45}} &  \textcolor{green}{k_{46}} & \\ 
+        0 & 0 &  \textcolor{green}{k_{53}} &  \textcolor{green}{k_{54}} &  \textcolor{green}{k_{55}} &  \textcolor{green}{k_{56}} & \\ 
+        0 & 0 &  \textcolor{green}{k_{63}} &  \textcolor{green}{k_{64}} &  \textcolor{green}{k_{65}} &  \textcolor{green}{k_{66}} & \\ 
+        \end{bmatrix}
+        \begin{Bmatrix}
+            u_2 \\ v_2 \\ u_4 \\ v_4 \\ u_5 \\ v_5
+        \end{Bmatrix} +
+        \begin{bmatrix}
+            \textcolor{blue}{k_{31}} &  \textcolor{blue}{k_{32}} &  \textcolor{blue}{k_{35}} + \textcolor{red}{k_{13}} &  \textcolor{blue}{k_{36}} + \textcolor{red}{k_{14}} & \\ 
+            \textcolor{blue}{k_{41}} &  \textcolor{blue}{k_{42}} &  \textcolor{blue}{k_{45}} + \textcolor{red}{k_{23}} &  \textcolor{blue}{k_{46}} + \textcolor{red}{k_{24}} & \\ 
+        0 & 0 &  \textcolor{red}{k_{53}} + \textcolor{green}{k_{31}} &  \textcolor{red}{k_{54}} + \textcolor{green}{k_{32}} & \\ 
+        0 & 0 &  \textcolor{red}{k_{63}} + \textcolor{green}{k_{41}} &  \textcolor{red}{k_{64}} + \textcolor{green}{k_{42}} & \\ 
+        0 & 0 &  \textcolor{green}{k_{51}} &  \textcolor{green}{k_{52}} & \\ 
+        0 & 0 &  \textcolor{green}{k_{61}} &  \textcolor{green}{k_{62}} & \\ 
+        \end{bmatrix}
+        \begin{Bmatrix}
+            0 \\ 0 \\ 0 \\ 0
+        \end{Bmatrix} &=
+        \begin{Bmatrix}
+            0 \\ \textcolor{purple}{f} \\ \frac{1}{2} \ell_{4-5} \textcolor{orange}{t} \\ 0 \\ \frac{1}{2} \ell_{4-5} \textcolor{orange}{t} \\ 0
+        \end{Bmatrix} \\
+        \begin{bmatrix}
+            \textcolor{blue}{k_{13}} &  \textcolor{blue}{k_{14}} & 0 & 0 & 0 & 0 & \\ 
+            \textcolor{blue}{k_{23}} &  \textcolor{blue}{k_{24}} & 0 & 0 & 0 & 0 & \\ 
+            \textcolor{blue}{k_{53}} + \textcolor{red}{k_{31}} &  \textcolor{blue}{k_{54}} + \textcolor{red}{k_{32}} &  \textcolor{red}{k_{35}} + \textcolor{green}{k_{13}} &  \textcolor{red}{k_{36}} + \textcolor{green}{k_{14}} &  \textcolor{green}{k_{15}} &  \textcolor{green}{k_{16}} & \\ 
+            \textcolor{blue}{k_{63}} + \textcolor{red}{k_{41}} &  \textcolor{blue}{k_{64}} + \textcolor{red}{k_{42}} &  \textcolor{red}{k_{45}} + \textcolor{green}{k_{23}} &  \textcolor{red}{k_{46}} + \textcolor{green}{k_{24}} &  \textcolor{green}{k_{25}} &  \textcolor{green}{k_{26}} & \\ 
+        \end{bmatrix} 
+        \begin{Bmatrix}
+            u_2 \\ v_2 \\ u_4 \\ v_4 \\ u_5 \\ v_5
+        \end{Bmatrix} + 
+        \begin{bmatrix}
+            \textcolor{blue}{k_{11}} &  \textcolor{blue}{k_{12}} &  \textcolor{blue}{k_{15}} &  \textcolor{blue}{k_{16}} & \\ 
+            \textcolor{blue}{k_{21}} &  \textcolor{blue}{k_{22}} &  \textcolor{blue}{k_{25}} &  \textcolor{blue}{k_{26}} & \\ 
+            \textcolor{blue}{k_{51}} &  \textcolor{blue}{k_{52}} &  \textcolor{blue}{k_{55}} + \textcolor{red}{k_{33}} + \textcolor{green}{k_{11}} &  \textcolor{blue}{k_{56}} + \textcolor{red}{k_{34}} + \textcolor{green}{k_{12}} & \\ 
+            \textcolor{blue}{k_{61}} &  \textcolor{blue}{k_{62}} &  \textcolor{blue}{k_{65}} + \textcolor{red}{k_{43}} + \textcolor{green}{k_{21}} &  \textcolor{blue}{k_{66}} + \textcolor{red}{k_{44}} + \textcolor{green}{k_{22}} & \\ 
+        \end{bmatrix}
+        \begin{Bmatrix}
+            0 \\ 0 \\ 0 \\ 0
+        \end{Bmatrix}  &=
+        \begin{Bmatrix}
+            R_{x1} \\ R_{y1} \\ R_{x3} \\ R_{y3}
+        \end{Bmatrix}
+    \end{align*}
+\end{landscape}
 
 \section{Expressões para o Tetraedro Linear}
 
@@ -566,7 +564,7 @@ As mesmas relações gerais da seção anterior podem ser utilizadas para deriva
 A primeira grande diferença é que agora a função de deslocamento $\bm{\varphi}$, tem três componentes, na forma
 
 \begin{equation} \label{eq:funcao_deslocamento}
-    \vm{\varphi} = \begin{Bmatrix}
+    \bm{\varphi} = \begin{Bmatrix}
         u(x,y,z) \\
         v(x,y,z) \\
         w(x,y,z)
@@ -650,10 +648,11 @@ Por fim, a forma discretizada da função de deslocamento $\bm{\varphi}$, em ter
         u(x,y,z) \\
         v(x,y,z) \\
         w(x,y,z)
-    \end{Bmatrix} = \begin{bmatrix}
-        N_i & 0 & 0 & N_j & 0 & 0 & N_k & 0 & 0 & N_m & 0 & 0 \\
-        0 & N_i & 0 & 0 & N_j & 0 & 0 & N_k & 0 & 0 & N_m & 0 \\
-        0 & 0 & N_i & 0 & 0 & N_j & 0 & 0 & N_k & 0 & 0 & N_m
+    \end{Bmatrix} = 
+    \begin{bmatrix}
+        N_i & 0   & 0   & N_j & 0   & 0   & N_k & 0   & 0   & N_m & 0   & 0 \\
+        0   & N_i & 0   & 0   & N_j & 0   & 0   & N_k & 0   & 0   & N_m & 0 \\
+        0   & 0   & N_i & 0   & 0   & N_j & 0   & 0   & N_k & 0   & 0   & N_m \\
     \end{bmatrix}
     \begin{Bmatrix}
         u_i \\ v_i \\ w_i \\ u_j \\ v_j \\ w_j \\ u_k \\ v_k \\ w_k \\ u_m \\ v_m \\ w_m
@@ -678,17 +677,18 @@ Portanto, a relação entre deformação e deslocamento é dada por
 \begin{equation}
     \begin{Bmatrix}
         \epsilon_{xx} \\ \epsilon_{yy} \\ \epsilon_{zz} \\ \epsilon_{xy} \\ \epsilon_{xz} \\ \epsilon_{yz}
-    \end{Bmatrix} = \frac{1}{6V} \begin{bmatrix}
-        \beta_i & 0 & 0 & \beta_j & 0 & 0 & \beta_k & 0 & 0 & \beta_m & 0 & 0 \\
-        0 & \gamma_i & 0 & 0 & \gamma_j & 0 & 0 & \gamma_k & 0 & 0 & \gamma_m & 0 \\
-        0 & 0 & \delta_i & 0 & 0 & \delta_j & 0 & 0 & \delta_k & 0 & 0 & \delta_m \\
-        \gamma_i & \beta_i & 0 & \gamma_j & \beta_j & 0 & \gamma_k & \beta_k & 0 & \gamma_m & \beta_m & 0 \\
-        \delta_i & 0 & \beta_i & \delta_j & 0 & \beta_j & \delta_k & 0 & \beta_k & \delta_m & 0 & \beta_m \\
-        0 & \delta_i & \gamma_i & 0 & \delta_j & \gamma_j & 0 & \delta_k & \gamma_k & 0 & \delta_m & \gamma_m
-    \end{bmatrix}
+    \end{Bmatrix} = \frac{1}{6V} 
+    \begin{bmatrix}
+\beta_i & 0 & 0 & \beta_j & 0 & 0 & \beta_k & 0 & 0 & \beta_m & 0 & 0 \\
+0 & \gamma_i & 0 & 0 & \gamma_j & 0 & 0 & \gamma_k & 0 & 0 & \gamma_m & 0 \\
+0 & 0 & \delta_i & 0 & 0 & \delta_j & 0 & 0 & \delta_k & 0 & 0 & \delta_m \\
+\gamma_i & \beta_i & 0 & \gamma_j & \beta_j & 0 & \gamma_k & \beta_k & 0 & \gamma_m & \beta_m & 0 \\
+\delta_i & 0 & \beta_i & \delta_j & 0 & \beta_j & \delta_k & 0 & \beta_k & \delta_m & 0 & \beta_m \\
+0 & \delta_i & \gamma_i & 0 & \delta_j & \gamma_j & 0 & \delta_k & \gamma_k & 0 & \delta_m & \gamma_m
+    \end{bmatrix} 
     \begin{Bmatrix}
         u_i \\ v_i \\ w_i \\ u_j \\ v_j \\ w_j \\ u_k \\ v_k \\ w_k \\ u_m \\ v_m \\ w_m
-    \end{Bmatrix} \iff \{\epsilon\} = \bm{B} \bm{U}^{(e)}.
+    \end{Bmatrix}.
 \end{equation}
 
 A relação entre tensão e deformação é dada pela lei de Hooke generalizada (equação \ref{eq:lei_de_hooke}). Logo,

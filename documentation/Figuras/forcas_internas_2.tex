@@ -26,8 +26,7 @@
          \draw[icircle, fill=black!20]  (0,0) circle[radius={R(0)}];
      \end{scope}
       \begin{scope}[canvas is yz plane at x = 2, transform shape]
-         \draw (0, 3) node[below,transform shape=false]{$\mathbf{K}$};
-         \draw (0,-2) -- (-2,-2.5) node[below,transform shape=false]{$\vec{F}_{\mathbf{K}}$};
+         \draw (0, 3) node[below,transform shape=false]{$\mathcal{B}$};
      \end{scope}
     \DrawStretch{0:4}
      \begin{scope}[canvas is yz plane at x = 4, transform shape]
@@ -40,8 +39,10 @@
         \draw[icircle, fill=black!20]  (0,0) circle[radius={R(8)}];
      \end{scope}
      
-     \draw[->] (4,-3,-3) -- (5,-3,-3) node[right]{\tiny $x$};
-     \draw[->] (4,-3,-3) -- (4,-4,-3) node[right]{\tiny $z$};
-     \draw[->] (4,-3,-3) -- (4,-3,-2) node[right]{\tiny $y$};
+     \coordinate (A) at (0,-4,0);
+     \draw[->] (A) --++ (1,0,0) node[right]{\tiny $x$};
+     \draw[->] (A) --++ (0,-1,0) node[right]{\tiny $z$};
+     \draw[->] (A) --++ (0,0,1) node[right]{\tiny $y$};
+     \fill (A) circle[radius=1pt] node[left]{\tiny $o$};
 \end{tikzpicture}
 \end{document} 
