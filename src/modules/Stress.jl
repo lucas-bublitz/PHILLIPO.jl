@@ -11,7 +11,6 @@ module Stress
         if problem_type == "3D"
             if "tetrahedrons" in keys(input_elements)
                 type = "tetrahedrons"
-                pop!(input_elements["tetrahedrons"])
                 map_function = e -> begin
                     el = Elements.TetrahedronLinear(e, materials, nodes)
                     el.D * el.B * Ug[el.degrees_freedom]
@@ -20,7 +19,6 @@ module Stress
         else
             if "triangles" in keys(input_elements)
                 type = "triangles"
-                pop!(input_elements["triangles"])
                 map_function = e -> begin
                     el = Elements.TriangleLinear(e, materials, nodes, problem_type)
                     el.D * el.B * Ug[el.degrees_freedom]
