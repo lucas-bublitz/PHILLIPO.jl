@@ -484,4 +484,42 @@ Destes modo, fica demonstrado que algoritmo matemático do ME foi implementado c
 
 \section{Validação}
 
-Para validar os resultados obtidos pelo PHILLIPO.jl, foi utilizado a comparação com a solução analítica um problema de viga longa, na teoria de Euler-Bernoulli.
+Para validar os resultados obtidos pelo PHILLIPO.jl, foi utilizado a comparação com a solução analítica um problema de viga longa, na teoria de Euler-Bernoulli, analisando o deslocamento vertical sobre uma linha que passa no centro da viga.
+
+A viga longa é um problema clássico, que consiste em simplificações da teoria da elasticidade aplicada diretamente sobre vigas. Nesse contexto, os deslocamentos da linha elástica da viga é modelado pela equação diferencial de Euler-Bernoulli, dada por:
+
+\begin{equation}
+    EI v^{(\text{IV})}(x) = q(x),
+\end{equation}
+em que $E$ é o módulo de elasticidade do material, $I$ é o momento de inércia da seção transversal da viga, $v(x)$ é o deslocamento vertical da linha elástica, $q(x)$ é a carga normal a sua superfície, $x$ é a posição ao longo da viga. Para determinar a distribuição $v(x)$ é necessário também conhecer as condições de contorno que descrever a liberdade da viga. \cite{Hibbeler}
+
+Seja uma viga $\mathcal{B}$, como na figura \ref{fig:viga_longa_geometria}, composta pelo aço AISI, de $E = 210 \text{GPa}$ (módulo de elasticidade) e $\nu = 0.3$, e que está engastada em uma extremidade e livre na outra, e sujeita a um carregamento distribuído $\bm{t} = -100 \text{kPa} \hat{\bm{y}}$, conforme a figura \ref{fig:viga_longa_condicoes}. A viga possui uma sessão transversal quadrada, logo seu momento de inércia é dado por $I = \frac{b^4}{12}$, em que $b$ é a largura da seção transversal da viga.
+
+Para essas condições de contorno, a solução analítica para o deslocamento vertical $v(x)$ é dada por, de acordo com \citeshort{Hibbeler}:
+
+\begin{equation}
+    v(x) = -\frac{t_0 x^2}{24EI} \left(x^2 - 4 Lx + L^2\right)
+\end{equation}
+
+\begin{figure}
+    \centering
+    \caption{Uma viga longa.}
+    \includegraphics[page=1, width=\textwidth]{Figuras/viga_longa.pdf}
+    \label{fig:viga_longa_geometria}
+\end{figure}
+
+\begin{figure}
+    \centering
+    \caption{Uma viga longa.}
+    \includegraphics[page=2, width=\textwidth]{Figuras/viga_longa.pdf}
+    \label{fig:viga_longa_condicoes}
+\end{figure}
+
+\begin{figure}
+    \centering  
+    \caption{Deformação na direção de $y$ ao longo da linha $\overline{p_1 p_2}$}
+    \includegraphics[page=3, width=\textwidth]{Figuras/viga_longa.pdf}
+    \label{fig:viga_longa_deslocamento}
+\end{figure}
+
+
