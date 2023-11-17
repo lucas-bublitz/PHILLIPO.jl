@@ -8,11 +8,44 @@ $$ asdasd $$
 O desenvolvimento de softwares de simulação, seja utilizando o MEF ou não, é sempre acompanhado de uma bateria de testes, além de um procedimento de validação e verificação (V \& V), que garante, dentro de uma margem de abrangência do que se propõe, sua capacidade de reproduzir resultados concisos, sendo, então, um espelho da realidade.
 
 Verificação, dentro desse contexto, é o procedimento pelo qual se evidencia a exata implementação do modelo matemático no próprio software, ou seja, a verificação que a modelagem programada é equivalente ao algoritmo matemático, dentro dos limites impostos pela aritmética computacional em relação às operações em ponto flutuante\footnote{No computador, os números ditos Reais ($\mathbb{R}$) são representandos por um ponto flutuante, que é uma forma discreta, pois os computadores são desenvolvidos em lógica booleana}. Já a validação, por sua vez, é o processo para determinar a acurácia que um modelo computacional possui de presentar a realidade, dentro dos limites que se propõe. Essas definições estão de acordo com o documento \emph{An Overview of the Guide for Verification and Validation
-in Computational Solid Mechanics}, referente a norma ASME respectiva. Por questões de simplificação, a verificação foi realizada por comparação com outro programa semelhante, o Abaqus, e a validação, por comparação com resultados analíticos, já consolidados experimentalmente.
+in Computational Solid Mechanics}, referente a norma ASME respectiva.
+
+Por questões de simplificação, a verificação foi realizada por comparação com outro programa que realiza a mesma análise, o Abaqus, e a validação, por comparação com resultados analíticos, já consolidados experimentalmente.
 
 \section{Verificação}
 
-Foram utilizados 
+Para verificar os resultados foram utilizados seis sequências de comparação (três com o elemento tetraédrico, e três triangulares), nas quais aplicaram-se todas as condições de contorno (deslocamentos prescritos, carregamentos pontuais, em linhas e superficiais). Os resultados foram comparados com os obtidos no Abaqus, nas mesmas condições de contorno e geometrias, para deslocamentos nodais e tensões sobre os elementos. As geometrias empregadas foram simples, com malhas pouco refinadas, a fim de facilitar a comparação sobre todos os nós e elementos. 
 
+Em todos os casos, definiu-se o aço ASIS 4340 como material, cujas características físicas empregadas aqui foram: $E = 210 \text{GPa}$ (módulo de elasticidade) e $\nu = 0.3$ (coeficiente de Poisson).
 
-s
+Primeiramente, o problema é definido no Abaqus, para depois ser exportado para o GID, a fim de se manter tanto a geometria como a malha, principalmente, as identificações dos nós e elementos, o que facilitada a comparação dos resultados. O procedimento empregado em todos os casos foi o seguinte:
+
+\begin{enumerate}
+    \item Definição do problema no Abaqus (\emph{.cae});
+    \begin{enumerate}
+        \item Construção da geometria;
+        \item Definição do material (AISI 4340 STEEL);
+        \item Construção da malha;
+        \item Definição das condições de contorno;
+    \end{enumerate} 
+    \item Execução da análise;
+    \item Exportação dos resultados para um arquivo de texto (\emph{.rpt});
+    \begin{enumerate}
+        \item utilização da ferramenta \emph{probe} sobre os nós (deslocamentos nodais);
+        \item utilização da ferramenta \emph{probe} sobre os elementos (componentes das tensões e tensão de von Mises);
+    \end{enumerate}
+    \item Importação do arquivo de \emph{input} no GID (\emph{.inp});
+    \item Definição do problema no GID;
+    \begin{enumerate}
+        \item Definição do material (AISI 4340 STEEL);
+        \item Definição das condições de contorno;
+    \end{enumerate}
+    \item Execução da análise;
+    \item Exportação do arquivo de resultados (\emph{.post.res});
+    \item Comparação dos resultados.
+\end{enumerate}
+
+\subsection{Casos tridimensionais (elemento tetraédrico)}
+
+Nos casos tridimensionais foi empregado a geometria de um cubo unitário, conforme a figura \ref{fig:verificacao_cubo}, com as seguintes combinações de condições de contorno:
+

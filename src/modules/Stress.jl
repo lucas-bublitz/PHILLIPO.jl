@@ -25,7 +25,7 @@ module Stress
                 end
             end
         end
-
+        println("TESTE: ", size(input_elements[type]))
         σ   = Vector{Vector{Float64}}(map(
             map_function, 
             input_elements[type]

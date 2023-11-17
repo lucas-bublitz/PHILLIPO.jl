@@ -1,0 +1,43 @@
+
+{
+    "title": "PHILLIPO: arquivo de entrada",
+    "type": "plane_stress",
+    "materials":[
+        ["AISI_4340_Steel", 210E+9, 0.3], 
+        null
+    ],
+    "nodes":[
+        [0.000000e+00,0.000000e+00],
+        [1.000000e+00,0.000000e+00],
+        [0.000000e+00,1.000000e+00],
+        [1.000000e+00,1.000000e+00],
+        null
+    ],
+    "elements":{
+        "linear":{
+            "triangles":[
+                [1, 1, 1,2,4],
+                [2, 1, 4,3,1],
+                null
+            ]       
+        }
+    },
+    "constraints":{  
+        "displacements":[
+            [1, 0.0, 0.0, 0.0],
+            [3, 0.0, 0.0, 0.0],
+            [4, 0.1, 0.0, 0.0],
+            null
+        ],
+        "forces_nodes":[
+            null
+        ],
+        "forces_lines":[
+            null
+        ],
+        "forces_surfaces":[
+            null
+        ]
+    }
+}
+

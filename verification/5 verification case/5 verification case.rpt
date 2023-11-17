@@ -1,0 +1,86 @@
+********************************************************************************
+Probe Values Report, written on Fri Nov 17 03:15:03 2023
+
+Source
+-------
+
+   ODB: C:/temp/Job-1.odb
+   Step: Step-1
+   Frame: Increment      1: Step Time =    1.000
+   Variable: U, All direct
+
+Probe values reported at nodes
+
+  Part Instance     Node ID                   Orig. Coords                                     Def. Coords                 
+                                    X               Y               Z               X               Y               Z      
+-------------------------------------------------------------------------------------------------------------------------
+    PART-1-1           1              0.              0.              0.       -500.E-33    -121.172E-33              0.
+    PART-1-1           2              1.              0.              0.     999.999E-03    -6.94059E-06              0.
+    PART-1-1           3              0.              1.              0.        500.E-33              1.              0.
+    PART-1-1           4              1.              1.              0.              1.     999.992E-03              0.
+
+
+  Part Instance     Node ID  Attached elements           U, U1           U, U2
+-------------------------------------------------------------------------------
+    PART-1-1           1               1       -500.E-33    -121.172E-33
+    PART-1-1           1               2       -500.E-33    -121.172E-33
+    PART-1-1           2               1    -1.15402E-06    -6.94059E-06
+    PART-1-1           3               2        500.E-33    -378.828E-33
+    PART-1-1           4               1     1.50022E-06     -8.0946E-06
+    PART-1-1           4               2     1.50022E-06     -8.0946E-06
+
+
+********************************************************************************
+Probe Values Report, written on Fri Nov 17 03:15:24 2023
+
+Source
+-------
+
+   ODB: C:/temp/Job-1.odb
+   Step: Step-1
+   Frame: Increment      1: Step Time =    1.000
+   Variable: S, All direct (Not averaged)
+
+Loc 1 : Integration point values
+
+Probe values reported at integration points
+
+  Part Instance  Element ID        Type  Attached nodes
+--------------------------------------------------------------------------------
+    PART-1-1           1        CPS3           1           2           4
+    PART-1-1           2        CPS3           4           3           1
+
+
+  Part Instance  Element ID        Type        Int. Pt.          S, S11          S, S22          S, S33          S, S12
+--------------------------------------------------------------------------------
+    PART-1-1           1        CPS3               1    -346.205E+03    -346.205E+03              0.    -346.205E+03
+    PART-1-1           2        CPS3               1     346.205E+03     103.862E+03              0.    -653.795E+03
+
+
+********************************************************************************
+Probe Values Report, written on Fri Nov 17 03:16:32 2023
+
+Source
+-------
+
+   ODB: C:/temp/Job-1.odb
+   Step: Step-1
+   Frame: Increment      1: Step Time =    1.000
+   Variable: S, Mises (Not averaged)
+
+Loc 1 : Integration point values
+
+Probe values reported at integration points
+
+  Part Instance  Element ID        Type  Attached nodes
+--------------------------------------------------------------------------------
+    PART-1-1           1        CPS3           1           2           4
+    PART-1-1           2        CPS3           4           3           1
+
+
+  Part Instance  Element ID        Type        Int. Pt.        S, Mises
+--------------------------------------------------------------------------------
+    PART-1-1           1        CPS3               1      692.41E+03
+    PART-1-1           2        CPS3               1     1.17347E+06
+
+
