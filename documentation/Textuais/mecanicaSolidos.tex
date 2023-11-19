@@ -1,12 +1,13 @@
 \chapter{A Mecânica dos Sólidos: tensão, deformação e deslocamento}
 
-A Mecânica dos Sólidos estuda o comportamento de objetos sólidos sobre carregamentos, aplicando métodos analíticos para determinar suas características de resistência, rigidez e estabilidade. Seu conteúdo é notório por ser fundamental para grande parte da vida dos engenheiros, como mecânicos, civis ou mesmo eletricistas. Sua aplicação é voltada ao projeto de estruturas a fim de que cumpram determinadas exigências, sejam tanto de deformação máxima, capacidade de carga e peso, como também de economia de materiais. E, por meio de ferramentas matemáticas, estuda os efeitos de tensão e deformação no interior de corpos sólidos. \cite[pág. 2]{popov}
+A Mecânica dos Sólidos estuda o comportamento de objetos sólidos sob carregamentos externos, aplicando métodos analíticos para determinar características de resistência, rigidez e estabilidade. Sua aplicação é voltada ao projeto de estruturas a fim de que cumpram determinadas exigências, tais como deformação máxima, capacidade de carga e peso, ou economia de materiais. E, por meio de ferramentas matemáticas, estuda os efeitos de tensão e deformação no interior de corpos sólidos \cite[pág. 2]{popov}.
 
-Corpos sólidos são conjuntos de matéria que resistem a forças cisalhantes, ou seja, que resistem a trações tangenciais às suas superfícies. Neste trabalho é importante que também sejam elásticos, homogêneos e isotrópicos. Aqui, um corpo com essas características é denominado $\mathcal{B}$.
 
-\emph{Corpos sólidos elásticos} são aqueles que, quando submetidos a carregamentos, deformam-se, mas, quando o carregamento é retirado, retornam à sua forma original. \emph{Corpos sólidos homogêneos} são aqueles que possuem as mesmas propriedades físicas em todos os pontos de sua geometria, como massa específica, rigidez etc., de modo que uma porção do corpo seja indistinta do restante. \emph{Corpos sólidos isotrópicos} são aqueles que possuem as mesmas propriedades físicas em todas as direções de sua geometria.
+Um corpo sólido por ser descrito como um conjunto de pontos materiais que resistem a forças cisalhantes, ou seja, que resistem a trações tangenciais às suas superfícies. Neste trabalho são considerados corpos sólido elásticos, homogêneos e isotrópicos. Aqui, um corpo com essas características é denominado $\mathcal{B}$.
 
-Este capítulo aborda os seguintes temas de Mecânica dos Sólidos, relevantes para o desenvolvimento inicial do módulo PHILLIPO.jl voltado à análise de estruturas elásticas sobre carregamentos constantes:
+Corpos sólidos elásticos são aqueles que, quando submetidos a carregamentos, deformam-se, mas quando o carregamento é retirado, retornam à sua forma original. Corpos sólidos homogêneos são aqueles que possuem as mesmas propriedades físicas em todos os pontos materiais (tais como massa específica, rigidez etc.), de modo que uma porção do corpo seja indistinta do restante. Corpos sólidos isotrópicos são aqueles que possuem as mesmas propriedades físicas em todas direções do espaço.
+
+Este capítulo aborda os seguintes temas de Mecânica dos Sólidos, relevantes para o desenvolvimento inicial do módulo PHILLIPO.jl voltado à análise de estruturas elásticas sob carregamentos constantes:
 \begin{enumerate}
     \item conceito de tensão;
     \item conceito de deslocamento e deformação;
@@ -14,9 +15,8 @@ Este capítulo aborda os seguintes temas de Mecânica dos Sólidos, relevantes p
 \end{enumerate}
 
 \section{Tensão}
-Um corpo sólido se deforma quando submetido a carregamentos externos\footnote{Expressão que se refere tanto a careegamentos térmicos, quanto mecânicos, embora o primeiro não seja assunto deste texto.} sobre sua geometria. Tensão define a grandeza dessa distribuição agindo sobre áreas infinitesimais, de modo que qualquer secção do corpo revele forças internas que estejam em equilíbrio entre si, e que sejam balanceadas pelos carregamentos externos. Essas forças geralmente variam ao longo do corpo, como também dependem da orientação do plano de seção. Sendo grandezas vetoriais, é conveniente que sejam decompostas em parcelas tangenciais e normais à seção. \cite[pág. 60]{popov}
 
-\input{Figuras/forcas_internas.tex}
+Um corpo sólido se deforma quando submetido a carregamentos externos\footnote{Expressão que se refere tanto a carregamentos térmicos, quanto mecânicos, embora o primeiro não seja assunto deste texto.} sobre sua geometria, de modo que qualquer seção plana arbitrária do corpo revele forças internas que estejam em equilíbrio entre si, e que sejam balanceadas pelos carregamentos externos. Essas forças geralmente variam ao longo do corpo, como também dependem da orientação do plano dessa seção. Tensão define a intensidade da força interna agindo sobre uma área infinitesimal do plano de seção \cite[págs. 4 e 5]{popov}.
 
 Seja um corpo $\mathcal{B}$, sólido, em equilíbrio e de geometria qualquer, descrito sobre um sistema de referência ($xyz$ com origem em $o$), submetido a forças externas na forma do carregamento $\bm{F}$. Sejam também as seções $S_{1,2,3}$, planos de corte através desse corpo (normais aos versores do sistema de referência), em que atuam as forças internas $\bm{P}$, conforme a figura \ref{fig:forcas_internas_1}. $\Delta \bm{P}$ é a resultante de forças que atuam sobre uma área $\Delta A$ (centrada em um certo ponto $p$), pertencente a $S$. O limite da razão entre cada componente de $\Delta \bm{P}$ (tangenciais e normais) e a área $\Delta A$, quando $\Delta A \to 0$, define o vetor tração, cuja decomposição nos eixos $x$, $y$ e $z$, define as componentes do tensor tensão sobre o ponto $p$, de forma que
 \begin{equation}
@@ -24,7 +24,9 @@ Seja um corpo $\mathcal{B}$, sólido, em equilíbrio e de geometria qualquer, de
     \tau_{xy} = \lim_{\Delta A_x \to 0} \frac{\Delta P_y}{\Delta A_x}, \qquad
     \tau_{xz} = \lim_{\Delta A_x \to 0} \frac{\Delta P_z}{\Delta A_x},
 \end{equation}
-em que os índices de $\tau$ indicam, o primeiro, a normal do plano infinitesimal em que a tensão atua, e, o segundo, sua direção. Por conveniência, as tensões normais (aquelas que atuam perpendicularmente ao plano) são representadas por $\sigma$, ao invés de se utilizar $\tau$ com índices repetidos ($\tau_{xx} \equiv \sigma_x$). O símbolo $tau$, então, é reservado às tensões de cisalhamento, que atuam tangencialmente ao plano infinitesimal. No SI, a tensão é mensurada em Pascal ([Pa] = [N/m²]).
+em que os índices de $\tau$ indicam, o primeiro, a normal do plano infinitesimal em que a tensão atua, e, o segundo, sua direção. Por conveniência, as tensões normais (aquelas que atuam perpendicularmente ao plano) são representadas por $\sigma$, ao invés de se utilizar $\tau$ com índices repetidos ($\tau_{xx} \equiv \sigma_x$). O símbolo $tau$, então, é reservado às tensões de cisalhamento, que atuam tangencialmente ao plano infinitesimal. No SI, a tensão é mensurada em Pascal ([Pa] = [N/m²]) \cite[pág. 5]{popov}.
+
+\input{Figuras/forcas_internas.tex}
 
 Se o mesmo procedimento for realizado para cada face do elemento cúbico, formado por mais três seções paralelas a $S_{1,2,3}$ da figura \ref{fig:forcas_internas_3}, teremos a configuração da tração em três planos perpendiculares entre si para um certo ponto $p$ em $\mathcal{B}$,  conforme a figura \ref{fig:estado_de_tensao}, o que descreve o estado de tensão para aquele ponto. As componentes do estado de tensão podem ser dispostas na forma de uma matriz representativa do tensor de segunda ordem, denominado tensor de tensões, e, de acordo com \citeshort{popov}, é
 
@@ -80,9 +82,9 @@ Outro fato importante sobre o estado de tensão vem do equilíbrio de forças. A
     \oiint_A \bm{\sigma} \cdot d\bm{A} = \bm{0}.
     \label{eq:equilibrio}
 \end{equation}
-São desconsideradas, aqui, as forças de campo, como gravidade ou eletromagnéticas. \cite[pág. 4, The Equilibrium Equations]{roylance}
+São desconsideradas, aqui, as forças de campo, como gravidade ou eletromagnética. \cite[pág. 4, The Equilibrium Equations]{roylance}
 
-A integração é sobre uma região fechada, fronteira de um subdomínio de $\Omega$, e portanto, como a tensão foi assumida contínua e diferenciável em todo $\Omega$, podemos aplicar o teorema da divergência\footnote{O teorema da divergência, também conhecido como teorema de Gauss, afirma que, dada uma função vetorial contínua e diferenciável sobre uma região fechada: $ \oiint_{\partial \omega} \bm{f} d\bm{A} = \iiint_{\Omega} \nabla \cdot \bm{f} dV$, em que $\partial \Omega$ representa a fronteira da região $\Omega$.} à equação \ref{eq:equilibrio}, obtendo que
+A integração é realizada sobre uma região fechada, fronteira de um subdomínio de $\Omega$, e portanto, como a tensão foi assumida contínua e diferenciável em todo $\Omega$, podemos aplicar o teorema da divergência\footnote{O teorema da divergência, também conhecido como teorema de Gauss, afirma que, dada uma função vetorial contínua e diferenciável sobre uma região fechada: $ \oiint_{\partial \omega} \bm{f} d\bm{A} = \iiint_{\Omega} \nabla \cdot \bm{f} dV$, em que $\partial \Omega$ representa a fronteira da região $\Omega$.} à equação \ref{eq:equilibrio}, obtendo que
 
 \begin{equation}
     \int_V \nabla \cdot \bm{\sigma} dV = \bm{0}.
@@ -106,7 +108,7 @@ Explicitamente, para três dimensões, o sistema de equações diferenciais de e
 
 A direção em que o elemento infinitesimal é orientado altera as componentes do seu estado de tensão, de modo que sua rotação evidencia direções nas quais as tensões não tem componentes tangenciais, ou seja, têm cisalhamento nulo. Essas tensões são chamadas, então, tensões principais.
 
-O tensor de tensões é um transformação linear que recebe um vetor unitário $\bm{\hat{n}}$ e retorna o vetor da tração resultante, $\bm{t}$, agindo sobre um plano normal a $\bm{\hat{n}}$.\footnote{Aplicando um vetor $\bm{\hat{n}}$ trivial ($\bm{\hat{i}}, \bm{\hat{j}}, \bm{\hat{k}}$) à trasnformação $\bm{\sigma}$, obtém-se as próprias tensões mostradas na figura \ref{fig:estado_de_tensao}, como já era de se esperar.} Caso exista um vetor tração resultante que tenha a mesma direção de $\bm{\hat{n}}$, a tensão não terá componentes tangenciais, uma vez que, sendo colinear ao vetor unitário, é normal ao plano definido por ele. Em termos matemáticos, é o mesmo que $\bm{t} = \sigma \bm{\hat{n}}$\footnote{$|\sigma|$, nesse sentido, seria a norma da tração resultante, uma vez que $\bm{\hat{n}}$ é unitário e adimensional. $ |\bm{t}| = |\sigma \bm{\hat{n}}| = |\sigma| |\bm{\hat{n}}| = |\sigma| $}, ou, aplicando a transformação linear $\bm{\sigma}$,
+O tensor de tensões é uma transformação linear que recebe um vetor unitário $\bm{\hat{n}}$ e retorna o vetor da tração resultante, $\bm{t}$, agindo sobre um plano normal a $\bm{\hat{n}}$.\footnote{Aplicando um vetor $\bm{\hat{n}}$ trivial ($\bm{\hat{i}}, \bm{\hat{j}}, \bm{\hat{k}}$) à trasnformação $\bm{\sigma}$, obtém-se as próprias tensões mostradas na figura \ref{fig:estado_de_tensao}, como já era de se esperar.} Caso exista um vetor tração resultante que tenha a mesma direção de $\bm{\hat{n}}$, a tensão não terá componentes tangenciais, uma vez que, sendo colinear ao vetor unitário, é normal ao plano definido por ele. Em termos matemáticos, é o mesmo que $\bm{t} = \sigma \bm{\hat{n}}$\footnote{$|\sigma|$, nesse sentido, seria a norma da tração resultante, uma vez que $\bm{\hat{n}}$ é unitário e adimensional. $ |\bm{t}| = |\sigma \bm{\hat{n}}| = |\sigma| |\bm{\hat{n}}| = |\sigma| $}, ou, aplicando a transformação linear $\bm{\sigma}$,
 \begin{equation}
     \bm{\sigma}\bm{\hat{n}} = \sigma \bm{\hat{n}}.
 \end{equation}
@@ -130,41 +132,38 @@ Para o caso bidimensional, a solução desses sistema é bem conhecida, sendo da
 
 O deslocamento de um sólido é uma função vetorial que mapeia a cada ponto do seu domínio à variação entre sua posição original e a deslocada, de modo que se possa descrever sua posição final sofre em termos do deslocamento e de sua posição original. 
 
-Seja um corpo $\mathcal{B}$ definido sobre uma região $\Omega$, e a função $\bm{U}(\bm{x})$, a representação de seu deslocamento, que descreve a transformação da posição original em deformada de cada ponto, mapeando $\Omega$ para $\Omega'$.
+Seja um corpo $\mathcal{B}$ definido sobre uma região $\Omega$, e a função $\bm{\varphi}(\bm{x})$, a representação de seu deslocamento, a transformação que mapeia a posição original na posição deformada de cada ponto, mapeando $\Omega$ para $\Omega'$, é dada por
 
 \begin{equation}
-    T(\bm{x}) = \bm{x} + \bm{U}(\bm{x}), \qquad
+    T(\bm{x}) = \bm{x} + \bm{\varphi}(\bm{x}), \qquad
     \bm{U}(x,y,z) = \begin{Bmatrix}
         u(x,y,z) \\ v(x,y,z) \\ w(x,y,z) 
     \end{Bmatrix}.
     \label{eq:transformacao}
 \end{equation}
-em que $u, v, w$ são as componentes do deslocamento nas direções de $x, y, z$, respectivamente,  $\bm{x} = (x,y,z)$ é o vetor posição do ponto.
+em que $u, v, w$ são as componentes do deslocamento nas direções de $x, y, z$, respectivamente,  $\bm{x} = (x,y,z)$ é o vetor posição do ponto (ver figura \ref{fig:deslocamento}).
 
 \input{Figuras/deslocamento.tex}
 
-Quando um sólido passa por uma transformação de deslocamentos, pode sofrer translações e deformações, ambas caracterizadas pelas distâncias entre pontos do corpo antes e após a transformação. A figura \ref{fig:deslocamento} exibe a transformação sobre um corpo $\bm{B}$, e como o segmento de reta $AB$ é mapeado para sua nova configuração sobre $\Omega'$.
+Quando um sólido passa por uma transformação de deslocamentos, pode sofrer translações e deformações, ambas caracterizadas pelas distâncias entre pontos do corpo antes e após a transformação. A figura \ref{fig:deslocamento} exibe a transformação sobre um corpo $\mathcal{B}$, e como o segmento de reta $AB$ é mapeado para sua nova configuração sobre $\Omega'$.
 
 Nesse sentido, são duas as possibilidades:
 \begin{enumerate}
-    \item As distâncias entre os pontos permanece a mesma;
-        Nesse caso, podemos dizer que a transformação é uma translação\footnote{Esse transformação também é uma isomeria, pois preserva a métrica do espaço, ou seja, o produto interno, de forma que $ T(\bm{a} \cdot \bm{b}) = T(\bm{a}) \cdot T(\bm{b}) $.}, e que o corpo não sofreu de deformação, pois sua geometria foi conservada. Em termos matemáticos,
+    \item As distâncias entre os pontos permanecem a mesmas. Nesse caso, podemos dizer que a transformação é uma translação\footnote{Esse transformação também é uma isomeria, pois preserva a métrica do espaço, ou seja, o produto interno, de forma que $ T(\bm{a} \cdot \bm{b}) = T(\bm{a}) \cdot T(\bm{b}) $.}, e que o corpo não sofreu de deformação, pois sua geometria foi conservada. Em termos matemáticos,
         \begin{equation}
             ||{T(\bm{a}) - T(\bm{b}})|| = ||{\bm{a} - \bm{b}}||, \ \forall \bm{a}, \bm{b} \in \Omega. 
         \end{equation}        
-    \item As distâncias entre os pontos não se conservam;
-        Quando isso ocorre, a geometria do corpo é alterada, deformando-se; não significa, entretanto, que o corpo não passou por uma translação. A deformação de sua geometria são as variações das distâncias entre os pontos antes e após a transformação, e nada diz respeito à mudança de posição do corpo. Em termos matemáticos, podemos dizer que
+    \item As distâncias entre os pontos não se conservam. Quando isso ocorre, a geometria do corpo é alterada, e podemos dizer que houve deformação \footnote{Deformação e traslação não são excludentes. Um corpo pode deformar e também trasladar.}. Em termos matemáticos, podemos dizer que
         \begin{equation}
              \exists \bm{a}, \bm{b} \in \Omega : \ ||{T(\bm{a}) - T(\bm{b}})|| \neq ||{\bm{a} - \bm{b}}||.
         \end{equation}
 \end{enumerate}
 
 
-A deformação normal é esse alongamento, ou encurtamento, sofrido pelas linhas entre pontos do corpo, é descrita razão entre a variação do comprimento do segmento e o comprimento original, ou seja, a variação relativa do comprimento.  
+A deformação normal é o alongamento ou encurtamento sofrido pelas linhas entre os pontos do corpo, de forma que é descrita entre a variação do comprimento do segmentos e o comprimento original, ou seja, a varição relativa do comprimento.
+Como deformação geralmente varia ao longo do sólido, podemos descrevê-la observado seus efeitos sobre um elemento infinitesimal, e, similarmente à tensão, descrevendo um tensor de segunda ordem, com componentes normais e cisalhantes. (figura \ref{fig:deformacao_elemento}) \cite[pág. 143]{popov}.
 
-Essa definição, entretanto, está atrelada a uma curva no interior do sólido, e não descreve como que a deformação se manifesta ao longo de toda sua geometria, de forma a descrever continuamente ao longo de todo do domínio do corpo. Similarmente à tensão, define-se a deformação por um tensor de segunda ordem, de modo que suas componentes sejam determinadas pelo efeito que têm sobre um elemento infinitesimal (figura \ref{fig:deformacao_elemento}). \cite[pág. 230]{lub}
-
-A figura \ref{fig:deformacao_elemento_1} mostra um elemento infinitesimal, em que o segmento $AD$ sofreu tanto uma translação quanto uma deformação, dado pelo campo de deslocamento $\bm{U}$, de modo a se tornar $A'D'$. Portanto,
+A figura \ref{fig:deformacao_elemento_1} mostra um elemento infinitesimal ($dx \times dy$), em que o segmento $AD$ sofreu tanto uma translação quanto uma deformação, dados pelo campo de deslocamento $\bm{\varphi}$, de modo a se tornar $A'D'$. A deformação normal desse segmento é dado por
 
 \begin{equation}
     \epsilon_x = \frac{||A'D'|| - ||AD||}{||AD||}.
@@ -173,25 +172,38 @@ A figura \ref{fig:deformacao_elemento_1} mostra um elemento infinitesimal, em qu
 
 \input{Figuras/deformacao_elemento.tex}
 
-O comprimento do segmento antes da deformação é o próprio infinitesimal, $\|AD|| = dx$, já o deformado, é dado pela diferença das posições dos pontos deslocados, de modo que, sabendo da diferenciabilidade do campo de deslocamentos\footnote{Isso é importante pois o deslocamento de $D'$ é descrito em função do deslocamento em $A$, de forma que $u$, ao ser expandido em uma série de Taylor, ao redor de $A_x$, seja, determinando se a deformação de $D'$, $u(A_x + dx) = u(A_x) + \frac{\partial u}{\partial x}(A_x) dx$, em que os termos $O(x^3)$ foram desconsiderado, visto que $dx^2 << dx$.}, é
+O comprimento do segmento antes da deformação $AD$ é o próprio infinitesimal $dx$, já o deformado, é dado pela diferença das posições dos pontos deslocados $||A'D'||$, em termos do campo de deslocamento, é o mesmo que
 
 \begin{equation}
-    ||A'D'|| = (u + A_x + dx + \frac{\partial u}{\partial x} dx) - (u + A_x) \implies ||A'D'|| = \frac{\partial u}{\partial x} dx,
+    ||A'D'|| = (D_x + u(D_x)) - (A_x + u(A_x)),
+\end{equation}
+em que o subscrito $x$ donata a respectiva componente da posição do ponto.
+
+Como $D_x = A_x + dx$, podemos expandir a função $u$ ao redor de $A_x$, obtendo que\footnote{Os termos $O(3)$ da expansão são desconsiderados pois a diferença entre os pontos é infinitesimal, logo $dx >> dx^2$.}
+
+\begin{equation}
+    u(D_x) = u(A_x + dx) = u + \frac{\partial u}{\partial x} dx,
+\end{equation}
+
+Portanto,
+
+\begin{equation}
+    ||A'D'|| - ||AD|| = (D_x + u + \frac{\partial u}{\partial x} dx - u - A_x) - (D_x - A_x) = \frac{\partial u}{\partial x} dx
 \end{equation}
 em que $A_x$ representa a projeção do ponto $A$ em $x$.
 Agora, substituindo essa expressão na equação \ref{eq:deforma}, temos a definição da deformação normal na direção de $x$, em que
 \begin{equation}
     \epsilon_x = \frac{\partial u}{\partial x}.
 \end{equation}
-O mesmo procedimento pode ser feito na direção de $y$, com o segmento $AB$, como na direção de $z$, assumindo um elemento infinitesimal cúbico, tal qual a figura \ref{fig:estado_de_tensao} do estado de tensão, obtendo-se, assim, todas as definições básicas de deformação normal \cite{popov}:
+O mesmo procedimento pode ser feito tanto na direção de $y$, com o segmento $AB$,quanto na direção de $z$, assumindo um elemento infinitesimal cúbico, tal qual a figura \ref{fig:estado_de_tensao} do estado de tensão, obtendo-se, assim, todas as definições básicas de deformação normal \cite{popov}:
 
 \begin{equation}
     \epsilon_x = \frac{\partial u}{\partial x}, \qquad \epsilon_y = \frac{\partial u}{\partial y}, \qquad \epsilon_z = \frac{\partial u}{\partial z}. \\
 \end{equation}  
 
-Na figura \ref{fig:deformacao_elemento_2}, ocorre a deformação por cisalhamento, em que os segmentos $AD$ e $AB$ são, além de transladados, rotacionados em torno de $A'$, de modo a distorcer a geometria do elemento. Agora, a deformação ocorre na direção tanto em $x$, quanto em $y$, e é definida pela redução do ângulo reto $\angle BAD$, determinada, em termos do campo de deslocamentos (tal como na deformação normal) analisando o triângulo $A'D'D''$.
+Na figura \ref{fig:deformacao_elemento_2}, ocorre a deformação por cisalhamento, em que os segmentos $AD$ e $AB$ são, além de transladados, rotacionados em torno de $A'$, de modo a distorcer a geometria do elemento. Agora, a deformação ocorre tanto na direção em $x$, quanto em $y$, e é definida pela alteração do ângulo reto $\angle BAD$, determinada, em termos do campo de deslocamentos (tal como na deformação normal) analisando o triângulo $A'D'D''$.
 
-A função $v$, quando variada em $x$ da posição de $A$ até $D$, descreve o deslocamento dos pontos da face inferior do elemento infinitesimal na direção de $y$, ou seja, a hipotenusa do triângulo $A'D'D''$; a inclinação, portanto, dessa reta é própria derivada de $v$ na direção $x$, ou seja,
+A função $v$, quando variada em $x$ da posição de $A$ até $D$, descreve o deslocamento dos pontos da face inferior do elemento infinitesimal na direção de $y$, ou seja, a hipotenusa do triângulo $A'D'D''$. A inclinação, portanto, dessa reta é própria derivada de $v$ na direção $x$, ou seja,
 
 \begin{equation}
     \angle D'A'D'' = \tan{\frac{\partial v}{\partial x}} \approx \frac{\partial v}{\partial x}.\footnotemark
@@ -237,7 +249,7 @@ ou, em notação indicial
 \begin{equation}
     \epsilon_{ij} = \frac{1}{2} \left(\frac{\partial U_j}{\partial x_i} + \frac{\partial U_i}{\partial x_j}\right),
 \end{equation}
-em que vale o mesmo tipo de notação que as tesões, $\epsilon_{ii} = \epsilon_i$, e que $\bm{U}_x = u, \bm{U}_y = v, \bm{U}_z = w$.
+em que vale o mesmo tipo de notação que as componentes da tensão, $\epsilon_{ii} = \epsilon_i$, e que $\bm{U}_x = u, \bm{U}_y = v, \bm{U}_z = w$.
 
 Tal como o tensor de tensões, o tensor de deformações é simétrico, e, portanto, só possui seis componentes independentes. Na notação de Voigt, de acordo com \citeshort{roylance},
 \begin{equation}
@@ -248,18 +260,18 @@ Tal como o tensor de tensões, o tensor de deformações é simétrico, e, porta
 
 \section{A Lei de Hooke}
 
-Em corpos sólidos e elásticos, a deformação está relacionada diretamente com a tensão em seu interior, de modo que se possa, dentro de certas condições, descrever uma transformação linear entre elas. Essa transformação é nomeada \emph{Lei de Hooke}, e, utilizando a notação de Voigt, é descrita por
+Em corpos sólidos, a deformação está relacionada diretamente com a tensão em seu interior, de modo que se possa, dentro de certas condições, descrever uma transformação linear entre elas. Essa transformação é nomeada \emph{Lei de Hooke}, e, utilizando a notação de Voigt, é descrita por
 
 \begin{equation}
     \{\sigma\} = [\bm{C}] \{\epsilon\}.
     \label{eq:lei_de_hooke}
 \end{equation}
 
-$[\bm{C}]$ é denominada \emph{matriz constitutiva}\footnote{A matriz constituiva é uma forma de notação abrevida para descrever essa relação. Da mesma forma que o tensor de tensões é abreviado por um vetor na notação de Voigt, devido sua simetria, a matriz constituiva é a abreviação de do tensor de elasticidade, um tensor de quarta ordem que mapeia o espaço das deformações no das tensões.}, definida em termos das características do material do corpo, como Módulo de Elasticidade e Coeficiente de Poisson, utilizando o \emph{Princípio de Sobreposição}.
+em que $[\bm{C}]$ é denominada \emph{matriz constitutiva}\footnote{A matriz constitutiva é uma forma de notação abreviada para descrever essa relação. Da mesma forma que o tensor de tensões é abreviado por um vetor na notação de Voigt, devido sua simetria, a matriz constitutiva é a abreviação de do tensor de elasticidade, um tensor de quarta ordem que mapeia o espaço das deformações no das tensões.}, e é definida em termos das características do material do corpo, tais como Módulo de Elasticidade e Coeficiente de Poisson.
 
 \subsection{A Lei de Hooke Uniaxial}
 
-Sejam o quadrilátero $\mathcal{B}$, um corpo sólido, homogêneo, em equilíbrio, de comprimento $L$, engastado em sua face esquerda, e de seção transversal $A$, e $F$, uma força constante que atua sobre a face direita de $\mathcal{B}$, na direção de $x$, que a deforma em $\mathcal{B}'$ até um comprimento $L+\Delta L$, tal como na figura \ref{fig:barra_deformada_1}. 
+Sejam o quadrilátero $\mathcal{B}$, um corpo sólido, homogêneo, em equilíbrio, de comprimento $L$, engastado em sua face esquerda, e de seção transversal $A$. Seja também $F$, uma força constante que atua sobre a face direita de $\mathcal{B}$, na direção de $x$, que a deforma em $\mathcal{B}'$ até um comprimento $L+\Delta L$, tal como na figura \ref{fig:barra_deformada_1}. 
 
 \input{Figuras/barra_deformada.tex}
 

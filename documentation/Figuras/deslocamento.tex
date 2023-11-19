@@ -7,7 +7,6 @@
         marrowb/.style={arrows = {-Stealth[length=10pt, inset=1pt]}, line width = 0.5mm, violet},
         marrowc/.style={arrows = {-Stealth[length=10pt, inset=3pt]}, line width = 0.5mm}
         ]
-    ]
         \draw[mdomain] plot[smooth, variable=\u, domain=0:360]({(5 * cos(\u) + 0.3 * sin(\u))/1.5 + 3.5},{(2 * sin(\u) + 0.4 * cos(3 *\u))/1.5+5});
         \draw[mdomain] plot[smooth, variable=\u, domain=0:360, blue, thick, fill = blue, fill opacity = 0.6]({(5 * cos(\u) + 0.3 * sin(\u))/2 +10},{(2 * sin(\u) + 0.4 * cos(3 *\u))/1.1+3});
 
@@ -36,8 +35,8 @@
         \draw[marrow]  (0,0) -- (A'.center) node[midway,above]{\large $\bm{a}'$};
         \draw[marrow]  (0,0) -- (B'.center) node[midway,below]{\large $\bm{b}'$};
 
-        \draw[marrowb]  (A.center) -- (A'.center) node[midway,below]{$\bm{U}(\bm{A})$};
-        \draw[marrowb]  (B.center) -- (B'.center) node[midway,below]{$\bm{U}(\bm{B})$};
+        \draw[marrowb]  (A.center) -- (A'.center) node[midway,below]{$\bm{\varphi}(\bm{A})$};
+        \draw[marrowb]  (B.center) -- (B'.center) node[midway,below]{$\bm{\varphi}(\bm{B})$};
 
         \foreach \n in {A,B,A',B'}
              \node at (\n)[circle,fill,inner sep=0.3mm]{};
