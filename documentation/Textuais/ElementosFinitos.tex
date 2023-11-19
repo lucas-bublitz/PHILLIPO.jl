@@ -4,7 +4,7 @@
     "As far as the laws of mathematics refer to reality, they are not certain; and as far as they are certain, they do not refer to reality." (Albert Einstein)
 \end{quote}
 
-O método dos elementos finitos (MEF) é um procedimento numérica utilizada para encontrar soluções de equações que modelam a natureza. É amplamente utilizado na simulação de fenômenos físicos, como mecânica dos sólidos, transferência de calor, eletromagnetismo e muitos outros. \cite{Onate}
+O método dos elementos finitos (MEF) é um procedimento numérico utilizada para encontrar soluções de equações que modelam a natureza. É amplamente utilizado na simulação de fenômenos físicos, como mecânica dos sólidos, transferência de calor, eletromagnetismo e muitos outros. \cite{Onate}
 
 A abordagem do MEF envolve a subdivisão de uma estrutura ou domínio contínuo em pequenos elementos geométricos finitos, definidos por nós, caracterizados por suas propriedades físicas e geométricas, em que são aplicadas as equações governantes do problema, cujo campo é aproximado, dentro de cada um, por meio de funções de interpolação, que vão discretizar o campo sobre os valores nodais. Em seguida, essas equações aproximadas são montadas, justapondo os elementos, em um sistema global, levando em consideração as condições de contorno e as restrições do problema. \cite{LIU}
 
@@ -14,7 +14,7 @@ Em suma, o método de elementos finitos segue o seguinte procedimento, de acordo
     \item definição do domínio, e das condições de contorno;
     \item discretização do domínio em uma malha formada por nós que constituem os elemento;
     \item aplicação das equações de governo sobre cada elemento, formando um sistema local de rigidez;
-    \item assemblagem dessas equações em um único grande sistema global;
+    \item montagem dessas equações em um único grande sistema global;
     \item resolução do sistema, encontrando os valores nodais do campo.
 \end{enumerate}
 
@@ -26,10 +26,9 @@ Na análise estrutural aqui abordada, o objetivo da aplicação do MEF é determ
 \end{equation}
 em que $\bm{K}$ é a matriz de rigidez global, $\bm{U}$ é o vetor de deslocamentos nodais, e $\bm{F}$ é o vetor de forças nodais.
 
-Deste modo, convém definir os termos e símbolos dessas entidades matemáticas. Seja um corpo $\mathcal{B}$, definido por uma geometria sobre o domínio $\Omega$, sobre o qual é feito uma série de repartições em pequenos elementos, de domínio $\Omega^{(e)}$, cuja fronteira se denomina $\partial\Omega^{(e)}$. A figura \ref{fig:dominio_triangulo} mostra um domínio bidimensional $\Omega$ discretizado em elementos triangulares, cujos nós são representados por $i, j$ e $k$, e a figura \ref{fig:tetraedro} mostra um domínio tridimensional $\Omega$ discretizado em elementos tetraédricos, cujos nós são representados por $i, j, k$ e $m$. Quando uma entidade é definida sobre um elemento, ela é representada por um superescrito $(e)$, como por exemplo, o deslocamento $\bm{\varphi}^{(e)}$ sobre o elemento $e$. Quando uma entidade é definida sobre um nó, ela é representada por um subescrito $(i)$, como por exemplo, o deslocamento $\bm{\varphi}_i$ sobre o nó $i$. Quando uma entidade é definida sobre um elemento e um nó, ela é representada por um superescrito e um subescrito, como por exemplo, o deslocamento $\bm{\varphi}_i^{(e)}$ sobre o nó $i$ do elemento $e$.
+Deste modo, convém definir os termos e símbolos dessas entidades matemáticas. Seja um corpo $\mathcal{B}$, definido por uma geometria sobre o domínio $\Omega$, que é repartido em pequenos elementos, de domínio $\Omega^{(e)}$, cuja fronteira se denomina $\partial\Omega^{(e)}$. A figura \ref{fig:dominio_triangulo} mostra um domínio bidimensional $\Omega$ discretizado em elementos triangulares, cujos nós são representados por $i, j$ e $k$. Quando uma entidade é definida sobre um elemento, ela é representada por um superescrito $(e)$, como por exemplo o deslocamento $\bm{\varphi}^{(e)}$ sobre o elemento $e$.
 
-Neste capítulo é abordado como, na sequência proposta por \citeshort{LOGAN},
-
+Seguindo \citeshort{LOGAN}, neste capítulo aborda-se como
 \begin{enumerate}
     \item selecionar as funções de interpolação;
     \item definir as relações de tensão-deformação-deslocamento;
@@ -43,18 +42,53 @@ Neste capítulo é abordado como, na sequência proposta por \citeshort{LOGAN},
 
 As funções de interpolação são funções matemáticas que aproximam o campo de interesse, neste caso o deslocamento, dentro de um elemento, por meio de uma combinação linear de funções conhecidas, definidas sobre os nós do elemento. Essas funções são definidas, e depois justapostas, de modo que o campo seja contínuo. O objetivo dessa ferramente é alterar os valores incógnitos do campo de contínuos para discretos, para que o deslocamento seja bem definido pelo seu valor sobre a posição cada nó, e que, por sobre o domínio de cada elemento, o campo seja interpolado. Esses valores discretos desconhecidos do campo nos nós, em que o campo tem "liberdade" pra variar, denominam-se \emph{graus de liberdade}. \cite{LOGAN}
 
-O CST, por exemplo, tem seis graus de liberdade, uma vez que para cada nó, o vetor de deslocamento tem três componentes. Os problemas abordados aqui tem sempre três graus de liberdade por nó.
+O CST, por exemplo, tem seis graus de liberdade, uma vez que para cada nó, o vetor de deslocamento têm três componentes. Os problemas abordados aqui têm sempre três graus de liberdade por nó.
 
-Defini-se, então, a função de deslocamento sobre um elemento, representado pela figura \ref{fig:dominio_triangulo}, assim como a proposta linear de interpolação,
+Define-se, então, a função de deslocamento sobre um elemento, representado pela figura \ref{fig:CST}, assim como a proposta linear de interpolação,
 
 \begin{equation}
-    \bm{\varphi} = \begin{Bmatrix}
+    \bm{\varphi}^{(e)} = \begin{Bmatrix}
         u(x,y) \\ v(x,y) 
     \end{Bmatrix} = \begin{Bmatrix}
         a_1 + a_2 x + a_3 y \\ b_1 + b_2 x + b_3 y 
     \end{Bmatrix}.
 \end{equation}
 Nesse sentido, bidimensional, $\bm{\varphi}$ é uma função vetorial de campo que mapeia cada ponto do sólido para seu respectivo deslocamento nos eixos do sistema $xy$ ($u$ e $v$ respectivamente).
+
+\begin{figure}
+	\centering
+    \caption{Um triângulo de deformações constantes (CST).}
+    \begin{tikzpicture}
+        \begin{axis}[
+                xmin = -1.5, xmax = 1.5,
+                ymin = -1, ymax = 1.3, 
+                width = 16 cm,
+                axis lines = left,
+                xticklabels = {,,},
+                yticklabels = {,,},
+                axis line style = thick,
+            ]
+            \draw[->] (0.3537131,-0.7543531) -- ++(1 cm, 0 cm) node[right] {$u_i$};
+            \draw[->] (0.3537131,-0.7543531) -- ++(0 cm, 1 cm) node[above] {$v_i$};
+            
+            \draw[->] (-0.1558111,0.798229)  -- ++(1 cm, 0 cm) node[right] {$u_j$};
+            \draw[->] (-0.1558111,0.798229)  -- ++(0 cm, 1 cm) node[above] {$v_j$};
+
+            \draw[->] (-0.7003684,-0.2899937) -- ++(1 cm, 0 cm) node[right] {$u_k$};
+            \draw[->] (-0.7003684,-0.2899937) -- ++(0 cm, 1 cm) node[above] {$v_k$};
+
+            \draw[blue, ultra thick, fill = blue, fill opacity = 0.1] 
+                   (0.3537131,-0.7543531)  node[circle, draw, inner sep=1pt, fill=white, thin, scale = 0.9, fill opacity = 1] {$i$} 
+                -- (-0.1558111,0.798229)   node[circle, draw, inner sep=1pt, fill=white, thin, scale = 0.9, fill opacity = 1] {$j$} 
+                -- (-0.7003684,-0.2899937) node[circle, draw, inner sep=1pt, fill=white, thin, scale = 0.9, fill opacity = 1] {$k$} 
+                -- cycle;
+            \draw (-0.2,-0.1) node[scale = 1.5, opacity = 0.5, blue] {$\Omega^{(e)}$};
+            \draw (-0.65,0.5) node[scale = 1.5, opacity = 1, blue] {$\partial\Omega^{(e)}$};
+        \end{axis}
+    \end{tikzpicture}
+    \label{fig:CST}
+	\fonte{\me{2022}}
+\end{figure}
 
 Para determinar as constantes $a$ e $b$, e termos dos deslocamentos nodais basta aplicar a condição de que em cada nó a função deve assumir o valor do deslocamento respectivo. Isto é, analisando somente a componente $x$, ou seja, $u(x,y)$, temos que
 
@@ -153,8 +187,6 @@ Para simplificar a notação das equações \ref{eq:funcao_u} e \ref{eq:funcao_v
     N_k &= \frac{1}{2A} \left[ \alpha_k + \beta_k x + \gamma_k y \right].
 \end{align}
 
-Essas funções são denominadas \emph{Funções de forma} e representam a contribuição de cada grau de liberdade sobre o campo de deslocamento.
-
 Por fim, $\bm{\varphi}$ pode ser reescrito na forma matricial, em termos dessas funções $N$ e dos deslocamentos nodais e $u$ e $v$, como
 
 \begin{equation}
@@ -183,7 +215,7 @@ No caso bidimensional, o vetor de deformação, na notação de Voigt, é dado p
     \end{Bmatrix}
 \end{equation}
 
-Aplicando nessas derivas parciais as funções de interpolação de $\bm{\varphi}$, das equações \ref{eq:funcao_u} e \ref{eq:funcao_v}, temos que, conforme \citeshort{LOGAN},
+Aplicando nessas derivadas parciais as funções de interpolação de $\bm{\varphi}$, das equações \ref{eq:funcao_u} e \ref{eq:funcao_v}, temos que, conforme \citeshort{LOGAN},
 
 \begin{align}
     \frac{\partial u}{\partial x} &= \frac{1}{2A} \left[ \beta_i u_i + \beta_j u_j + \beta_k u_k\right],  \\
@@ -204,9 +236,9 @@ Utilizando essas equações, é possível reescrever o vetor de deformação $\{
     \label{eq:deformacao_deslocamento}
 \end{equation}
 
-A matrix $\bm{B}$ é denominada matrix gradiente, e é uma função das coordenadas dos nós do elemento, e relaciona o vetor de deslocamentos nodais do elemento $\bm{U}^{(e)}$ com o vetor de deformações $\{\epsilon\}$, assim como é constante ao longo de todo o elemento, o que é devido pela escolha de funções lineares para interpolar o campo de deslocamento sobre o elemento. Por causa dessa propriedade, esse elemento é denominado triângulo de deformações constantes, ou CST (\emph{Constant Strain Triangle}). \cite{LOGAN}
+A matrix $\bm{B}$ é uma função das coordenadas dos nós do elemento, e relaciona o vetor de deslocamentos nodais do elemento $\bm{U}^{(e)}$ com o vetor de deformações $\{\epsilon\}$, assim como é constante ao longo de todo o elemento, o que é devido pela escolha de funções lineares de interpolação. Por causa dessa propriedade, esse elemento é denominado triângulo de deformações constantes, ou CST (\emph{Constant Strain Triangle}).
 
-Por fim, ao passo que a relação entre deformação e tensão é dada pela Lei de Hooke generalizada, na forma da matriz constitutiva $\bm{C}$, expressar a relação entre tensão e deslocamento, ou tensão-Deformação-Deslocamento, é simplesmente uma questão de multiplicar a matriz constitutiva pela matriz gradiente, obtendo assim a relação
+Por fim, ao passo que a relação entre deformação e tensão é dada pela Lei de Hooke generalizada, na forma da matriz constitutiva $\bm{C}$ (por conveniência, a matriz constitutiva será expressa sem a notação usual $[C]$), expressar a relação entre tensão e deslocamento, ou tensão-Deformação-Deslocamento, é simplesmente uma questão de multiplicar a matriz constitutiva pela matriz $\bm{B}$, obtendo assim a relação
 
 \begin{equation}
     \{\sigma\} = \bm{C} \bm{B} \bm{U}^{(e)}.
@@ -230,40 +262,38 @@ $\bm{F}^{(e)}$ é um vetor que armazena as forças aplicadas sobre os nós do el
     \end{Bmatrix}.
 \end{equation}
 
-Um dos métodos para derivar essa matriz é utilizar o \emph{Princípio dos Trabalhos Virtuais} de modo que a energia interna do elemento, devido à sua deformação elástica, seja igual ao trabalho virtual das forças externas. \cite{Zin}
-
-O \emph{Princípio dos Trabalhos virtuais} (PTV), então, pode ser enunciado como:
+Um dos métodos para derivar essa matriz é utilizar o \emph{Princípio dos Trabalhos Virtuais}, que pode ser enunciado como:
 
 \begin{citacao}
     Se um corpo deformável em equilíbrio é submetido a deslocamentos virtuais arbitrários (imaginários) associados a uma deformação compatível do corpo, o trabalho virtual das forças externas no corpo é igual à energia virtual de deformação das tensões internas. \cite[pág. 876, tradução livre]{LOGAN}
 \end{citacao}
 
-Nesse contexto, o trabalho virtual interno é causado por uma deformação do próprio corpo, denotada $\delta \bm{\epsilon}$, enquanto o trabalho virtual externo, por sua vez, é causado diretamente por um deslocamento virtual das forças que atuam sobre as fronteiras do corpo, denotado $\delta \bm{u}$. Em um corpo elástico, modelado pela Lei de Hook, o trabalho virtual interno pode ser descrito em termos do deslocamento, como a energia armazenada na forma elástica, a fim de desenvolver as equações de equilíbrio estático apresentadas a seguir. \footnote{A notação $\delta$ se refere a um variacional, que representa uma variação infinitesimal sobre o todo o contínuo da função, de modo que seja nulo na região em que são aplicadas as condições de contorno. O cálculo variacional, entretanto, não é abordado diretamente nesta monografia.}
+Nesse contexto, o trabalho virtual interno é causado por uma deformação do próprio corpo, denotada $\delta \bm{\epsilon}$, enquanto o trabalho virtual externo, por sua vez, é causado diretamente por um deslocamento virtual das forças que atuam sobre as fronteiras do corpo, denotado $\delta \bm{u}$. Em um corpo elástico, modelado pela Lei de Hooke, o trabalho virtual interno pode ser descrito em termos do deslocamento, como a energia armazenada na forma elástica, a fim de desenvolver as equações de equilíbrio estático apresentadas a seguir. \footnote{A notação $\delta$ se refere a um variacional, que representa uma variação infinitesimal sobre o todo o contínuo da função, de modo que seja nulo na região em que são aplicadas as condições de contorno. O cálculo variacional, entretanto, não é abordado diretamente nesta monografia.}
 
 
 Seja um elemento triangular, como da figura \ref{fig:dominio_triangulo}, que sofre um deslocamento virtual $\delta \bm{U}^{(e)}$. De acordo com \citeshort{Zin}, o trabalho interno do elemento é dado por\footnote{Poder escrever a energia interna desta forma simples é devido à escolha de que, na notação de Voigt do tensor de deformação, foi utilizado a convenção de $\gamma = 2 \epsilon$.}
 
 \begin{equation}
-    E_I = \int_{\Omega^{(e)}} \delta \{\epsilon\}^t \{\sigma\} dV,
+    \mathcal{U} = \int_{\Omega^{(e)}} \delta \{\epsilon\}^t \{\sigma\} dV,
 \end{equation}
 
 Utilizando as relações de tensão-deformação-deslocamento, descritas nas equações \ref{eq:deformacao_deslocamento} e \ref{eq:relacao_tensao_deslocamento}, temos que\footnote{Utilizando também a propriedade de transposição do produto de matrizes, $(\bm{A}\bm{B})^t = \bm{B}^t \bm{A}^t$.}
 
 \begin{equation}
-    E_I = \int_{\Omega^{(e)}} (\bm{B} \delta \bm{U}^{(e)})^t \bm{C} \bm{B} \bm{U}^{(e)} dV
-    \implies E_I = \delta (\bm{U}^{(e)})^t \int_{\Omega^{(e)}} \bm{B}^t \bm{C} \bm{B} dV \bm{U}^{(e)}.
+    \mathcal{U} = \int_{\Omega^{(e)}} (\bm{B} \delta \bm{U}^{(e)})^t \bm{C} \bm{B} \bm{U}^{(e)} dV
+    \implies \mathcal{U} = \delta (\bm{U}^{(e)})^t \int_{\Omega^{(e)}} \bm{B}^t \bm{C} \bm{B} dV \bm{U}^{(e)}.
 \end{equation}
 
 O trabalho desenvolvido pelas forças externas é dado, também de acordo com \citeshort{Zin}, pelo produto dos deslocamento nodais e das forças nodais, na forma
 
 \begin{equation}
-    E_E = \delta (\bm{U}^{(e)})^t \bm{F}^{(e)}.
+    \mathcal{W} = \delta (\bm{U}^{(e)})^t \bm{F}^{(e)}.
 \end{equation}
 
 Igualando as duas parcelas de trabalho, temos que
 
 \begin{equation}
-    E_I = E_E \implies
+    \mathcal{U} =  \mathcal{W}\implies
     \delta (\bm{U}^{(e)})^t \int_{\Omega^{(e)}} \bm{B}^t \bm{C} \bm{B} dV \bm{U}^{(e)} = \delta (\bm{U}^{(e)})^t \bm{F}^{(e)}.
 \end{equation}
 
@@ -280,7 +310,7 @@ Comparando com a forma da equação \ref{eq:sistema_global}, fica evidente que a
     \bm{K}^{(e)} = \int_{\Omega^{(e)}} \bm{B}^t \bm{C} \bm{B} dV.
 \end{equation}
 
-O elemento tratado aqui é o CST, portanto, a matriz gradiente $\bm{B}$ é constante em todo o domínio $\Omega^{(e)}$, como também é constante a matriz constitutiva $\bm{C}$. A integral, portanto, não precisa ser computada em um sistema local, pois todos os termos que a compõe são constantes. \footnote{A definição de sistemas locais na formulação de outros tipos de elementos, em que a função de interpolação não é linear, como o quadrilátero, ou mesmo o triangular quadrático, é necessária, assim como definir transformações do sistema local para o global. Aqui, não sãos tradas transformações de coordenas pela simplicidade dos elementos.} Logo, a matriz de rigidez local pode ser simplificada ainda mais, tornando-se, de acordo com \citeshort{LOGAN}
+O elemento tratado aqui é o CST, portanto, a matriz $\bm{B}$ é constante em todo o domínio $\Omega^{(e)}$, como também é constante a matriz constitutiva $\bm{C}$. A integral, portanto, não precisa ser computada em um sistema local, pois todos os termos que a compõe são constantes. Logo, a matriz de rigidez local pode ser simplificada ainda mais, tornando-se, de acordo com \citeshort{LOGAN}
 
 \begin{equation}
     \bm{K}^{(e)} = \bm{B}^t \bm{C} \bm{B} \int_{\Omega^{(e)}} dV = \bm{B}^t \bm{C} \bm{B} V,
@@ -289,9 +319,9 @@ em que $V$ é o volume do elemento, definido, no caso bidimensional, por $V = A 
 
 Essa matriz pode ser lida como uma lista de causa e efeito. Enquanto a linha da matriz representa onde que o efeito do deslocamento é aplicado, a força no caso, a coluna informa qual é o deslocamento, o grau de liberdade, que o causa. \cite{LOGAN}
 
-Outra forma de derivar essa relação diretamente da equação de equilíbrio estático é por meio do método de Galerkin, em que as bases da função de deslocamento são as mesmas da função de ponderação, utilizando a chama formulação fraca da equação de governo. Esse método leva à mesma formulação mostrada acima.
+Outra forma de derivar essa relação diretamente da equação de equilíbrio estático é por meio do método de Galerkin, em que as bases da função de interpolação são as mesmas da função de ponderação, utilizando a chamada formulação fraca da equação de governo. Esse método leva à mesma formulação mostrada acima.
 
-Vale ressaltar que não foi preciso definir um sistema local de coordenadas para derivar essas relações, uma vez que o elemento tradado aqui, como também o tetraedro (tratado mais adiante), tem funções de interpolação simples o suficiente que um sistema orientado a cada elemento não é necessário. Elementos mais sofisticados, com funções de interpolação envolvendo termos não lineares, necessitam, por uma questão de manipulação algébrica, de um sistema de referência local. Esses elementos não são tratados aqui.
+Vale ressaltar que não foi preciso definir um sistema local de coordenadas para derivar essas relações, uma vez que o elemento tradado aqui, como também o tetraedro (tratado mais adiante), tem funções de interpolação simples o suficiente que um sistema orientado a cada elemento não é necessário. Elementos mais sofisticados necessitam, por uma questão de manipulação algébrica, de um sistema de referência local. Esses elementos não são tratados aqui.
 
 \section{Matriz de Rigidez Global e Condições de Contorno}
 
@@ -299,9 +329,9 @@ Para cada elemento do domínio é realizado o procedimento descrito na seção a
 \begin{equation}
     \bm{K} = \sum_{e} \bm{K}^{(e)}.
 \end{equation}
-Nesse contexto, $\Sigma$ representa, não uma soma ordinária, mas sim a sobreposição dos efeitos de rigidez sobre os nós, num procedimento chamado \emph{Direct Stiffness Method}.  \cite{LOGAN}
+Nesse contexto, $\Sigma$ representa, não uma soma ordinária, mas sim a sobreposição dos efeitos de rigidez sobre os nós. \cite{LOGAN}
 
-Em cada elemento, a matriz local de rigidez $\bm{K}^{(e)}$ define a interação de forças e deslocamentos entre os graus de liberdade dos nós. Analisando a estrutura como um todo, cada nó pode pertencer a vários elementos, pois é assim que a malha é constituída. O efeito de rigidez, então, sobre cada nó é a soma dos efeitos de todos os elementos que o contém. Isso vale para os deslocamentos nodais, como para as forças nodais. O procedimento, portanto, de assemblagem da matriz global de rigidez é a soma das matrizes locais de rigidez sobre as posições dos graus de liberdade respectivos das matrizes locais.
+Em cada elemento, a matriz local de rigidez $\bm{K}^{(e)}$ define a interação de forças e deslocamentos entre os graus de liberdade dos nós. Analisando a estrutura como um todo, cada nó pode pertencer a vários elementos, pois é assim que a malha é constituída. O efeito de rigidez, então, sobre cada nó é a soma dos efeitos de todos os elementos que o contém. Isso vale para os deslocamentos nodais, como para as forças nodais. O procedimento, portanto, de montagem da matriz global de rigidez é a soma das matrizes locais de rigidez sobre as posições dos graus de liberdade respe    ctivos das matrizes locais (mapeamento local-global).
 
 \input{Figuras/exemplo_matriz_global.tex}
 
@@ -317,7 +347,7 @@ As matrizes locais de rigidez desses elementos são quadradas $6 \times 6$, pois
         k_{41} & k_{42} & k_{43} & k_{44} & k_{45} & k_{46} \\
         k_{51} & k_{52} & k_{53} & k_{54} & k_{55} & k_{56} \\
         k_{61} & k_{62} & k_{63} & k_{64} & k_{65} & k_{66} \\
-    \end{bmatrix}
+    \end{bmatrix}^{(1)}
     \color{black}
     \begin{Bmatrix}
         u_1 \\ v_1 \\ u_2 \\ v_2 \\ u_3 \\ v_3
@@ -333,7 +363,7 @@ As matrizes locais de rigidez desses elementos são quadradas $6 \times 6$, pois
         k_{41} & k_{42} & k_{43} & k_{44} & k_{45} & k_{46} \\
         k_{51} & k_{52} & k_{53} & k_{54} & k_{55} & k_{56} \\
         k_{61} & k_{62} & k_{63} & k_{64} & k_{65} & k_{66} \\
-    \end{bmatrix}
+    \end{bmatrix}^{(2)}
     \color{black}
     \begin{Bmatrix}
         u_2 \\ v_2 \\ u_3 \\ v_3 \\ u_4 \\ v_4
@@ -349,14 +379,14 @@ As matrizes locais de rigidez desses elementos são quadradas $6 \times 6$, pois
         k_{41} & k_{42} & k_{43} & k_{44} & k_{45} & k_{46} \\
         k_{51} & k_{52} & k_{53} & k_{54} & k_{55} & k_{56} \\
         k_{61} & k_{62} & k_{63} & k_{64} & k_{65} & k_{66} \\
-    \end{bmatrix}
+    \end{bmatrix}^{(3)}
     \color{black}
     \begin{Bmatrix}
-        u_3 \\ v_3 \\ u_4 \\ v_4 \\ u_5 \\ v_5
+        u_3 \\ v_3 \\ u_5 \\ v_5 \\ u_4 \\ v_4
     \end{Bmatrix}
     &=
     \begin{Bmatrix}
-        f_{x3} \\ f_{y3} \\ f_{x4} \\ f_{y4} \\ f_{x5} \\ f_{y5}
+        f_{x3} \\ f_{y3} \\ f_{x5} \\ f_{y5} \\ f_{x4} \\ f_{y4}
     \end{Bmatrix} \iff \color{green} \bm{K}^{(e)} \bm{U}^{(e)} = \bm{F}^{(e)}.
 \end{align}
 
