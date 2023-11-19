@@ -242,14 +242,9 @@ O tensor de deformações é
         \frac{\partial u}{\partial x} & \frac{1}{2} \left(\frac{\partial u}{\partial y}+\frac{\partial v}{\partial x}\right) & \frac{1}{2} \left(\frac{\partial u}{\partial z}+\frac{\partial w}{\partial x}\right) \\
         \frac{1}{2} \left(\frac{\partial v}{\partial x}+\frac{\partial u}{\partial y}\right) & \frac{\partial v}{\partial y} & \frac{1}{2} \left(\frac{\partial v}{\partial z}+\frac{\partial w}{\partial y}\right) \\
         \frac{1}{2} \left(\frac{\partial w}{\partial x}+\frac{\partial u}{\partial z}\right) & \frac{1}{2} \left(\frac{\partial w}{\partial y}+\frac{\partial v}{\partial z}\right) & \frac{\partial w}{\partial z} \\
-    \end{bmatrix},
+    \end{bmatrix}.
     \label{eq:tensor_de_deformacoes}
 \end{gather}
-ou, em notação indicial
-\begin{equation}
-    \epsilon_{ij} = \frac{1}{2} \left(\frac{\partial U_j}{\partial x_i} + \frac{\partial U_i}{\partial x_j}\right),
-\end{equation}
-em que vale o mesmo tipo de notação que as componentes da tensão, $\epsilon_{ii} = \epsilon_i$, e que $\bm{U}_x = u, \bm{U}_y = v, \bm{U}_z = w$.
 
 Tal como o tensor de tensões, o tensor de deformações é simétrico, e, portanto, só possui seis componentes independentes. Na notação de Voigt, de acordo com \citeshort{roylance},
 \begin{equation}
@@ -273,21 +268,20 @@ em que $[\bm{C}]$ é denominada \emph{matriz constitutiva}\footnote{A matriz con
 
 Sejam o quadrilátero $\mathcal{B}$, um corpo sólido, homogêneo, em equilíbrio, de comprimento $L$, engastado em sua face esquerda, e de seção transversal $A$. Seja também $F$, uma força constante que atua sobre a face direita de $\mathcal{B}$, na direção de $x$, que a deforma em $\mathcal{B}'$ até um comprimento $L+\Delta L$, tal como na figura \ref{fig:barra_deformada_1}. 
 
-\input{Figuras/barra_deformada.tex}
-
-A tensão desenvolvida em uma seção $S$ de $\mathcal{B}$, perpendicular à força $\vec{F}$, pode ser descrita em termos do módulo de elasticidade, $E$ (também denominado Módulo de Young), que é uma característica intrínseca do material de $\mathcal{B}$, e da deformação, $\epsilon_x$, atuando na mesma direção da força. Essa relação, denominada \emph{Lei de Hooke Uniaxial}, é linear da forma
-
+A tensão desenvolvida em um ponto de uma seção transversal $S$ de $\mathcal{B}$, perpendicular à força $\vec{F}$, pode ser descrita em termos do módulo de elasticidade, $E$ (também denominado Módulo de Young), que é uma característica intrínseca do material de $\mathcal{B}$, e da deformação, $\epsilon_x$, atuando na mesma direção da força. Essa relação, denominada \emph{Lei de Hooke Uniaxial}, é linear da forma
 \begin{equation}
     \sigma_x = E \epsilon_x.
     \label{eq:lei_de_hooke_uniaxial}
 \end{equation} 
-A unidade de $E$ é a mesma de $\sigma_x$, o que é coerente, pois $\epsilon_x$ é adimensional, ou seja, o módulo de elasticidade é medido, no SI, em Pascal. O módulo de Young não depende da geometria do corpo, mas do material de que é feito (dentre outras condições mais específicas), entretanto, pode variar conforme a direção da deformação, para materiais que não são isotrópicos.
+A unidade de $E$ é a mesma de $\sigma_x$, o que é coerente, pois $\epsilon_x$ é adimensional, ou seja, o módulo de elasticidade é medido, no SI, em Pascal.
 
-Essa relação desconsidera outros efeitos de deformação no interior do sólido, como a deformação transversal, $\epsilon_y$ (que pode ser observada como o encurtamento da altura da barra na figura \ref{fig:barra_deformada_1}), e a por cisalhamento, $\gamma_{xy}$. Vale lembrar que a Lei de Hooke é válida apenas para deformações elásticas lineares. \footnote{O limite de elasticidade do material é determinado experimentalmente, observando como se deforma sobre carregamentos controlados, determinando a região de deformações em que o material preserva-se na Lei de Hooke, ou seja, mantém uma relação linear entre deformação e tensão, e ao ser aliviado dos carregamentos externos, volta à geometria original.}.
+\input{Figuras/barra_deformada.tex}
+
+Essa relação desconsidera outros efeitos de deformação no interior do sólido, como a deformação transversal, $\epsilon_y$ (que pode ser observada como o encurtamento da altura da barra na figura \ref{fig:barra_deformada_1}), e a por cisalhamento, $\gamma_{xy}$. \footnote{O limite de elasticidade do material é determinado experimentalmente, observando como se deforma sobre carregamentos controlados, determinando a região de deformações em que o material preserva-se na Lei de Hooke, ou seja, mantém uma relação linear entre deformação e tensão, e ao ser aliviado dos carregamentos externos, volta à geometria original.}.
 
 \subsection{A Lei de Hooke em Cisalhamento}
 
-Sejam a quadrilátero $\mathcal{B}$, um corpo sólido, homogêneo, em equilíbrio, de comprimento $L$, engastado em sua face inferior, e de seção transversal $A$, e $Q$, uma carregamento constante que atua sobre a face superior de $\mathcal{B}$, tangencialmente, na direção de $x$, que a deforma em $\mathcal{B}'$, inclinando-a, até um ângulo $\gamma$, tal como na figura \ref{fig:barra_deformada_2}. 
+Seja um quadrilátero $\mathcal{B}$, um corpo sólido, homogêneo, em equilíbrio, de comprimento $L$, engastado em sua face inferior, e de seção transversal $S$, e seja $Q$, uma carregamento constante que atua sobre a face superior de $\mathcal{B}$, tangencialmente, na direção de $x$, que a deforma em $\mathcal{B}'$, inclinando-a, até um ângulo $\gamma$, tal como na figura \ref{fig:barra_deformada_2}. 
 
 A tensão desenvolvida em uma seção $S$ de $\mathcal{B}$, paralela ao carregamento de  $Q$, pode ser descrita em termos do módulo de cisalhamento, $G$, que é uma característica intrínseca do material de $\mathcal{B}$, e da deformação angular, $\gamma$, atuando na inclinação das seções verticais. Essa relação, denominada \emph{Lei de Hooke em Cisalhamento}, é linear da forma
 
@@ -295,17 +289,18 @@ A tensão desenvolvida em uma seção $S$ de $\mathcal{B}$, paralela ao carregam
     \tau_{xy} = G \gamma_{xy} \implies \tau_{xy} = 2G \epsilon_{xy}.
     \label{eq:lei_de_hooke_cisalhamento}
 \end{equation}
-O módulo de cisalhamento tem a mesma unidade de tensão, e, assim como o módulo de Young (a final, $\gamma$ é adimensional), não depende da geometria do corpo, mas do material de que é feito (dentre outras condições mais específicas), entretanto, pode variar conforme a direção da deformação, para materiais que não são isotrópicos.
+O módulo de cisalhamento tem a mesma unidade de tensão, e, assim como o módulo de Young ($\gamma$ é adimensional), não depende da geometria do corpo, mas do material de que é feito.
 
 \subsection{O Coeficiente de Poisson}
 
-Na deformação uniaxial de um corpo sólido, tal como na figura \ref{fig:barra_deformada_1}, é razoável que o corpo também se deforme em outras direções, perpendiculares àquela, de forma que existe, dentro de determinados limites do regime elástico, uma relação entre essa deformações. Observa-se, por meio da experiência prática, que a deformação transversal geralmente é negativa, o corpo tende a se contrair quando submetido a uma deformação axial. Se o corpo se deforma ao longo de $x$ um $\epsilon_x > 0$, ele se contrai em $y$, ou seja, desenvolve uma deformação $\epsilon_y < 0$, de forma que, de acordo com \citeshort{lub}
-
+Na deformação uniaxial de um corpo sólido, tal como na figura \ref{fig:barra_deformada_1}, é razoável que o corpo também se deforme nas direções transversais, de forma que existe, dentro de determinados limites do regime elástico, uma relação entre essa deformações. Observa-se, por meio da experiência prática, que a deformação transversal geralmente é negativa, o corpo tende a se contrair quando submetido a uma deformação axial positiva. Se o corpo se deforma ao longo de $x$ um $\epsilon_x > 0$, ele se contrai em $y$, ou seja, desenvolve uma deformação $\epsilon_y < 0$, de forma que, de acordo com \citeshort{lub}, para deformação axial
 \begin{equation}
     \nu = -\frac{\epsilon_y}{\epsilon_x},
     \label{eq:coeficiente_de_poisson}
 \end{equation}
-em $\nu$ representa o coeficiente de Poisson, a razão entre a deformação transversal e a deformação axial, uma característica intrínseca do material, e, assim como os módulos de Young e de cisalhamento, não depende da geometria do corpo, mas do material de que é feito (dentre outras condições mais específicas), entretanto, pode variar conforme a direção da deformação, para materiais que não são isotrópicos, diferentemente, de $\mathcal{B}$. Aqui $\nu$ é tratado como constante.
+em que $\nu$ representa o coeficiente de Poisson, a razão entre a deformação transversal e a deformação axial.
+
+O coeficiente de Poisson é uma característica intrínseca do material, e, assim como os módulos de Young e de cisalhamento, não depende da geometria do corpo, mas do material de que é feito (dentre outras condições mais específicas), entretanto, pode variar conforme a direção da deformação, para materiais que não são isotrópicos, diferentemente, de $\mathcal{B}$. Aqui $\nu$ é tratado como constante.
 
 \subsection{O Princípio da Sobreposição \& A Lei de Hooke Generalizada}
 
@@ -359,7 +354,7 @@ O módulo de cisalhamento pode ser determinado em termos da razão de Poisson e 
     G = \frac{E}{2(1+\nu)}.
 \end{gather}
 
-Em forma matricial, a lei de Hooke generalizada pode ser escrita como, utilizando a notação de Voigt para ${\epsilon}$ e ${\sigma}$, como que $\dfrac{\gamma}{2} = \epsilon$,
+Utilizando a notação de Voigt, a Lei de Hooke generalizada pode ser em forma compacta como
 
 \begin{equation}
     \begin{Bmatrix}
@@ -401,32 +396,32 @@ Invertendo esse sistema, obtemos a matriz constitutiva da equação \ref{eq:lei_
         0 & 0 & 0 & \frac{1-2\nu}{2} & 0 & 0 \\
         0 & 0 & 0 & 0 & \frac{1-2\nu}{2} & 0 \\
         0 & 0 & 0 & 0 & 0 & \frac{1-2\nu}{2} 
-    \end{bmatrix}}_{\bm{C}}
+    \end{bmatrix}}_{[\bm{C}]}
     \{\epsilon\}
 \end{equation}
 Para que essa matriz exista, é necessário que $-1 < \nu < \frac{1}{2}$.\footnote{Materiais com $\nu = 0.5$ são chamados de incompressíveis, pois não sofrem deformações volumétricas.}
 
 \subsection{Estado Plano de Deformação e de Tensão}
 
-Quando se analisa um problema plano, é possível simplificar as relações descritas pela matriz $[\bm{C}]$ em dois casos, observando como a tensão é distribuída.
+Quando se analisa um problema plano, é possível simplificar as relações descritas pela matriz $[\bm{C}]$ em dois casos, observando a rigidez do corpo nas direção transversal ao plano de análise.
 
-O Estado Plano de Tensão (EPT) ocorre quando a rigidez do corpo é muito baixa comparada com a rigidez nas demais direções (como uma chapa ou uma placa), fazendo com que a tensão nessa direção possa ser neglicenciada, ou seja, $\sigma_z = \tau_{xz} = \tau_{yz} = 0$. Nesse caso, a lei de Hooke generalizada se reduz a, \footnote{Tanto a matriz consitutiva do EPT e quando do EPD são facilmende deduzidas da lei de Hooke generalizada, apenas atribuindo os valores nulos e trabalhando com as inversas da matriz $[\bm{C}]$.}
+O Estado Plano de Tensão (EPT) ocorre quando a rigidez do corpo na direção transversal é muito baixa (como uma chapa ou uma placa), fazendo com que a tensão nessa direção possa ser neglicenciada, ou seja, $\sigma_z = \tau_{xz} = \tau_{yz} = 0$. Nesse caso, a lei de Hooke generalizada se reduz a, \footnote{Tanto a matriz constitutiva do EPT e quando do EPD são facilmente deduzidas da lei de Hooke generalizada, apenas atribuindo os valores nulos e trabalhando com as inversas da matriz $[\bm{C}]$.}
 
 \begin{gather}
-    \begin{bmatrix}
+    \begin{Bmatrix}
         \epsilon_x \\
         \epsilon_y \\
         \gamma_{xy}
-    \end{bmatrix} = \frac{1}{E} \begin{bmatrix}
+    \end{Bmatrix} = \frac{1}{E} \begin{bmatrix}
         1 & -\nu & 0 \\
         -\nu & 1 & 0 \\
         0 & 0 & (1+\nu)
     \end{bmatrix}
-    \begin{bmatrix}
+    \begin{Bmatrix}
         \sigma_x \\
         \sigma_y \\
         \tau_{xy}
-    \end{bmatrix}, \\
+    \end{Bmatrix}, \\
     \epsilon_z = -\nu \frac{\sigma_x}{E} - \nu \frac{\sigma_y}{E}.
 \end{gather}
 $\epsilon_z$ passou a ser uma variável dependente, pois é determinada, totalmente, pelas outras deformações. \cite[pág. 90]{Zin}
@@ -434,46 +429,44 @@ $\epsilon_z$ passou a ser uma variável dependente, pois é determinada, totalme
 As Relações que definem a matriz constitutiva para o estado plano de tensão:
 
 \begin{gather}
-    \begin{bmatrix}
+    \begin{Bmatrix}
         \sigma_x \\
         \sigma_y \\
         \tau_{xy}
-    \end{bmatrix} = \frac{E}{1-\nu^2} 
+    \end{Bmatrix} = \frac{E}{1-\nu^2} 
     \underbrace{\begin{bmatrix}
         1 & \nu & 0 \\
         \nu & 1 & 0 \\
         0 & 0 & \frac{1-\nu}{2}
     \end{bmatrix}}_{[\bm{C}]}
-    \begin{bmatrix}
+    \begin{Bmatrix}
         \epsilon_x \\
         \epsilon_y \\
         \epsilon_{xy}
-    \end{bmatrix}.
+    \end{Bmatrix}.
 \end{gather}
 
-O Estado de Plano de Deformação (EPD), por sua vez, ocorre quando o corpo é muito rígido em uma direção comparada com as demais (como uma barragem ou um muro), fazendo com que a deformação nessa direção possa ser neglicenciada, ou seja, $\epsilon_z = \gamma_{xz} = \gamma_{yz} = 0$. Nesse caso, a lei de Hooke generalizada se reduz a
+O Estado de Plano de Deformação (EPD), por sua vez, ocorre quando o corpo é muito rígido na direção transversal (como uma barragem ou um muro), fazendo com que a deformação nessa direção possa ser neglicenciada, ou seja, $\epsilon_z = \gamma_{xz} = \gamma_{yz} = 0$. Nesse caso, a lei de Hooke generalizada se reduz a
 
 \begin{gather}
-    \begin{bmatrix}
+    \begin{Bmatrix}
         \sigma_x \\
         \sigma_y \\
         \tau_{xy}
-    \end{bmatrix} = \frac{E}{(1+\nu)(1-2\nu)} 
+    \end{Bmatrix} = \frac{E}{(1+\nu)(1-2\nu)} 
     \underbrace{\begin{bmatrix}
         1 - \nu & \nu & 0 \\
         \nu & 1 - \nu & 0 \\
         0 & 0 & \frac{1-2\nu}{2}
     \end{bmatrix}}_{[\bm{C}]}
-    \begin{bmatrix}
+    \begin{Bmatrix}
         \epsilon_x \\
         \epsilon_y \\
         \gamma_{xy}
-    \end{bmatrix}, \\
-    \epsilon_{xz} = -\nu \frac{\sigma_x}{E} - \nu \frac{\sigma_y}{E}.
+    \end{Bmatrix}, \\
+    \sigma{z} = \nu (\sigma_x + \sigma_y)
 \end{gather}
 $\gamma_{xz}$ passou a ser uma variável dependente, pois é determinada, totalmente, pelas outras deformações.  \cite[pág. 91]{Zin}
-
-
 
 \section{Teoria da Energia de Distorção Máxima: A Tensão Equivalente de Von Mises}
 
@@ -486,20 +479,20 @@ Essa proposição surge da observação que materiais dúcteis sob carregamentos
 
 A energia por unidade de volume, devida à deformação do material, é definida por um produto da tensão pela deformação. Em um elemento orientado sob tensões principais, de acordo com \cite{Hibbeler}
 \begin{equation}
-    u = \frac{1}{2} (\sigma_1 \epsilon_1 + \sigma_2 \epsilon_2 + \sigma_3 \epsilon_3),
+    \mathcal{U} = \frac{1}{2} (\sigma_1 \epsilon_1 + \sigma_2 \epsilon_2 + \sigma_3 \epsilon_3),
 \end{equation}
-em que $u$ denota a energia por unidade de volume, $\sigma_i$ as tensões principais.
+em que $\mathcal{U}$ denota a energia por unidade de volume, $\sigma_i$ as tensões principais.
 
 Substituindo as deformações pelas tensões, utilizando a lei de Hooke generalizada, equação \ref{eq:lei_de_hooke_generalizada}, temos que
 
 \begin{equation}
-    u = \frac{1}{2E} \left[ \sigma_1^2 + \sigma_2^2 + \sigma_3^2 - 2\nu(\sigma_1\sigma_2 + \sigma_1\sigma_3 + \sigma_2 \sigma_3) \right].
+    \mathcal{U} = \frac{1}{2E} \left[ \sigma_1^2 + \sigma_2^2 + \sigma_3^2 - 2\nu(\sigma_1\sigma_2 + \sigma_1\sigma_3 + \sigma_2 \sigma_3) \right].
     \label{eq:energia_deformacao}
 \end{equation}
 
 Essa energia pode sem compreendia como a soma de duas parcelas: a energia de deformação volumétrica, $u_v$, e a energia de deformação por cisalhamento, $u_d$. A energia de deformação volumétrica é a energia de deformação que tende a alterar o volume do elemento, sem distorcer sua geometria, ou seja, a energia de deformação devido à tensão média das tesões principais. Substituindo, então, as tensões principais pela tensão média na equação anterior, temos que
 \begin{equation}
-    u_v = \frac{3\bar{\sigma}^2}{2E} (1 - 2\nu),
+    \mathcal{U}_v = \frac{3\bar{\sigma}^2}{2E} (1 - 2\nu),
     \label{eq:energia_deformacao_volumetrica}
 \end{equation}
 em que $\bar{\sigma} = \frac{1}{3} (\sigma_1 + \sigma_2 + \sigma_3)$ é a tensão média. 
@@ -507,23 +500,23 @@ em que $\bar{\sigma} = \frac{1}{3} (\sigma_1 + \sigma_2 + \sigma_3)$ é a tensã
 A energia de distorção, portanto, é a diferença entre a energia total e a energia volumétrica, de modo que
 
 \begin{equation}
-    u_d = u - u_v = \frac{1 +\nu}{3E} \left[\frac{(\sigma_1 - \sigma_2)^2 + (\sigma_2 - \sigma_3)^2 + (\sigma_3 - \sigma_1)^2}{2} \right].
+    \mathcal{U}_d = \mathcal{U} - \mathcal{U}_v = \frac{1 +\nu}{3E} \left[\frac{(\sigma_1 - \sigma_2)^2 + (\sigma_2 - \sigma_3)^2 + (\sigma_3 - \sigma_1)^2}{2} \right].
     \label{eq:energia_deformacao_distorcao}    
 \end{equation}
 
 Fazendo $\sigma_2 = \sigma_3 = 0$, temos a energia de deformação para o caso de tração uniaxial, de modo que
 \begin{equation}
-    u_d = \frac{1 + \nu}{3}S^2,
+    \mathcal{U} = \frac{1 + \nu}{3}\sigma_e^2,
 \end{equation}
-em que $S$ é a tensão admissível do material num ensaio de tração. \cite{Hibbeler}
+em que $\sigma_e$ é a tensão admissível do material num ensaio de tração. \cite{Hibbeler}
 
 Portanto, de acordo com o princípio da energia de distorção máxima, o escoamento ocorre quando a energia de distorção ultrapassa a energia de distorção de um ensaio de tração simples, ou seja, quando \cite{Hibbeler}
 
 \begin{equation}
-    S \leq \left[\frac{(\sigma_1 - \sigma_2)^2 + (\sigma_2 - \sigma_3)^2 + (\sigma_3 - \sigma_1)^2}{2} \right]^{1/2}.
+    \sigma_e \leq \left[\frac{(\sigma_1 - \sigma_2)^2 + (\sigma_2 - \sigma_3)^2 + (\sigma_3 - \sigma_1)^2}{2} \right]^{1/2}.
 \end{equation}
 
-O lado direito dessa inequação pode ser interpretado como uma tensão equivalente ou efetiva do estado de tensão dado pelas tensões principais. De acordo com \cite{Hibbeler}, essa tensão é denominada \emph{tensão equivalente de von Mises}, ou von Mises, definida por
+O lado direito dessa inequação pode ser interpretado como uma tensão equivalente ou efetiva do estado de tensão dado pelas tensões principais. De acordo com \cite{Hibbeler}, essa tensão é denominada \emph{tensão equivalente de von Mises}, definida por
 
 \begin{equation}
     \sigma_{eq} = \left[\frac{(\sigma_1 - \sigma_2)^2 + (\sigma_2 - \sigma_3)^2 + (\sigma_3 - \sigma_1)^2}{2} \right]^{1/2}.
