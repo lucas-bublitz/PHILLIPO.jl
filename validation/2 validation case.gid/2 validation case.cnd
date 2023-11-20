@@ -38,8 +38,8 @@ VALUE: 0.0
 QUESTION: Z
 VALUE: 0.0
 END CONDITION
-NUMBER: 5 CONDITION: Constraint_force_surface
-CONDTYPE: over surfaces
+NUMBER: 5 CONDITION: Constraint_force_line
+CONDTYPE: over lines
 CONDMESHTYPE: over face elements
 QUESTION: X
 VALUE: 0.0

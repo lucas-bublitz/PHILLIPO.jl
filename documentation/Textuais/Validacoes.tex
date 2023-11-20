@@ -1,7 +1,3 @@
-
-
-%334% 
-$$ asdasd $$
 \chapter{Validação \& Verificação}
 
 
@@ -47,6 +43,8 @@ Primeiramente, o problema é definido no Abaqus, para depois ser exportado para 
     \item Comparação dos resultados.
 \end{enumerate}
 
+As análises podem ser repetidas diretamente utilizando os arquivos $.inp$, para dar entrada com dados do problema no Abaqus, e os arquivos $.dat$ (dentro da pasta $.gid$), para dar entrada com dados do problema em PHILLIPO. No Abaqus é necessário importar o modelo, e no PHILLIPO é necessário chamar a função principal do módulo indicando a localização do arquivo $.dat$, para que não seja preciso utilizar a interface do GID. A numeração dos casos de verificação segue a mesma sequência de apresentação deste capítulo.
+
 \subsection{Casos tridimensionais (elemento tetraédrico)}
 
 \begin{figure}
@@ -81,14 +79,14 @@ Nos casos tridimensionais foi empregado a geometria de um cubo unitário, confor
         \toprule
         \textbf{Nó} & \textbf{x} [m]  & \textbf{y}  [m]  & \textbf{z}  [m]  \\
         \midrule
-        1 & 1.000000e+00 & 1.000000e+00 & 1.000000e+00 \\
-        2 & 1.000000e+00 & 0.000000e+00 & 1.000000e+00 \\
-        3 & 1.000000e+00 & 0.000000e+00 & 0.000000e+00 \\
-        4 & 1.000000e+00 & 1.000000e+00 & 0.000000e+00 \\
-        5 & 0.000000e+00 & 0.000000e+00 & 1.000000e+00 \\
-        6 & 0.000000e+00 & 0.000000e+00 & 0.000000e+00 \\
-        7 & 0.000000e+00 & 1.000000e+00 & 0.000000e+00 \\
-        8 & 0.000000e+00 & 1.000000e+00 & 1.000000e+00 \\
+        1 & 1.00 & 1.00 & 1.00 \\
+        2 & 1.00 & 0.00 & 1.00\\
+        3 & 1.00 & 0.00 & 0.00 \\
+        4 & 1.00 & 1.00 & 0.00 \\
+        5 & 0.00 & 0.00 & 1.00 \\
+        6 & 0.00 & 0.00 & 0.00 \\
+        7 & 0.00 & 1.00 & 0.00 \\
+        8 & 0.00 & 1.00 & 1.00 \\
         9 & 4.929074e-01 & 5.337674e-01 & 5.471772e-01 \\
         \bottomrule
     \end{tabular}
@@ -291,8 +289,6 @@ Nos casos tridimensionais foi empregado a geometria de um cubo unitário, confor
     \label{tab:verificacao_cubo_3_tenoes}
 \end{table}
 
-
-
 Em todas as sequências de comparação para o caso tridimensionais, os resultados exportados do Abaqus convergiram com os produzidos por PHILLIPO, com exceção dos deslocamentos prescritos, que não são definidos exatamente zero nos engastes, o que pode ser devido ao procedimento de solução do sistema no Abaqus, por algum método iterativo ou de penalização, porém essa diferença é desprezível.
 
 Destes modo, fica demonstrado que algoritmo matemático do ME foi implementado corretamente nessas condições. 
@@ -303,8 +299,8 @@ Nos casos bidimensionais foi empregado a geometria de um quadrado unitário, con
 
 \begin{enumerate}
     \item Carregamento em linha (figura \ref{fig:verificacao_quadrado_3}), resultados nas tabelas \ref{tab:verificacao_quadrado_1_deslocamentos} e \ref{tab:verificacao_quadrado_1_tensoes};
-    \item Carregamento pontual (figura \ref{fig:verificacao_quadrado_4}), resultados nas tabelas \ref{tab:verificacao_quadrado_2_deslocamentos} e \ref{tab:verificacao_quadrado_2_tenoes};
-    \item Deslocamento prescrito (figura \ref{fig:verificacao_cubo_5}) resultados nas tabelas \ref{tab:verificacao_quadrado_3_deslocamentos} e \ref{tab:verificacao_quadrado_3_tenoes}.
+    \item Carregamento pontual (figura \ref{fig:verificacao_quadrado_4}), resultados nas tabelas \ref{tab:verificacao_quadrado_2_deslocamentos} e \ref{tab:verificacao_quadrado_2_tesoes};
+    \item Deslocamento prescrito (figura \ref{fig:verificacao_cubo_5}) resultados nas tabelas \ref{tab:verificacao_quadrado_3_deslocamentos} e \ref{tab:verificacao_quadrado_3_tesoes}.
 \end{enumerate}
 
 \begin{table}
@@ -484,42 +480,65 @@ Destes modo, fica demonstrado que algoritmo matemático do ME foi implementado c
 
 \section{Validação}
 
-Para validar os resultados obtidos pelo PHILLIPO.jl, foi utilizado a comparação com a solução analítica um problema de viga longa, na teoria de Euler-Bernoulli, analisando o deslocamento vertical sobre uma linha que passa no centro da viga.
+Para validar os resultados obtidos pelo PHILLIPO.jl, foi utilizado a comparação com a solução analítica um problema de viga longa, na teoria de Euler-Bernoulli, analisando o deslocamento vertical sobre a linha elástica, que passa no centro da viga.
 
 A viga longa é um problema clássico, que consiste em simplificações da teoria da elasticidade aplicada diretamente sobre vigas. Nesse contexto, os deslocamentos da linha elástica da viga é modelado pela equação diferencial de Euler-Bernoulli, dada por:
 
 \begin{equation}
-    EI v^{(\text{IV})}(x) = q(x),
+    EI v^{(4)}(x) = q(x),
 \end{equation}
-em que $E$ é o módulo de elasticidade do material, $I$ é o momento de inércia da seção transversal da viga, $v(x)$ é o deslocamento vertical da linha elástica, $q(x)$ é a carga normal a sua superfície, $x$ é a posição ao longo da viga. Para determinar a distribuição $v(x)$ é necessário também conhecer as condições de contorno que descrever a liberdade da viga. \cite{Hibbeler}
+em que $E$ é o módulo de elasticidade do material, $I$ é o momento de inércia da seção transversal da viga, $v(x)$ é o deslocamento vertical da linha elástica, $q(x)$ é a carga normal a sua superfície, $x$ é a posição ao longo da viga. Para determinar a distribuição $v(x)$ é necessário conhecer as condições de contorno que descrevem a liberdade da viga. \cite{Hibbeler}
 
-Seja uma viga $\mathcal{B}$, como na figura \ref{fig:viga_longa_geometria}, composta pelo aço AISI, de $E = 210 \text{GPa}$ (módulo de elasticidade) e $\nu = 0.3$, e que está engastada em uma extremidade e livre na outra, e sujeita a um carregamento distribuído $\bm{t} = -100 \text{kPa} \hat{\bm{y}}$, conforme a figura \ref{fig:viga_longa_condicoes}. A viga possui uma sessão transversal quadrada, logo seu momento de inércia é dado por $I = \frac{b^4}{12}$, em que $b$ é a largura da seção transversal da viga.
+Seja uma viga $\mathcal{B}$, como na figura \ref{fig:viga_longa_geometria}, composta pelo aço AISI, de $E = 210 \text{GPa}$ (módulo de elasticidade) e $\nu = 0.3$, e que está engastada em uma extremidade e livre na outra, e sujeita a um carregamento distribuído $\bm{t} = -100 \ \text{kPa} \ \hat{\bm{y}}$, conforme a figura \ref{fig:viga_longa_condicoes}. A viga possui uma seção transversal quadrada, logo seu momento de inércia é dado por $I = \frac{b^4}{12}$, em que $b$ é a largura da seção transversal da viga.
 
 Para essas condições de contorno, a solução analítica para o deslocamento vertical $v(x)$ é dada por, de acordo com \citeshort{Hibbeler}:
 
 \begin{equation}
-    v(x) = -\frac{t_0 x^2}{24EI} \left(x^2 - 4 Lx + L^2\right)
+    v(x) = -\frac{t_0 x^2}{24EI} \left(x^2 - 4 Lx + L^2\right),
 \end{equation}
+em que $L$ é o comprimento da viga.
 
 \begin{figure}
     \centering
     \caption{Uma viga longa.}
-    \includegraphics[page=1, width=\textwidth]{Figuras/viga_longa.pdf}
-    \label{fig:viga_longa_geometria}
+    \begin{subfigure}[c]{\textwidth}
+        \centering
+        \includegraphics[page=1,width=\textwidth]{Figuras/viga_longa.pdf}
+        \caption{Geometria}
+        \label{fig:viga_longa_geometria}
+    \end{subfigure}
+    \begin{subfigure}[c]{\textwidth}
+        \centering  
+        \includegraphics[page=2, width=\textwidth]{Figuras/viga_longa.pdf}
+        \caption{Condições de contorno}
+        \label{fig:viga_longa_condicoes}
+    \end{subfigure}
+    \begin{subfigure}[c]{\textwidth}
+        \centering  
+        \includegraphics[page=4, width=\textwidth]{Figuras/viga_longa.pdf}
+        \caption{Geometria no GID}
+        \label{fig:viga_longa_GID}
+    \end{subfigure}
 \end{figure}
 
-\begin{figure}
-    \centering
-    \caption{Uma viga longa.}
-    \includegraphics[page=2, width=\textwidth]{Figuras/viga_longa.pdf}
-    \label{fig:viga_longa_condicoes}
-\end{figure}
+No GID, a geometria da viga foi construída utilizando quatro paralelepípedos idênticos, conforme a figura \ref{fig:viga_longa_GID}, para que fosse possível extrair o deslocamento sobre a linha elástica de forma direta. Foram geradas malhas não estruturas com quantidade de nós diferentes. Os resultados de deslocamento da linha elástico foram plotados na figura \ref{fig:viga_longa_grafico_tetra}, como também a solução analítica.
+
+É possível notar que os resultados obtidos pelo PHILLIPO.jl, no caso tridimensional, convergem para a solução analítica, conforme a malha é refinada, o que demonstra que o algoritmo matemático implementado é válido para representar o problema físico.
 
 \begin{figure}
     \centering  
-    \caption{Deformação na direção de $y$ ao longo da linha $\overline{p_1 p_2}$}
+    \caption{Comparação dos deslocamentos da linha elástica da viga longa com elementos tetraédricos.}
     \includegraphics[page=3, width=\textwidth]{Figuras/viga_longa.pdf}
-    \label{fig:viga_longa_deslocamento}
+    \label{fig:viga_longa_grafico_tetra}
 \end{figure}
 
+A mesma análise foi realizada utilizando elementos CST, modelando a viga por um EPT, cujo resultado consta na figura \ref{fig:viga_longa_grafico_CST}. 
 
+É possível notar que a modelagem por CST converge mais rápido, para o total de nós utilizado em cada análise, que a feita por elementos tetraédricos. Isso é devido porque no caso tridimensional os nós são postos sobre toda a geometria da viga, e no caso bidimensional, os nós são postos apenas sobre um plano e os efeitos transversais são definidos pelo EPT.
+
+\begin{figure}
+    \centering  
+    \caption{Comparação dos deslocamentos da linha elástica da viga longa com elementos CST.}
+    \includegraphics[page=5, width=\textwidth]{Figuras/viga_longa.pdf}
+    \label{fig:viga_longa_grafico_CST}
+\end{figure}
