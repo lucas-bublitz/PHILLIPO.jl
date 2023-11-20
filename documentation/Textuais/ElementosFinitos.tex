@@ -49,9 +49,9 @@ Define-se, então, a função de deslocamento sobre um elemento, representado pe
 \begin{equation}
     \bm{\varphi}^{(e)} = \begin{Bmatrix}
         u(x,y) \\ v(x,y) 
-    \end{Bmatrix} = \begin{Bmatrix}
+    \end{Bmatrix}^{(e)} = \begin{Bmatrix}
         a_1 + a_2 x + a_3 y \\ b_1 + b_2 x + b_3 y 
-    \end{Bmatrix}.
+    \end{Bmatrix}^{(e)}.
 \end{equation}
 Nesse sentido, bidimensional, $\bm{\varphi}$ é uma função vetorial de campo que mapeia cada ponto do sólido para seu respectivo deslocamento nos eixos do sistema $xy$ ($u$ e $v$ respectivamente).
 
@@ -333,9 +333,10 @@ Nesse contexto, $\Sigma$ representa, não uma soma ordinária, mas sim a sobrepo
 
 Em cada elemento, a matriz local de rigidez $\bm{K}^{(e)}$ define a interação de forças e deslocamentos entre os graus de liberdade dos nós. Analisando a estrutura como um todo, cada nó pode pertencer a vários elementos, pois é assim que a malha é constituída. O efeito de rigidez, então, sobre cada nó é a soma dos efeitos de todos os elementos que o contém. Isso vale para os deslocamentos nodais, como para as forças nodais. O procedimento, portanto, de montagem da matriz global de rigidez é a soma das matrizes locais de rigidez sobre as posições dos graus de liberdade respe    ctivos das matrizes locais (mapeamento local-global).
 
-\input{Figuras/exemplo_matriz_global.tex}
-
 Seja um sólido $\mathcal{B}$ discretizado por uma malha composta de cinco nós, formando três elementos, conforme a figura \ref{fig:exemplo_matriz_global}, engastado na superfície inferior do elemento azulado e sujeito a uma força \textcolor{purple}{$f$} concentrada no nó $2$, como também um carregamento distribuído \textcolor{orange}{$t$} na superfície entre os nós $4$ e $5$.
+
+
+\input{Figuras/exemplo_matriz_global.tex}
 
 As matrizes locais de rigidez desses elementos são quadradas $6 \times 6$, pois no CST existem três graus de liberdade, dois para cada nó, referente ao deslocamento nas direções de $x$ e $y$. Os sistemas locas, então, para elemento da figura \ref{fig:exemplo_matriz_global}, têm a forma
 
@@ -390,7 +391,7 @@ As matrizes locais de rigidez desses elementos são quadradas $6 \times 6$, pois
     \end{Bmatrix} \iff \color{green} \bm{K}^{(e)} \bm{U}^{(e)} = \bm{F}^{(e)}.
 \end{align}
 
-Aplicar o \emph{Direct Stiffness Method} é somar essas matrizes de rigidez sobre os graus de liberdade. Observemos que o primeiro nó só faz parte de um elemento, o \textcolor{blue}{azul}, portanto sua rigidez só tem contribuição desse elemento; o nó $3$, por sua vez, pertence aos três elementos (\textcolor{blue}{azul}, \textcolor{red}{vermelho} e \textcolor{green}{verde}), e, portanto, seu termo de rigidez tem contribuição de todos eles. Realizando esse procedimento, é possível montar a matriz global de rigidez, utilizando, para tanto, a notação dos vetores de deslocamentos nodais $\bm{U}$ e de forças nodais $\bm{F}$.
+A montagem do sistema global é somar essas matrizes de rigidez sobre os graus de liberdade. Observemos que o primeiro nó só faz parte de um elemento, o \textcolor{blue}{azul}, portanto sua rigidez só tem contribuição desse elemento; o nó $3$, por sua vez, pertence aos três elementos (\textcolor{blue}{azul}, \textcolor{red}{vermelho} e \textcolor{green}{verde}), e, portanto, seu termo de rigidez tem contribuição de todos eles. Realizando esse procedimento, é possível montar a matriz global de rigidez, utilizando, para tanto, a notação dos vetores de deslocamentos nodais $\bm{U}$ e de forças nodais $\bm{F}$.
 
 A matriz de rigidez global é quadrada $10 \times 10$, pois existem cinco nós, com dois graus de liberdade cada, e é dada por
 \begin{landscape}
@@ -425,8 +426,8 @@ Um outro passo nessa montagem do sistema global é a aplicação das condições
     \item de Neumann, ou de segundo tipo.
 \end{enumerate}
 
- As condições de Dirichlet são aquelas que definem valores na fronteira do domínio do campo em si. Já as de Neumann, são aquelas que definem valores de contorno sobre a derivada nas fronteiras do domínio. \citeshort{diprima} Aqui, as condições de contorno de Dirichlet são restrições de deslocamento, enquanto as condições de Neumann são carregamentos aplicados sobre a estrutura.
-
+ As condições de Dirichlet são aquelas que definem valores da variável incógnita na fronteira do domínio. Já as de Neumann, são aquelas que definem valores de contorno sobre a derivada da variável incógnita nas fronteiras do domínio \cite{sinan}. Aqui, as condições de contorno de Dirichlet são restrições de deslocamento, enquanto as condições de Neumann são carregamentos aplicados sobre a estrutura.
+ 
 As condições de contorno sobre os deslocamentos, então, dividem os graus de liberdade entre 
 
 \begin{enumerate}
@@ -437,37 +438,37 @@ As condições de contorno sobre os deslocamentos, então, dividem os graus de l
     \cite{LOGAN}
 \end{enumerate}
 
-Um engaste, por exemplo, é uma condição de contorno de Dirichlet que gera graus de liberdade prescritos, pois impõe que o deslocamento naquela região do sólido é nulo. Um deslocamento conhecido, também o faz, determinando que os graus correspondentes recebam o valor deslocado.
+Um engaste, por exemplo, gera uma condições de contorno de Dirichlet, definindo graus de liberdade prescritos, pois impõe que o deslocamento naquela região do sólido é nulo. Um deslocamento conhecido, também o faz, determinando que os graus correspondentes recebam o valor deslocado.
 
-O vetor de forças $\bm{F}$ é nulo em regra sobre os graus de liberdade livres, pois essa entidade representa as forças externas sobre o elemento. Entretanto, como no MEF os deslocamentos são discretizados nos nós, o mesmo é feito com os carregamentos. Quando se aplica condições de contorno de Neumann, os graus correspondentes devem receber forças nodais equivalentes, de forma que representem os carregamentos por forças externas concentradas nos nó. Pode-se encontrar as forças nodais equivalentes utilizando o mesmo método da seção anterior: o princípio dos trabalhos virtuais, fazendo com que o trabalho de carregamentos sobre a fronteira de um elemento $\partial \Omega^{(e)}$, causado por um deslocamento virtual $\delta \bm{U}^{(e)}$, seja igual ao trabalho da forças nodais equivalentes. Em termos matemáticos, de acordo com \citeshort{Zin},
+O vetor de forças $\bm{F}$ é nulo em regra sobre os graus de liberdade livres, pois essa entidade representa as forças externas sobre o elemento. Entretanto, como no MEF os deslocamentos são discretizados nos nós, o mesmo é feito com os carregamentos. Quando se aplicam condições de contorno de Neumann, os graus correspondentes devem receber forças nodais equivalentes, de forma que representem os carregamentos por forças externas concentradas nos nó. Pode-se encontrar as forças nodais equivalentes utilizando o mesmo método da seção anterior: o princípio dos trabalhos virtuais, fazendo com que o trabalho de carregamentos sobre a fronteira de um elemento $\partial \Omega^{(e)}$, causado por um deslocamento virtual $\delta \bm{U}^{(e)}$, seja igual ao trabalho da forças nodais equivalentes. Em termos matemáticos, de acordo com \citeshort{Zin},
 \begin{equation}
-    \delta (\bm{U}^{(e)})^t \bm{F}^{(e)} = \int_{\partial \Omega^{(e)}} (\bm{N}\bm{U}^{(e)})^t \bm{t} dl,
+    \delta (\bm{U}^{(e)})^t \bm{F}^{(e)} = \int_{\partial \Omega^{(e)}} (\bm{N}\bm{U}^{(e)})^t \bm{t} d \ell,
 \end{equation}
 em que $\bm{t}$ é o vetor do carregamento sobre a fronteira do elemento, na forma
 \begin{equation}
     \bm{t} = \begin{Bmatrix}
-        t_x(x,y) \\ t_y(x,y)
+        t_x(x,y) \\ t_y(x,y),
     \end{Bmatrix}.
 \end{equation}
+e $d\ell$ é o infinitesimal de área da fronteira do elemento.
 
 Aqui os carregamentos são constantes sobre as fronteiras dos elementos, isto é, são carregamentos distribuídos e uniformes. Deste modo, a equação anterior pode ser simplificada para
 
 \begin{equation}
-    \delta (\bm{U}^{(e)})^t \bm{F}^{(e)} = \delta \bm{U}^{(e)} \int_{\partial \Omega^{(e)}} \bm{N}^t dl \bm{t}. 
+    \delta (\bm{U}^{(e)})^t \bm{F}^{(e)} = \delta \bm{U}^{(e)} \int_{\partial \Omega^{(e)}} \bm{N}^t d\ell \bm{t}. 
 \end{equation}
 Portanto, as forças nodais equivalentes, devidas a carregamentos uniformes sobre a fronteira do elemento, é dada por
 \begin{equation}
     \bm{F}^{(e)} = \int_{\partial \Omega^{(e)}} \bm{N}^t dl \bm{t}.
 \end{equation}
 
-Essa integração é por vezes trabalhosa, e não pode ser feita algebricamente, tal qual a integração de definição da matriz de rigidez local. O elemento triangular de deformações constantes, entretanto, tem funções de interpolações cuja integração da matriz $\bm{N}$ seja possível de ser feita analiticamente. No elemento CST, o carregamento uniforme sobre a fronteira do elemento é aplicado igualmente sobre os nós que compõe aquela sessão da fronteira em forças nodais equivalentes, isto é, de acordo com \cite{Onate},
-
+No elemento CST, pela simplicidade das funções de interpolação, é possível realizar essa integração analiticamente. A solução mostra que o carregamento uniforme sobre a fronteira do elemento é equivalente à distribuição dessa carga duas forças nodais iguais, agindo nas extremidades da face em que atua o carregamento, ou seja, de acordo com \cite{Onate},
 \begin{equation}
-    \bm{F}^{(e)}_{\bm{t}} = \frac{1}{2} l^{(e)} d \bm{t}
+    \bm{F}^{(e)}_{\bm{t}} = \frac{1}{2} l^{(e)} \bm{t}
 \end{equation}
 em que $\bm{F}^{(e)}_{\bm{t}}$ são as forças equivalentes que compreendem a fronteira em que o carregamento $\bm{t}$ é aplicado, $l^{(e)}$ é o comprimento da fronteira do elemento, e $d$ é a espessura do elemento.
 
-Na equação \ref{eq:sistema_global_montado}, em que foi montado o sistema global, já foi aplicada essas condições de contorno. Pode-se notar que os deslocamentos vinculados à fronteira compostas pelos nós $1$ e $3$ são nulos, pois alí se faz um engaste. A força roxeada \textcolor{purple}{$f$}, agindo sobre o nó $2$, faz-se presente diretamente no vetor de forças nodais, pois já é uma força concentrada em um nó. O carregamento alaranjado \textcolor{orange}{$t$}, por sua vez, foi decomposto em duas parcelas, para os nós $5$ e $4$, seguindo a expressão da equação anterior. 
+Na equação \ref{eq:sistema_global_montado}, em que foi montado o sistema global, já foram aplicada essas condições de contorno. Pode-se notar que os deslocamentos vinculados à fronteira compostas pelos nós $1$ e $3$ são nulos, pois alí se faz um engaste. A força roxeada \textcolor{purple}{$f$}, agindo sobre o nó $2$, faz-se presente diretamente no vetor de forças nodais, pois já é uma força concentrada em um nó. O carregamento alaranjado \textcolor{orange}{$t$}, por sua vez, foi decomposto em duas parcelas, para os nós $5$ e $4$, seguindo a expressão da equação anterior. 
 
 Vale ressaltar que nos graus de liberdade prescritos as forças nodais desconhecidas são as reações das estruturas, isto é, as forças de reação que as restrições fazem sobre o corpo que se mantenha em equilíbrio. Por conta disso, na equação \ref{eq:sistema_global_montado}, as forças sobre os graus prescritos foram denominadas $R$, de reação.
 
@@ -594,15 +595,15 @@ As mesmas relações gerais da seção anterior podem ser utilizadas para deriva
 A primeira grande diferença é que agora a função de deslocamento $\bm{\varphi}$, tem três componentes, na forma
 
 \begin{equation} \label{eq:funcao_deslocamento}
-    \bm{\varphi} = \begin{Bmatrix}
+    \bm{\varphi}^{(e)} = \begin{Bmatrix}
         u(x,y,z) \\
         v(x,y,z) \\
         w(x,y,z)
-    \end{Bmatrix} = \begin{Bmatrix}
+    \end{Bmatrix}^{(e)} = \begin{Bmatrix}
         a_1 + a_2 x + a_3 y + a_4 z\\
         b_1 + b_2 x + b_3 y + b_4 z \\
         c_1 + c_2 x + c_3 y + c_4 z
-    \end{Bmatrix}.
+    \end{Bmatrix}^({e}).
 \end{equation}
 em que $u$, $v$ e $w$ são as componentes do deslocamento nos eixos $x$, $y$ e $z$, respectivamente.
 
@@ -697,16 +698,16 @@ Aplicando as definições do tensor de deformações na notação de Voigt, temo
     \epsilon_{xx} &= \frac{\partial u}{\partial x} = \frac{1}{6V}[\beta_i u_i + \beta_j u_j + \beta_k u_k + \beta_m u_m] \\
     \epsilon_{yy} &= \frac{\partial v}{\partial y} = \frac{1}{6V}[\gamma_i v_i + \gamma_j v_j + \gamma_k v_k + \gamma_m v_m] \\
     \epsilon_{zz} &= \frac{\partial w}{\partial z} = \frac{1}{6V}[\delta_i w_i + \delta_j w_j + \delta_k w_k + \delta_m w_m] \\
-    \epsilon_{xy} &= \frac{\partial u}{\partial y} + \frac{\partial v}{\partial x} = \frac{1}{6V}[\beta_i v_i + \beta_j v_j + \beta_k v_k + \beta_m v_m + \gamma_i u_i + \gamma_j u_j + \gamma_k u_k + \gamma_m u_m] \\
-    \epsilon_{xz} &= \frac{\partial u}{\partial z} + \frac{\partial w}{\partial x} = \frac{1}{6V}[\delta_i u_i + \delta_j u_j + \delta_k u_k + \delta_m u_m + \beta_i w_i + \beta_j w_j + \beta_k w_k + \beta_m w_m] \\
-    \epsilon_{yz} &= \frac{\partial v}{\partial z} + \frac{\partial w}{\partial y} = \frac{1}{6V}[\gamma_i w_i + \gamma_j w_j + \gamma_k w_k + \gamma_m w_m + \delta_i v_i + \delta_j v_j + \delta_k v_k + \delta_m v_m].
+    \gamma_{xy} &= \frac{\partial u}{\partial y} + \frac{\partial v}{\partial x} = \frac{1}{6V}[\beta_i v_i + \beta_j v_j + \beta_k v_k + \beta_m v_m + \gamma_i u_i + \gamma_j u_j + \gamma_k u_k + \gamma_m u_m] \\
+    \gamma_{xz} &= \frac{\partial u}{\partial z} + \frac{\partial w}{\partial x} = \frac{1}{6V}[\delta_i u_i + \delta_j u_j + \delta_k u_k + \delta_m u_m + \beta_i w_i + \beta_j w_j + \beta_k w_k + \beta_m w_m] \\
+    \gamma_{yz} &= \frac{\partial v}{\partial z} + \frac{\partial w}{\partial y} = \frac{1}{6V}[\gamma_i w_i + \gamma_j w_j + \gamma_k w_k + \gamma_m w_m + \delta_i v_i + \delta_j v_j + \delta_k v_k + \delta_m v_m].
 \end{align}
 
 Portanto, a relação entre deformação e deslocamento é dada por
 
 \begin{equation}
     \begin{Bmatrix}
-        \epsilon_{xx} \\ \epsilon_{yy} \\ \epsilon_{zz} \\ \epsilon_{xy} \\ \epsilon_{xz} \\ \epsilon_{yz}
+        \epsilon_{xx} \\ \epsilon_{yy} \\ \epsilon_{zz} \\ \gamma_{xy} \\ \gamma_{xz} \\ \gamma_{yz}
     \end{Bmatrix} = \frac{1}{6V} 
     \begin{bmatrix}
 \beta_i & 0 & 0 & \beta_j & 0 & 0 & \beta_k & 0 & 0 & \beta_m & 0 & 0 \\
@@ -723,7 +724,7 @@ Portanto, a relação entre deformação e deslocamento é dada por
 
 A relação entre tensão e deformação é dada pela lei de Hooke generalizada (equação \ref{eq:lei_de_hooke}). Logo,
 \begin{equation}
-    \{\sigma\} = \bm{D} \{\epsilon\} \implies \{\sigma\} = \bm{D} \bm{B} \bm{U}^{(e)}.
+    \{\sigma\} = \bm{C} \{\epsilon\} \implies \{\sigma\} = \bm{C} \bm{B} \bm{U}^{(e)}.
 \end{equation}
 
 \subsection{As condições de contorno}
