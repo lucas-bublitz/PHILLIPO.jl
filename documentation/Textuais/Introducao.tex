@@ -14,7 +14,7 @@ O Método dos Elementos Finitos consiste, basicamente, na ideia apresentada de a
 
 Esse procedimento é custoso em termos de cálculo, visto que para cada elemento é necessário calcular suas funções de interpolação, e depois justapor todos em um grande sistema de equações algébricas, cuja solução também é custosa. É evidente, então, que o Método dos Elementos Finitos, ou os métodos numéricos em geral, acompanham o desenvolvimento da programação, impulsionado pelo avanço do processamento computacional \cite[pág. 2]{Onate}. O poder computacional permite que se trabalhe com um volume inconcebível para a capacidade humana. 
 
-Os algoritmos e a estrutura de dados implementados passam a ser tão relevantes quanto a própria equação diferencial. Então, é de se esperar que uma aplicação desse método seja acompanhada de aspectos de projeto de software conciso, cujo objetivo não seja só a otimização computacional, mas a legibilidade e empacotamento, que são características úteis quando se espera a reutilização, aprimoramento continuado e, acima de tudo, a comunicação e distribuição do código-fonte.
+Os algoritmos e a estrutura de dados implementados passam a ser tão relevantes quanto a própria equação diferencial. Então, é de se esperar que uma aplicação desse método seja acompanhada de aspectos de estruturação de código, cujo objetivo não seja só a otimização computacional, mas a legibilidade e empacotamento, que são características úteis quando se espera a reutilização, aprimoramento continuado e, acima de tudo, a comunicação e distribuição do código-fonte.
 
 A escolha da linguagem de programação para uma aplicação do MEF, é o passo fundamental para se planejar a estrutura do código, pois, são as ferramentas de sintaxe e processamento que a linguagem e seu compilador/interpretador oferecem que vão ditar, em parte, a forma como os algoritmos são implementados, além de outros aspectos de execução, como otimização e estrutura de dados. Comumente, programas comerciais de análise por elementos finitos, como Abaqus e Ansys, são escritos em linguagens compiladas, basicamente, C e FORTRAN, que são sinônimos de robustez e desempenho. Entretanto, também são conhecidas pela sua prolixidade, complexidade de sintaxe de distribuição de bibliotecas, empacotamento etc 
 
@@ -51,13 +51,13 @@ Foram propostos os seguintes objetivos específicos:
 
 \section{Organização do documento}
 
-Este documento aborda o projeto e o desenvolvimento de um módulo em Julia, denominado PHILLIPO.jl, que aplica o Método de Elementos Finitos, integrado à ferramenta de pré e pós-processamento GiD, para realizar a análise das tensões em estruturas sólidas e elásticas sob carregamentos estáticos, e está organizado em capítulos que abordam:
+Este documento aborda o desenvolvimento de um módulo em Julia, denominado PHILLIPO.jl, que aplica o Método de Elementos Finitos, integrado à ferramenta de pré e pós-processamento GiD, para realizar a análise das tensões em estruturas sólidas e elásticas sob carregamentos estáticos, e está organizado em capítulos que abordam:
 
 \begin{enumerate}
     \item A mecânica dos sólidos: tensão e deformação no regime elástico;
     \item O método de elementos finitos aplicado no equilíbrio estático de estruturas sólidas;
-    \item A linguagem de programação Julia: o processamento paralelo acessível a engenheiros mecânicos;
-    \item PHILLIPO.jl, o módulo;
+    \item A linguagem de programação Julia: o processamento paralelo acessível;
+    \item PHILLIPO.jl;
     \item Validação e verificação de resultados;
     \item Objetivos alcançados e melhorias em projetos futuros;
     \item Conclusão.

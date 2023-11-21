@@ -23,3 +23,6 @@ output.favia.res
 /testes
 build
 /documentation/TCC-Lucas_bublitz
+
+!verification/
+!verification/**/*.log
