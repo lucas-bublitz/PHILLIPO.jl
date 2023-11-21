@@ -1,7 +1,7 @@
 
 # PHILLIPO
 # Módulo: construção de matrizes esparsas baseada em coordenadas
-# Este arquivo é construído sobre o FEMSparse.jl (módulo utilizado no JuliaFEM.jl)
+# Este arquivo é construído com fork indireto o FEMSparse.jl (módulo utilizado no JuliaFEM.jl)
 
 module Matrices
 

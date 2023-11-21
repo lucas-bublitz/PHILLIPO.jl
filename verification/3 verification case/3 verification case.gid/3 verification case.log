@@ -1,0 +1,35 @@
+      ___           ___                       ___       ___                   ___           ___      
+     /\  \         /\__\          ___        /\__\     /\__\      ___        /\  \         /\  \     
+    /  \  \       / /  /         /\  \      / /  /    / /  /     /\  \      /  \  \       /  \  \    
+   / /\ \  \     / /__/          \ \  \    / /  /    / /  /      \ \  \    / /\ \  \     / /\ \  \   
+  /  \-\ \  \   /  \  \ ___      /  \__\  / /  /    / /  /       /  \__\  /  \-\ \  \   / /  \ \  \  
+ / /\ \ \ \__\ / /\ \  /\__\  __/ /\/__/ / /__/    / /__/     __/ /\/__/ / /\ \ \ \__\ / /__/ \ \__\
+ \/__\ \/ /  / \/__\ \/ /  / /\/ /  /    \ \  \    \ \  \    /\/ /  /    \/__\ \/ /  / \ \  \ / /  / 
+      \  /  /       \  /  /  \  /__/      \ \  \    \ \  \   \  /__/          \  /  /   \ \  / /  /  
+       \/__/        / /  /    \ \__\       \ \  \    \ \  \   \ \__\           \/__/     \ \/ /  /   
+                   / /  /      \/__/        \ \__\    \ \__\   \/__/  FEM analysis        \  /  /.jl    
+                   \/__/                     \/__/     \/__/                               \/__/  
+
+PHILLIPO.jl é um solver para estruturas sólidas, elásticas sobre carregamentos estáticos, e que se deforma linearmente.
+
+PHILLIPO também:
+
+      1. é apenas um projeto open-source de TCC;
+      2. é desenvolvido por Lucas Bublitz, discente do curso de Bacharelado em Engenharia Mecânica na UDESC;
+      3. é um projeto que não tem a pretensão de aplicação prática, mas de servir de referência para como, dentro das habilidades dos estudantes de engenharia, encapsular e organizar projetos de software de Elementos Finitos pelo Pkg.jl em módulo, e assim facilitar a sua distribuição;
+      4. é um projeto que serviu para seu desenvolvedor compreender o próprio Método de Elementos Finitos, como também, sua aplicação em Julia;
+
+Desenvolvido por Lucas Bublitz, sob a orientação de Pablo Muñoz
+Número de threads: 8
+Lendo arquivo JSON...                                                   0.003378 seconds (197 allocations: 12.547 KiB, 92.80% compilation time)
+Tipo de problema: 3D
+Construindo os elementos e a matrix de rigidez global paralelamente...  4.139005 seconds (4.99 M allocations: 318.831 MiB, 1.75% gc time, 726.85% compilation time)
+Aplicando as restrições de força...                                     0.000007 seconds
+Resolvendo o sistema de (27, 27) 
+  2.279799 seconds (3.12 M allocations: 210.057 MiB, 3.50% gc time, 99.86% compilation time)
+Calculando as reações...                                                0.082913 seconds (174.89 k allocations: 11.793 MiB, 99.60% compilation time)
+Somatório das reações: [3.5762786865234375e-7, -9.5367431640625e-7, -5.7220458984375e-6]
+Recuperando as tensões...                                             TESTE: (12,)
+  0.394174 seconds (655.74 k allocations: 40.467 MiB, 5.34% gc time, 99.40% compilation time)
+Imprimindo o arquivo de saída...                                        0.096737 seconds (69.91 k allocations: 4.766 MiB, 98.56% compilation time)
+Tempo total de execução:   7.427118 seconds (9.31 M allocations: 605.608 MiB, 2.33% gc time, 449.19% compilation time)

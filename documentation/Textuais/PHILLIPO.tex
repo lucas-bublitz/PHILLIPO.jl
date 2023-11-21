@@ -190,4 +190,26 @@ A macro \emph{@time} é responsável por fornecer algumas informações sobre o 
 
 \section{Estrutura do módulo PHILLIPO.jl}
 
-O código-fonte de PHILLIPO foi organizado em seis módulos, ao longo de sete arquivos \emph{.jl}, agrupando as funções em categorias conforme sua aplicação. O início da definição do módulo de PHILLIPO é o arquivo homônimo, localizado na raiz da pasta \emph{src} do repositório.
+O código-fonte de PHILLIPO foi organizado em seis módulos, ao longo de sete arquivos \emph{.jl}, agrupando as funções em categorias conforme sua aplicação. O início da definição do módulo de PHILLIPO é o arquivo homônimo, localizado na raiz da pasta \emph{src} do repositório. São os arquivos:
+
+\begin{enumerate}
+    \item \textbf{\emph{PHILLIPO.jl}}: define o módulo PHILLIPO e a função principal;
+    \item \textbf{\emph{includes.jl}}: juntas as importações dos módulos internos;
+    \item \textbf{\emph{IOfiles.jl}}: módulo interno que define as funções de leitura e escrita de arquivos;
+    \item \textbf{\emph{Elements.jl}}: módulo interno que  define as estruturas dos elementos e suas funções;
+    \item \textbf{\emph{Matrices.jl}}: módulo interno que define a estrutura das matrizes COO;
+    \item \textbf{\emph{Solver.jl}}: módulo interno que executa a resolução do sistema;
+    \item \textbf{\emph{Stress.jl}}: módulo de recuperação de tensões.
+\end{enumerate}
+
+
+\subsection{PHILLIPO.jl}
+
+O arquivo \emph{PHILLIPO.jl} é o que define o próprio módulo, e por contada disso é homônimo. Nele é se encontra a função principal \emph{main}, que vai conduzir toda a parte do processamento da análise \footnote{Pode-se pensar na função principal como um ponto de partida do software, um \emph{int main()} como em C.}. 
+
+\begin{figure}[hbtp]
+    \caption{Parte do arquivo principal do módulo: PHILLIPO.jl}
+    \lstinputlisting[firstline = 15, lastline = 32]{../src/PHILLIPO.jl}
+    \label{fig:phillipo.jl}
+\end{figure}
+
