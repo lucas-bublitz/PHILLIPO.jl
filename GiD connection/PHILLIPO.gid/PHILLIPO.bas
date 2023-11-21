@@ -1,4 +1,3 @@
-
 {
     "title": "PHILLIPO: arquivo de entrada",
     "type": "*GenData(1)",

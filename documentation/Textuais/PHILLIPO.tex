@@ -63,15 +63,15 @@ O pré-processamento é realizado totalmente pelo GID (figura \ref{fig:fluxogram
 
     \item \textbf{Definição da geometria do problema,} que pode ser tanto construída utilizando as ferramente CAE do próprio GID, como também, importada de um arquivo externo de algum outro software CAD cujo formato seja reconhecido pelo GID \footnote{O GID reconhece uma grande variedade de arquivo de entrada (sejam de geometria, malhas, condições de contorno), inclusive arquivos próprios de programas comerciais, como ANSYS e Abaqus;}.
 
-    \item Definição das características do material, como também as condições de contorno: sejam elas deslocamentos sobre pontos, linhas e superfícies, ou carregamentos concentrados sobre pontos, ou carregamentos distribuídos sobre linhas e superfícies. \footnote{Carregamentos sobre linha só estão disponíveis para o \emph{Problem type} \emph{PHILLIPO}.}
+    \item \textbf{Definição das características do material,} como também as condições de contorno: sejam elas deslocamentos sobre pontos, linhas e superfícies, ou carregamentos concentrados sobre pontos, ou carregamentos distribuídos sobre linhas e superfícies. \footnote{Carregamentos sobre linha só estão disponíveis para o \emph{Problem type} \emph{PHILLIPO}.}
 
-    \item Geração da malha, que pode ser amplamente configuras pelas ferramentas oferecidas pelo GID para gerar malhas estruturadas ou não estruturas, com refinamentos em determinadas regiões, e com a possibilidade de se definir o tipo de elemento a ser utilizado. 
-    \item Por fim, é chamada a função de CALCULAR. 
+    \item \textbf{Geração da malha,} que pode ser amplamente configuras pelas ferramentas oferecidas pelo GID para gerar malhas estruturadas ou não estruturas, com refinamentos em determinadas regiões, e com a possibilidade de se definir o tipo de elemento a ser utilizado. 
+    \item \textbf{Chamamento da função de CALCULAR.}
 \end{enumerate}
 
-A função de CALCULAR do GID, deleta possíveis arquivos de saída anteriores, e gera os arquivos de saída \emph{.dat}\footnote{Embora o arquivo esteja nomeado no formato \emph{dat} ele, na verdade, é um \emph{.json}, pois esse é o padrão de entrada para PHILLIPO.}, assim como os arquivos de \emph{log}, e cria a sessão Julia, chamando para ser executado nela o arquivo \emph{link.jl}. 
+A função de CALCULAR do GID, executa o arquivo \emph{.bat} do \emph{problem type}: deleta possíveis arquivos de saída anteriores, e gera os arquivos de saída \emph{.dat}\footnote{Embora o arquivo esteja nomeado no formato \emph{dat} ele, na verdade, é um \emph{.json}, pois esse é o padrão de entrada para PHILLIPO.}, assim como os arquivos de \emph{log}, e cria a sessão Julia, chamando para ser executado nela o arquivo \emph{link.jl}. 
 
-Na sessão Julia, o módulo PHILLIPO.jl é importado, momento em que ocorre a pré-compilação do código, e, em seguida, chama a função principal do módulo \emph{PHILLIPO.main}, passando como parâmetros os caminhos para o arquivo \emph{.json} e o caminho de saída do resultado da análise, assim iniciando o processamento.
+Na sessão Julia, o módulo PHILLIPO.jl é importado, momento em que ocorre a pré-compilação do código, e, em seguida, o chamamento da função principal do módulo \emph{PHILLIPO.main}, passando como parâmetros os caminhos para o arquivo \emph{.json} e o caminho de saída do resultado da análise, assim iniciando o processamento.
 
 \subsection{Processamento}
 
@@ -79,29 +79,19 @@ O processamento é realizado dentro da sessão Julia, executando a função prin
 \begin{enumerate}
     \item \textbf{Leitura do arquivo de entrada.} O arquivo \emph{.json} é lido e convertido em um dicionário pelo \emph{parser} JSON, cujos dados são distribuídos nas variáveis do problema.
     \item \textbf{Definição dos graus de liberdade livres e prescritos.} Conforme sãos as restrições de deslocamento, o programa calcula a numeração dos graus de liberdade prescritos, e os armazena em um vetor.
-    \item \textbf{Construção da matriz global de rigidez paralelamente.} É chamada
-    \item aplicação das restrições de forças;
-    \item resolução do sistema 
-    \item cálculo das reações e recuperação de tensão
-    \item geração do arquivo de saída.
+    \item \textbf{Construção da matriz global de rigidez paralelamente.} Nessa etapa, o programa chama as funções de construção de elemento paralelamente, utilizando uma macro do módulo \emph{Threads}, para construir a matriz global de rigidez, que é salva no formato COO (um formato de matriz esparsa que armazena os valores em um vetor único cuja ordem não importa para a interpretação da matriz, o que facilita a execução paralela). Após a construção da matriz global de rigidez, é feita a conversão para o formato CSR. 
+    \item \textbf{Aplicação das restrições de forças.} As restrições de forças são aplicadas sobre o vetor de forças prescritas. Dependendo do tipo (sobre linhas ou superfícies), são calculadas as forças nodais equivalentes.
+    \item \textbf{Resolução do sistema.} Com a matriz global de rigidez e o vetores de deslocamentos e forças nodais, o programa decompõe o sistema pelos graus de liberdade livres e prescritos, e o resolve diretamente, utilizando o método mais apropriado, determinado pelo módulo \emph{LinearAlgebra}, levando em consideração as características da matriz de rigidez global.
+    \item \textbf{Cálculo das reações e recuperação de tensão.} O programa calcula as reações de apoio, utilizando os graus de liberdade prescritos, e, em seguida, calcula as tensões, chamando, novamente, as funções de construção de elementos para resgatar as matrizes de rigidez locais.
+    \item \textbf{Geração do arquivo de saída.} O programa gera o arquivo de saída, no formato \emph{.dat}, que é lido pelo GID para gerar os gráficos de resultados.
 
 \end{enumerate}
 
-\begin{enumerate}
-    \item Leitura do arquivo de entrada:
-    \item Definição dos graus de liberdade livres e prescritos:
-    \item Construção da matriz global de rigidez paralelamente:
-    \item Aplicação das restrições de forças:
-    \item Resolução do sistema:
-    \item Cálculo das reações e recuperação de tensão:
-    \item Geração do arquivo de saída:
-\end{enumerate}
-   
-Com o fim da execução da função principal, é encerrada a sessão Julia e, em seguida, execução do arquivo \emph{.bat}. O GID chama o programa Notepad para a abrir o arquivo \emph{.log}, onde algumas informações de debug foram impressas durante o processamento, utilizando a função \emph{print}.
+Com o fim da execução da função principal, é encerrada a sessão Julia e, e é chamado o programa Notepad para a abrir o arquivo \emph{.log}, onde algumas informações de debug foram impressas durante o processamento. 
 
 \section{Integração com GID}
 
-O GID é um software utilizado como pré e pós-processamento, neste caso, para PHILLIPO. Nele é possível criar a geometria do problema, definir as propriedades dos materiais, as condições de contorno, as cargas aplicadas, e, principalmente, gerar a malha de elementos. Além de se ser possível sua integração com um \emph{solver} qualquer, por meio de um conjunto de arquivos de entrada e saída (ambos configurados de forma a permitir uma certa flexibilidade nessa integração), cuja execução é controlada por um \emph{script} em Batch, o que possibilita a automatização do processo de simulação. Nesta seção é abordado como é feita e integração entre o GID e PHILLIPO, por meio das pastas \emph{PHILLIPO.gid} e \emph{PHILLIPO3D.gid}, sendo que, como a nomeação dos arquivos sugere, a primeira é utilizada para problemas bidimensionais, e a segunda para problemas tridimensionais.
+O GID é um software utilizado como pré e pós-processamento. Com ele é possível criar a geometria do problema, definir as propriedades dos materiais, as condições de contorno, as cargas aplicadas, e, principalmente, gerar a malha de elementos. Além de se ser possível a integração com um \emph{solver} qualquer, por meio de um conjunto de arquivos de entrada e saída (ambos configurados de forma a permitir uma certa flexibilidade nessa integração), cuja execução é controlada por um \emph{script} em Batch, o que possibilita a automatização do processo de simulação. Nesta seção é abordado como é feita e integração entre o GID e PHILLIPO, por meio das pastas \emph{PHILLIPO.gid} e \emph{PHILLIPO3D.gid}, sendo que, como a nomeação dos arquivos sugere, a primeira é utilizada para problemas bidimensionais, e a segunda para problemas tridimensionais.
 
 \subsection{PHILLIPO.gid}
 
@@ -121,11 +111,73 @@ Na pasta \emph{PHILLIPO.gid} é possível encontrar os seguinte arquivos:
 O primeiro arquivo do \emph{Problem type} de PHILLIPO é \emph{PHILLIPO.cnd}, que define as condições de contorno e sobre quais entidades, leia-se nós, elementos ou geometrias (superfícies, volumes, linhas etc.), são aplicadas, por meio de uma sintaxe específica \footnote{No manual do usuário do GID, acessível em \url{https://gidsimulation.atlassian.net/wiki/spaces/GUM/overview}, é possível encontrar a descrição o funcionamento de toda essa sintaxe, que compreende desde esse arquivo de condições de contorno, como também, dos outros que compões a construção do \emph{problem type}.}, uma forma de marcação de texto, que é interpretada pelo GID.
 
 \begin{figure}
-    \lstinputlisting[lastline=10]{../GID connection/PHILLIPO.gid/PHILLIPO.cnd}
     \caption{Parte do arquivo de condições de contorno: PHILLIPO.cnd}
+    \lstinputlisting[lastline=10]{../GID connection/PHILLIPO.gid/PHILLIPO.cnd}
     \label{fig:PHILLIPO.cnd}
 \end{figure}
 
-Em sua representação parcial, da figura \ref{fig:PHILLIPO.cnd}, é possível notar a construção de uma condição de contorno por meio de um bloco que inicia na linha 1, com a expressão \emph{CONDITION: Constraint\_displacement\_point}, que também nomeia esta condição, referente a restrição de deslocamento em pontos (entidade geométrica discretizada por um nó), e que acaba com \emph{END CONDITION}. Dentre essas linhas, são definidas as formas e os valores que essa condição vai aplicar sobre a geometria selecionada, neste caso, os pontos. Na linha 2, é definido, justamente, sobre qual entidade geométrica se aplica essa condição: pontos. Na próxima linha, é definido como que essa informação, que foi associada à entidade geométrica se traduz na malha, neste caso, essa condição é aplicada sobre os nós que correspondem aos pontos, ou seja, quando o GID for gerar a malha, vai aplicar essa condição para o nó que corresponde ao ponto. \footnote{Isso se deve porque a malha é criada sobre a geometria, posteriormente à aplicação das condições de contorno sobre aquela.} As linhas seguintes, 4 a 9, se referem aos valores da condição, neste caso, aos deslocamentos prescritos sobre os nós nas direções de \emph{X}, \emph{Y} e \emph{Z}. 
+Em sua representação parcial, da figura \ref{fig:PHILLIPO.cnd}, é possível notar a construção de uma condição de contorno por meio de um bloco que inicia na linha 1, com a expressão \emph{CONDITION: Constraint\_displacement\_point}, que também nomeia esta condição, referente a restrição de deslocamento em pontos (entidade geométrica discretizada por um nó), e que acaba com \emph{END CONDITION}. Dentre essas linhas, são definidas as formas e os valores que essa condição vai aplicar sobre a geometria selecionada, neste caso, os pontos. Na linha 2, é definido, justamente, sobre qual entidade geométrica se aplica essa condição: pontos. Na próxima linha, é definido como que essa informação, que foi associada à entidade geométrica se traduz na malha: essa condição é aplicada sobre os nós que cujo ponto foi discretizado. \footnote{Isso se deve porque a malha é criada sobre a geometria, posteriormente à aplicação das condições de contorno sobre aquela.} As linhas seguintes, 4 a 9, se referem aos valores da condição, neste caso, aos deslocamentos prescritos sobre os nós nas direções de \emph{X}, \emph{Y} e \emph{Z}. 
 
+Na condição \emph{Constraint\_force\_line} (figura \ref{fig:PHILLIPO.cnd_2}), o processo é análogo. A restrição de carregamento uniforme é aplicada sobre uma linha (o tipo de geometria), e, diferentemente da anterior, é traduzida sobre as faces. Nesse caso bidimensional, é o segmento de reta determinado pelos nós nas extremidades. Os campos \emph{X}, \emph{Y} e \emph{Z}, referem-se ao vetor dessa carregamento uniformeS.
 
+\begin{figure}
+    \caption{Parte do arquivo de condições de contorno: PHILLIPO.cnd}
+    \lstinputlisting[firstline=36,lastline=45]{../GID connection/PHILLIPO.gid/PHILLIPO.cnd}
+    \label{fig:PHILLIPO.cnd_2}
+\end{figure}
+
+O arquivo \emph{PHILLIPO.prb} (figura \ref{fig:PHILLIPO.prb}) define as entrada de informações gerais ao problema, ou seja, que não são aplicados diretamente sobre a geometria. Somente um campo foi utilizado e se refere ao tipo do estado plano (EPD ou EPT). A sintaxe da linha 3 é indica que esse campo só possa ser preenchido por essas duas opções, no formato \emph{drop-down list}.
+\begin{figure}
+    \caption{Arquivo de dados gerais: PHILLIPO.prb}
+    \lstinputlisting[firstline=1,lastline=8]{../GID connection/PHILLIPO.gid/PHILLIPO.prb}
+    \label{fig:PHILLIPO.prb}
+\end{figure}
+
+O arquivo \emph{PHILLIPO.mat} (figura \ref{fig:PHILLIPO.mat}) define as características dos materiais implementados. Somente um material foi definido, o aço AISI 4340, com os campos de módulo de elasticidade, coeficiente de Poisson e massa específica.
+
+\begin{figure}
+    \caption{Arquivo de materiais: PHILLIPO.mat}
+    \lstinputlisting[firstline=1,lastline=8]{../GID connection/PHILLIPO.gid/PHILLIPO.mat}
+    \label{fig:PHILLIPO.mat}
+\end{figure}
+
+O arquivo \emph{PHILLIPO.bas} configura o arquivo de saída do GID. Esse arquivo intercala o conteúdo explicito do arquivo de saída (as partes invariáveis), com trechos de programação, responsáveis por imprimir os valores dinâmicos, aqueles referentes ao problema em si, como as coordenadas dos nós, a conectividade dos elementos etc.\footnote{Esse modo de compor os arquivo, misturando textos estáticos e programação é similar aos arquivos em PHP. Isso numa utilização mais clássica.} A separação entre texto e programa se dá pelo caractere \emph{*} no início da linha, indicando que toda ela é uma instrução para ser executada. 
+
+O arquivo gerado é do formato \emph{.json}, o que pode ser não usual para aplicações do MEF. Entretanto, esse formato é amplamente utilizado para troca de dados entre aplicações, e, por isso, pode ser facilmente lido por um módulo já consolidado em Julia, o \emph{JSON.jl}\footnote{JSON se refere a \emph{JavaScript Object Notation}, um formato de texto para representar objetos na linguagem JavaScript, que se tornou padrão na implementação de APIs.}. 
+
+Para gerar as listas de elementos triangules, foi escrito o seguinte código, dentro do arquivo emph{PHILLIPO.bas}:
+\lstinputlisting[firstline=10,lastline=16]{../GID connection/PHILLIPO.gid/PHILLIPO.bas}
+
+Na linha 1 é definido o nome do campo \emph{"nodes"}, separado pelo características \emph{:} inicia a declaração do valor daquele campo: uma lista \emph{[}\footnote{Essa sintaxe de listas e \emph{literals} é próprio do JavaScript.}. Na linha 2, é iniciado um laço de repetição, que percorre todos os nós, e, para cada um, é adicionado um elemento à lista, que é composto por um par de coordenadas, separadas por vírgula, e envolvidas por colchetes, pois cada nó é presentando por um vetor que contem suas coordenadas. Na linha 5, é fechado o laço de repetição, e, na linha 6, é fechado o campo \emph{]}. 
+
+Esse padrão se repete para o elementos também, com a diferença que estes, dependendo do seu tipo (CST ou tetraedro), são listas dentro da tupla que representa dos os elementos. Na figura \ref{fig:PHILLIPO.bas}, é possível nota essa hierarquia dos dados na estrutura de entrada de PHILLIPO.
+
+No exemplo da figura
+
+\begin{figure}
+    \caption{Arquivo de saída do quarto caso de verificação: 4 verification case.dat}
+    \lstinputlisting{../verification/4 verification case/4 verification case.gid/4 verification case.dat}
+    \label{fig:PHILLIPO.bas}
+\end{figure}
+
+O arquivo \emph{PHILLIPO.bat} (figura \ref{fig:PHILLIPO.bat}) é um \emph{script} que é chamado pela função CALCULAR do GID, para iniciar a análise do problema. É um arquivo de linhas de comando (ou arquivo de lote)\footnote{Comandos utilizados dentro do terminal do sistema: o CMD.} para o sistema operacional Windows\footnote{Por conta disso, o \emph{PHILLIPO.gid} só funciona em sistemas Windows.}.
+
+Nas linhas 1 a 3, são feitas as exclusões de possíveis arquivos restantes de análises passadas. Na linha 4, é chamada a sessão Julia, passando como parâmetro o arquivo \emph{link.jl}, o caminho absoluto do arquivo de entrada \emph{.dat} e o local em que o arquivo de saída deve ser gravado. No final da linha, os operadores right-shift \emph{>>} redirecionam o debug da execução de PHILLIPO para o arquivos \emph{.log} e \emph{.error.log}. Na linha 5, o arquivo log de erro é aglutinado ao arquivo de log para que, quando a linha 5 for executada, o aplicativo Notepad exiba os dois conteúdos juntos\footnote{Assim foi implementado porque se o mesmo arquivo receber o fluxo de texto, o conteúdo dos erros sobrescrevem aos normais}. 
+
+A flag \emph{-t} com o parâmetro \emph{auto} na linha 4, indica que a sessão Julia deve ser iniciado utilizado um número de threads disponibilizados pelo sistema \footnote{O parâmetro pode ser alterado para forçar a sessão Júlia a usar mais threads.}. Isso é importante para que ocorra a montagem da matriz global de rigidez paralelamente.
+
+\begin{figure}
+    \caption{Arquivo de execução: PHILLIPO.bat}
+    \lstinputlisting{../GID connection/PHILLIPO.gid/PHILLIPO.bat}
+    \label{fig:PHILLIPO.bat}
+\end{figure}
+
+O arquivo \emph{link.jl} (figura \ref{fig:link.jl}) é o arquivo que executado dentro da sessão Julia. Ele recebe esse nome porque é o arquivo que faz a ligação entre a execução do GID e o módulo PHILLIPO.jl, e, por não estar previsto dentro da estrutura de um \emph{problem type}, recebe um nome diferenciado. Nele é apenas importado o módulo PHILLIPO.jl  (linha 1) e chamado a função principal do módulo (linha 2), passando como parâmetros o caminho para o arquivo de entrada e o caminho para a gravação do arquivo de saída \footnote{ARGS é um vetor presente em toda a sessão Julia, que recebe os parâmetros passados para o executável que a iniciou.}. A última linha é responsável por garantir o encerramento da sessão Julia.
+
+A macro \emph{@time} é responsável por fornecer algumas informações sobre o tempo de execuções do módulo (como também memória alocada e tempo dedicado à compilação ao \emph{Garbade Collector}). É uma ferramenta de debug, e seu retorno é impresso no arquivo \emph{.log}.
+
+\begin{figure}
+    \caption{Arquivo de execução: link.jl}
+    \lstinputlisting{../GID connection/PHILLIPO.gid/link.jl}
+    \label{fig:link.jl}
+\end{figure}

@@ -2,7 +2,5 @@ PROBLEM DATA
 
 QUESTION: type#CB#(plane_stress,plane_strain)
 value: plane_stress
-QUESTION: thickness
-VALUE: 1.0
 
-END GEENRAL DATA
+END GENERAL DATA

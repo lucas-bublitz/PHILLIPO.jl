@@ -10,13 +10,4 @@
                    / /  /      \/__/        \ \__\    \ \__\   \/__/  FEM analysis        \  /  /.jl    
                    \/__/                     \/__/     \/__/                               \/__/  
 
-PHILLIPO.jl é um solver para estruturas sólidas, elásticas sobre carregamentos estáticos, e que se deforma linearmente.
 
-PHILLIPO também:
-
-      1. é apenas um projeto open-source de TCC;
-      2. é desenvolvido por Lucas Bublitz, discente do curso de Bacharelado em Engenharia Mecânica na UDESC;
-      3. é um projeto que não tem a pretensão de aplicação prática, mas de servir de referência para como, dentro das habilidades dos estudantes de engenharia, encapsular e organizar projetos de software de Elementos Finitos pelo Pkg.jl em módulo, e assim facilitar a sua distribuição;
-      4. é um projeto que serviu para seu desenvolvedor compreender o próprio Método de Elementos Finitos, como também, sua aplicação em Julia;
-
-Desenvolvido por Lucas Bublitz, sob a orientação de Pablo Muñoz
