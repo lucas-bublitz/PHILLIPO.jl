@@ -59,19 +59,19 @@ Nesses diagramas, é possível separar a execução de uma utilização normal d
 O pré-processamento é realizado totalmente pelo GID (figura \ref{fig:fluxograma_GID}), e consisti na definição da geometria, das condições de contorno, do material e na geração de malha, e segue:
 
 \begin{enumerate}
-    \item \textbf{Definição do \emph{Problem type}.} Caso o problema físico seja modelado em duas dimensões, deve-se escolher o \emph{Problem type} \emph{PHILLIPO}, caso seja modelado em três dimensões, deve-se escolher o \emph{Problem type} \emph{PHILLIPO3D}. Essa escolha define quais arquivos serão utilizados para a definição das condições de contorno, dos materiais, e como será a geração da malha.
+    \item Definição do \emph{Problem type}. Caso o problema físico seja modelado em duas dimensões, deve-se escolher o \emph{Problem type} \emph{PHILLIPO}, caso seja modelado em três dimensões, deve-se escolher o \emph{Problem type} \emph{PHILLIPO3D}. Essa escolha define quais arquivos serão utilizados para a definição das condições de contorno, dos materiais, e como será a geração da malha. O GID cria então uma pasta onde os arquivos do problema serão salvos.
 
     \item \textbf{Definição da geometria do problema,} que pode ser tanto construída utilizando as ferramente CAE do próprio GID, como também, importada de um arquivo externo de algum outro software CAD cujo formato seja reconhecido pelo GID \footnote{O GID reconhece uma grande variedade de arquivo de entrada (sejam de geometria, malhas, condições de contorno), inclusive arquivos próprios de programas comerciais, como ANSYS e Abaqus;}.
 
-    \item \textbf{O próximo passo é definir as características do material}, como também as condições de contorno: sejam elas deslocamentos sobre pontos, linhas e superfícies, ou carregamentos concentrados sobre pontos, ou carregamentos distribuídos sobre linhas e superfícies. \footnote{Carregamentos sobre linha só estão disponíveis para o \emph{Problem type} \emph{PHILLIPO}.}
+    \item Definição das características do material, como também as condições de contorno: sejam elas deslocamentos sobre pontos, linhas e superfícies, ou carregamentos concentrados sobre pontos, ou carregamentos distribuídos sobre linhas e superfícies. \footnote{Carregamentos sobre linha só estão disponíveis para o \emph{Problem type} \emph{PHILLIPO}.}
 
     \item Geração da malha, que pode ser amplamente configuras pelas ferramentas oferecidas pelo GID para gerar malhas estruturadas ou não estruturas, com refinamentos em determinadas regiões, e com a possibilidade de se definir o tipo de elemento a ser utilizado. 
-    \item Por fim, é chamada a função de CALCULAR, que vai tanto gerar o arquivo de entrada para o PHILLIPO, pelas regras definas do arquivo \emph{.bas}, como executar o arquivo \emph{.bat}, que é o responsável por criar a sessão Julia e executar o módulo PHILLIPO.jl. 
+    \item Por fim, é chamada a função de CALCULAR. 
 \end{enumerate}
 
-O GID, então, deleta possíveis arquivos de saída anteriores, e gera os arquivos de entrada \emph{.dat}\footnote{Embora o arquivo esteja nomeado no formato \emph{dat} ele, na verdade, é um \emph{.json}.}, assim como os arquivos de \emph{log}, e cria a sessão Julia, chamando para ser executado nela o arquivo \emph{link.jl}.
+A função de CALCULAR do GID, deleta possíveis arquivos de saída anteriores, e gera os arquivos de saída \emph{.dat}\footnote{Embora o arquivo esteja nomeado no formato \emph{dat} ele, na verdade, é um \emph{.json}, pois esse é o padrão de entrada para PHILLIPO.}, assim como os arquivos de \emph{log}, e cria a sessão Julia, chamando para ser executado nela o arquivo \emph{link.jl}. 
 
-Na sessão Julia, o módulo PHILLIPO.jl é importado, momento em que ocorre a pré-compilação do código, e, em seguida, chama a função principal do módulo, passando como parâmetros os caminhos para o arquivo \emph{.json} e o caminho de saída do resultado da análise, assim iniciando o processamento.
+Na sessão Julia, o módulo PHILLIPO.jl é importado, momento em que ocorre a pré-compilação do código, e, em seguida, chama a função principal do módulo \emph{PHILLIPO.main}, passando como parâmetros os caminhos para o arquivo \emph{.json} e o caminho de saída do resultado da análise, assim iniciando o processamento.
 
 \subsection{Processamento}
 
@@ -87,6 +87,17 @@ O processamento é realizado dentro da sessão Julia, executando a função prin
 
 \end{enumerate}
 
+\begin{enumerate}
+    \item Leitura do arquivo de entrada:
+    \item Definição dos graus de liberdade livres e prescritos:
+    \item Construção da matriz global de rigidez paralelamente:
+    \item Aplicação das restrições de forças:
+    \item Resolução do sistema:
+    \item Cálculo das reações e recuperação de tensão:
+    \item Geração do arquivo de saída:
+\end{enumerate}
+   
+Com o fim da execução da função principal, é encerrada a sessão Julia e, em seguida, execução do arquivo \emph{.bat}. O GID chama o programa Notepad para a abrir o arquivo \emph{.log}, onde algumas informações de debug foram impressas durante o processamento, utilizando a função \emph{print}.
 
 \section{Integração com GID}
 
@@ -94,7 +105,7 @@ O GID é um software utilizado como pré e pós-processamento, neste caso, para 
 
 \subsection{PHILLIPO.gid}
 
-O GID pode ser configurado para operar como pré e pós-processamentos de diversos programas, como o Abaqus, o Ansys, o Calculix..., por meio de um \emph{Problem type}, que é como o GID chama o conjunto de arquivos que configuram o formato de saída dos dados, a criação de determinadas propriedades para as condições de contorno e materiais, como também automatizar a execução da simulação, chamando o programa. Pode-se dizer que o \emph{Problem type} é uma interface para que as informações contidas no arquivo gerado pelo GID (geometria, malha, condições de contorno etc.) sejam salvas em um formato que o programa, o \emph{solver} no caso, possa interpretar, ao passo que o \emph{script} de execução automatiza o chamamento deste, e a simulação seja iniciada. 
+O GID pode ser configurado para operar como pré e pós-processamentos de diversos programas, como o Abaqus, o Ansys, o Calculix..., por meio de um \emph{Problem type}, que é como o GID chama o conjunto de arquivos que configuram o formato de saída dos dados, a criação de determinadas propriedades para as condições de contorno e materiais, como também automatizar a execução da simulação, chamando o programa. Pode-se dizer que o \emph{Problem type} é uma interface para que as informações contidas nos arquivos gerados pelo GID (geometria, malha, condições de contorno etc.) sejam salvas em um formato que o programa, o \emph{solver}, possa interpretar, ao passo que o \emph{script} de execução automatiza o chamamento desse, e a simulação seja iniciada. 
 
 Na pasta \emph{PHILLIPO.gid} é possível encontrar os seguinte arquivos:
 
@@ -110,11 +121,11 @@ Na pasta \emph{PHILLIPO.gid} é possível encontrar os seguinte arquivos:
 O primeiro arquivo do \emph{Problem type} de PHILLIPO é \emph{PHILLIPO.cnd}, que define as condições de contorno e sobre quais entidades, leia-se nós, elementos ou geometrias (superfícies, volumes, linhas etc.), são aplicadas, por meio de uma sintaxe específica \footnote{No manual do usuário do GID, acessível em \url{https://gidsimulation.atlassian.net/wiki/spaces/GUM/overview}, é possível encontrar a descrição o funcionamento de toda essa sintaxe, que compreende desde esse arquivo de condições de contorno, como também, dos outros que compões a construção do \emph{problem type}.}, uma forma de marcação de texto, que é interpretada pelo GID.
 
 \begin{figure}
-    \lstinputlisting[ lastline=10]{../GID connection/PHILLIPO.gid/PHILLIPO.cnd}
+    \lstinputlisting[lastline=10]{../GID connection/PHILLIPO.gid/PHILLIPO.cnd}
     \caption{Parte do arquivo de condições de contorno: PHILLIPO.cnd}
     \label{fig:PHILLIPO.cnd}
 \end{figure}
 
-Em sua representação parcial, da figura \ref{fig:PHILLIPO.cnd}, é possível notar a construção de uma condição de contorno por meio de um bloco que inicia na linha 1, com a expressão \emph{CONDITION: Constraint\underline{}displacement\underline{}point}, que também nomeia esta condição, referente a restrição de deslocamento em pontos (entidade geométrica discretizada por um nó), e que acaba com \emph{END CONDITION}. Dentre essas linhas, são definidas as formas e os valores que essa condição vai aplicar sobre a geometria selecionada, neste caso, os pontos. Na linha 2, é definido, justamente, sobre qual entidade geométrica se aplica essa condição: pontos. Na próxima linha, é definido como que essa informação associada à entidade geométrica se traduz na malha, neste caso, essa condição é aplicada sobre os nós que correspondem aos pontos, ou seja, quando o GID for gerar a malha, vai aplicar essa condição para o nó que corresponde ao ponto. \footnote{Isso se deve porque a malha é criada sobre a geometria, posteriormente à aplicação das condições de contorno sobre aquela.} As linhas seguintes, 4 a 9, se referem aos valores da condição, neste caso, aos deslocamentos prescritos sobre os nós nas direções de \emph{X}, \emph{Y} e \emph{Z}. 
+Em sua representação parcial, da figura \ref{fig:PHILLIPO.cnd}, é possível notar a construção de uma condição de contorno por meio de um bloco que inicia na linha 1, com a expressão \emph{CONDITION: Constraint\_displacement\_point}, que também nomeia esta condição, referente a restrição de deslocamento em pontos (entidade geométrica discretizada por um nó), e que acaba com \emph{END CONDITION}. Dentre essas linhas, são definidas as formas e os valores que essa condição vai aplicar sobre a geometria selecionada, neste caso, os pontos. Na linha 2, é definido, justamente, sobre qual entidade geométrica se aplica essa condição: pontos. Na próxima linha, é definido como que essa informação, que foi associada à entidade geométrica se traduz na malha, neste caso, essa condição é aplicada sobre os nós que correspondem aos pontos, ou seja, quando o GID for gerar a malha, vai aplicar essa condição para o nó que corresponde ao ponto. \footnote{Isso se deve porque a malha é criada sobre a geometria, posteriormente à aplicação das condições de contorno sobre aquela.} As linhas seguintes, 4 a 9, se referem aos valores da condição, neste caso, aos deslocamentos prescritos sobre os nós nas direções de \emph{X}, \emph{Y} e \emph{Z}. 
 
 
