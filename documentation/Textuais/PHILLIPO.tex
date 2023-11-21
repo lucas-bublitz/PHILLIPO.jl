@@ -2,27 +2,29 @@
 
 \chapter{PHILLIPO}
 
-PHILLIPO é um \emph{solver} para campos de deformação elástica em estruturas discretizadas por elementos finitos, com algumas otimizações computacionais relacionadas a paralelismo e matrizes esparsas, e que visa constituir-se como exemplo didático na implementação legível e concisa dos algoritmos de elementos finitos em Julia no âmbito acadêmico do campus CCT, da UDESC. PHILLIPO é um programa de código aberto, que é distribuído em um repositório público\footnotemark[1]{} sob a licença LGPL\footnotemark[2]{}. Portanto, sua utilização é gratuita e livre para fins acadêmicos e comerciais, que incluem a modificação, implementação e venda de qualquer parte do programa, como também da documentação que o acompanha; só se resguarda, entretanto, a devida citação deste documento.
+PHILLIPO é um \emph{solver} para análise de em estruturas discretizadas por elementos finitos, com algumas otimizações computacionais relacionadas a paralelismo e matrizes esparsas, e que visa constituir-se como exemplo didático na implementação legível e concisa dos algoritmos de elementos finitos em Julia no âmbito acadêmico do campus CCT, da UDESC. PHILLIPO é um programa de código aberto, que é distribuído em um repositório público\footnotemark[1]{} sob a licença LGPL\footnotemark[2]{}. Portanto, sua utilização é gratuita e livre para fins acadêmicos e comerciais, que incluem a modificação, implementação e venda de qualquer parte do programa, como também da documentação que o acompanha; só se resguarda, entretanto, a devida citação deste documento.
 \footnotetext[1]{O repositório é mantido no GitHub, assim como o presente documento em formato Latex: \url{https://github.com/lucas-bublitz/PHILLIPO}}
 \footnotetext[2]{O GiD, interface de pré e pós-processamento, é um software distribuído comercialmente, e não está sujeito à mesma licença que PHILLIPO.}
 
 Um \emph{solver}, ou em melhor português, um solucionador em MEF não é uma novidade no mundo acadêmico, nem no comercial. Softwares como Calculix (que é distribuído integrado com o FreeCAD) e o FreeFEM, que já conta com 7 mil commits em seu repositório, são continuamente produzidos e aprimorados desde antes da virada do milênio, um trabalho que demanda tempo e uma comunidade bem ativa. Deste modo, a pretensão de PHILLIPO não é fornecer uma alternativa a esses softwares, muito menos servir de módulo ou biblioteca para agregar algum deles, além do mais, a elaboração de programas robustos e confiáveis é um trabalho demorado e de muitas pessoas.
 
-A pretensão de PHILLIPO é construir uma aplicação simples utilizando o MEF, que possa aproveitar algumas ferramentas de construção de código em Julia, como paralelismo e despachos múltiplos, para apresentar mais uma referência de programação em engenharia para os alunos do campus CCT, da UDESC, e, deste modo, evidenciar que é possível construir programas de engenharia de forma simples e legível, e que, por meio de uma linguagem de programação moderna, como Julia.
+A pretensão de PHILLIPO é construir uma aplicação simples utilizando o MEF, que possa aproveitar algumas ferramentas de construção de código em Julia, como paralelismo e despachos múltiplos, para apresentar mais uma referência de programação em engenharia no campus CCT, da UDESC, e, deste modo, evidenciar que é possível construir aplicações do MEF de forma simples e legível, e por meio de uma linguagem de programação moderna, como Julia.
 
-Neste capítulo é apresentado como é feita a distribuição é como se dá o funcionamento de PHILLIPO, dividido em duas partes. A primeira, descrevendo o fluxo de execução normal do programa, isto é, utilizando o GID como interface de pré e pós-processamento, e, a segunda, esmiuçando o código, tanto do módulo PHILLIPO, quanto dos arquivos de integração com o GID.
+Neste capítulo é apresentado como é feita a distribuição, instalação e como se dá o funcionamento de PHILLIPO, dividido em duas partes. A primeira, descrevendo o fluxo de execução normal do programa, isto é, utilizando o GID como interface de pré e pós-processamento, e, a segunda, esmiuçando o código, tanto do módulo PHILLIPO, quanto dos arquivos de integração com o GID.
 
-\section{Distribuição pelo Pkg.jl}
+\section{Distribuição pelo Pkg.jl e importação dos \emph{Problems types} no GID}
 
-O Pkg.jl é o gerenciador de pacotes anexado à Julia, tal como PIP é anexado ao Pyhton. Ele é responsável por distribuir, gerir e empacotar os módulos da linguagem, permitindo relacionar dependências e controlar versionamento. PHILLIPO é distribuído por meio do Pkg.jl, porém, não pelo repositório oficial\footnote{Há uma série de critérios para que um módulo seja adicionado ao repositório oficial do Pkg.jl, além disso, não é objetivo de PHILLIPO ser distribuido massivamente.}, mas, pelo próprio repositório deste trabalho, utilizando-se de uma função do gerenciador de pacotes: a função \emph{add}.
+O Pkg.jl é o gerenciador de pacotes anexado à Julia, tal como PIP é anexado ao Pyhton. Ele é responsável por distribuir, gerir e empacotar os módulos da linguagem, permitindo relacionar dependências e controlar versionamento. PHILLIPO é distribuído por meio do Pkg.jl, porém, não pelo repositório oficial\footnote{Há uma série de critérios para que um módulo seja adicionado ao repositório oficial do Pkg.jl, além disso, não é objetivo de PHILLIPO ser distribuido massivamente.}, mas pelo próprio repositório deste trabalho, que pode ser utilizado para o mesmo fim, pela função \emph{add}.
 
 Como PHILLIPO foi encapsulado em um módulo, pode ser facilmente distribuído iniciando uma sessão Julia e executando:
 \begin{lstlisting}
     add https://github.com/lucas-bublitz/PHILLIPO.jl
 \end{lstlisting}
-O Pkg.jl então trata de buscar as dependências do módulo, isto é, os módulos que são importados para uso interno de PHILLIPO: o \emph{SparseArrays}, que fornece as estruturas e funções para alocar e manipular eficientemente matrizes esparsas, o \emph{LinearAlgebra}, implementação do LAPACK em Julia, e o \emph{JSON}, um parser de objetos em JSON para dicionários. No arquivo \emph{Projecy.toml} é possível encontrar tanto essa lista de dependência, e no \emph{Manifest.toml}, são listadas as dependências das dependências, isto é, quais módulos cada módulo importado por PHILLIPO importa para si. 
 
-O versionamento é importante pois permite que a compilação do pacote seja feita utilizando exatamente os códigos dos módulos de quando foi desenvolvido, assim baixando o risco de resultados inesperados devido a uma alteração no funcionamento de um módulo exterior ao que se trabalha. 
+O Pkg.jl então trata de buscar as dependências do módulo, isto é, os módulos que são importados para uso interno de PHILLIPO: o \emph{SparseArrays}, que fornece as estruturas e funções para alocar e manipular eficientemente matrizes esparsas, o \emph{LinearAlgebra}, implementação do LAPACK em Julia, e o \emph{JSON}, um parser de objetos em JSON para dicionários. No arquivo \emph{Projecy.toml} é possível encontrar tanto essa lista de dependência, e no \emph{Manifest.toml}, são listadas as dependências das dependências, isto é, quais módulos cada módulo importado por PHILLIPO importa para si. \footnote{O versionamento é importante pois permite que a compilação do pacote seja feita utilizando exatamente os códigos dos módulos de quando foi desenvolvido, assim baixando o risco de resultados inesperados devido a uma alteração no funcionamento de um módulo exterior ao que se trabalha. }
+
+PHILLIPO utiliza a interface GID para gerar as malhas e definir as condições de contorno. A integração desses programas é feita pelo conjunto de arquivos presente presentes na pasta \emph{\textbackslash GID connections}: \emph{PHILLIPO.gid} e \emph{PHILLIPO3D.gid}, que são os \emph{Problem types} do GID para PHILLIPO, e \emph{link.jl}, que é o arquivo que é chamado pelo \emph{script} de execução do GID, e que importa o módulo PHILLIPO.jl e o executa. O conteúdo dessa pasta deve ser copiado para a pasta \emph{\dots\textbackslash GiD 16.1.6d \textbackslash ProblemTypes}, localizada onde o próprio GID está instalado\footnote{O caminho para a pasta \emph{ProblemTypes} pode variar de acordo com a versão do GID, e com o sistema operacional.}, para que sejam automaticamente carregados durante a inicialização do GID\footnote{Também é possível importar \emph{Problem types} dentro da interface do GID, entretanto, desse modo, a importação não é permanente.}.
+
 
 \section{Fluxo de execução}
 
@@ -54,38 +56,39 @@ Nesses diagramas, é possível separar a execução de uma utilização normal d
 
 \subsection{Pré-processamento}
 
-O pré-processamento é realizado totalmente pelo GID, e consisti na definição da geometria, das condições de contorno, do material e na geração de malha, e segue:
+O pré-processamento é realizado totalmente pelo GID (figura \ref{fig:fluxograma_GID}), e consisti na definição da geometria, das condições de contorno, do material e na geração de malha, e segue:
 
 \begin{enumerate}
-    \item Definição do \emph{Problem type}. Caso o problema físico seja modelado em duas dimensões, deve-se escolher o \emph{Problem type} \emph{PHILLIPO}, caso seja modelado em três dimensões, deve-se escolher o \emph{Problem type} \emph{PHILLIPO3D}. Essa escolha define quais arquivos serão utilizados para a definição das condições de contorno, dos materiais, e como será a geração da malha.
+    \item \textbf{Definição do \emph{Problem type}.} Caso o problema físico seja modelado em duas dimensões, deve-se escolher o \emph{Problem type} \emph{PHILLIPO}, caso seja modelado em três dimensões, deve-se escolher o \emph{Problem type} \emph{PHILLIPO3D}. Essa escolha define quais arquivos serão utilizados para a definição das condições de contorno, dos materiais, e como será a geração da malha.
 
-    \item Definição da geometria do problema, que pode ser tanto construída utilizando as ferramente CAE do próprio GID, como também, importada de um arquivo externo de algum outro software CAD cujo formato seja reconhecido pelo GID \footnote{O GID reconhece uma grande variedade de arquivo de entrada (sejam de geometria, malhas, condições de contorno), inclusive arquivos próprios de programas comerciais, como ANSYS e Abaqus;}.
+    \item \textbf{Definição da geometria do problema,} que pode ser tanto construída utilizando as ferramente CAE do próprio GID, como também, importada de um arquivo externo de algum outro software CAD cujo formato seja reconhecido pelo GID \footnote{O GID reconhece uma grande variedade de arquivo de entrada (sejam de geometria, malhas, condições de contorno), inclusive arquivos próprios de programas comerciais, como ANSYS e Abaqus;}.
 
-    \item O próximo passo é definir as características do material, como também as condições de contorno: sejam elas deslocamentos sobre pontos, linhas e superfícies, ou carregamentos concentrados sobre pontos, ou carregamentos distribuídos sobre linhas e superfícies. \footnote{Carregamentos sobre linha só estão disponíveis para o \emph{Problem type} \emph{PHILLIPO}.}
+    \item \textbf{O próximo passo é definir as características do material}, como também as condições de contorno: sejam elas deslocamentos sobre pontos, linhas e superfícies, ou carregamentos concentrados sobre pontos, ou carregamentos distribuídos sobre linhas e superfícies. \footnote{Carregamentos sobre linha só estão disponíveis para o \emph{Problem type} \emph{PHILLIPO}.}
 
     \item Geração da malha, que pode ser amplamente configuras pelas ferramentas oferecidas pelo GID para gerar malhas estruturadas ou não estruturas, com refinamentos em determinadas regiões, e com a possibilidade de se definir o tipo de elemento a ser utilizado. 
     \item Por fim, é chamada a função de CALCULAR, que vai tanto gerar o arquivo de entrada para o PHILLIPO, pelas regras definas do arquivo \emph{.bas}, como executar o arquivo \emph{.bat}, que é o responsável por criar a sessão Julia e executar o módulo PHILLIPO.jl. 
 \end{enumerate}
 
-O GID, então, deleta possíveis arquivos de saída anteriores, e gera os arquivos de saída \emph{.dat}\footnote{Embora o arquivo esteja nomeado no formato \emph{dat} ele, na verdade, é um \emph{.json}.}, assim como os arquivos de \emph{log}, e cria a sessão Julia, chamando para ser executado nela o arquivo \emph{link.jl}.
+O GID, então, deleta possíveis arquivos de saída anteriores, e gera os arquivos de entrada \emph{.dat}\footnote{Embora o arquivo esteja nomeado no formato \emph{dat} ele, na verdade, é um \emph{.json}.}, assim como os arquivos de \emph{log}, e cria a sessão Julia, chamando para ser executado nela o arquivo \emph{link.jl}.
 
 Na sessão Julia, o módulo PHILLIPO.jl é importado, momento em que ocorre a pré-compilação do código, e, em seguida, chama a função principal do módulo, passando como parâmetros os caminhos para o arquivo \emph{.json} e o caminho de saída do resultado da análise, assim iniciando o processamento.
 
 \subsection{Processamento}
 
-A execução propriamente dita de PHILLIPO pode ser dividida em três partes: 
-    a leitura do arquivo de entrada;
-    definição dos graus de liberdade livres e prescritos;
-    Construção da matriz global de rigidez paralelamente;
-    aplicação das restrições de forças;
-    resolução do sistema 
-    cálculo das reações e recuperação de tensão
-    geração do arquivo de saída.
-    
-    a resolução do sistema.
+O processamento é realizado dentro da sessão Julia, executando a função principal de \emph{PHILLIPO.main} (figura \ref{fig:fluxograma_PHILLIPO}), e consiste nas seguintes etapas:
+\begin{enumerate}
+    \item \textbf{Leitura do arquivo de entrada.} O arquivo \emph{.json} é lido e convertido em um dicionário pelo \emph{parser} JSON, cujos dados são distribuídos nas variáveis do problema.
+    \item \textbf{Definição dos graus de liberdade livres e prescritos.} Conforme sãos as restrições de deslocamento, o programa calcula a numeração dos graus de liberdade prescritos, e os armazena em um vetor.
+    \item \textbf{Construção da matriz global de rigidez paralelamente.} É chamada
+    \item aplicação das restrições de forças;
+    \item resolução do sistema 
+    \item cálculo das reações e recuperação de tensão
+    \item geração do arquivo de saída.
+
+\end{enumerate}
 
 
-\section{GID}
+\section{Integração com GID}
 
 O GID é um software utilizado como pré e pós-processamento, neste caso, para PHILLIPO. Nele é possível criar a geometria do problema, definir as propriedades dos materiais, as condições de contorno, as cargas aplicadas, e, principalmente, gerar a malha de elementos. Além de se ser possível sua integração com um \emph{solver} qualquer, por meio de um conjunto de arquivos de entrada e saída (ambos configurados de forma a permitir uma certa flexibilidade nessa integração), cuja execução é controlada por um \emph{script} em Batch, o que possibilita a automatização do processo de simulação. Nesta seção é abordado como é feita e integração entre o GID e PHILLIPO, por meio das pastas \emph{PHILLIPO.gid} e \emph{PHILLIPO3D.gid}, sendo que, como a nomeação dos arquivos sugere, a primeira é utilizada para problemas bidimensionais, e a segunda para problemas tridimensionais.
 
@@ -112,6 +115,6 @@ O primeiro arquivo do \emph{Problem type} de PHILLIPO é \emph{PHILLIPO.cnd}, qu
     \label{fig:PHILLIPO.cnd}
 \end{figure}
 
-Em sua representação parcial, da figura \ref{fig:PHILLIPO.cnd}, é possível notar a construção de uma condição de contorno por meio de um bloco que inicia na linha 1, com a expressão \emph{CONDITION: Constraint\underline{}displacement\underline{}point}, que também nomeia esta condição, referente a restrição de deslocamento em pontos (entidade geométrica discretizada por um nó), e que acaba com \emph{END CONDITION}. Dentre essas linhas, são definidas as formas e os valores que essa condição vai aplicar sobre a geometria selecionada, neste caso, os pontos. Na linha 2, é definido, justamente, sobre qual entidade geométrica se aplica essa condição: pontos. Na próxima linha, é definido como que essa informação, que foi associada à entidade geométrica se traduz na malha, neste caso, essa condição é aplicada sobre os nós que correspondem aos pontos, ou seja, quando o GID for gerar a malha, vai aplicar essa condição para o nó que corresponde ao ponto. \footnote{Isso se deve porque a malha é criada sobre a geometria, posteriormente à aplicação das condições de contorno sobre aquela.} As linhas seguintes, 4 a 9, se referem aos valores da condição, neste caso, aos deslocamentos prescritos sobre os nós nas direções de \emph{X}, \emph{Y} e \emph{Z}. 
+Em sua representação parcial, da figura \ref{fig:PHILLIPO.cnd}, é possível notar a construção de uma condição de contorno por meio de um bloco que inicia na linha 1, com a expressão \emph{CONDITION: Constraint\underline{}displacement\underline{}point}, que também nomeia esta condição, referente a restrição de deslocamento em pontos (entidade geométrica discretizada por um nó), e que acaba com \emph{END CONDITION}. Dentre essas linhas, são definidas as formas e os valores que essa condição vai aplicar sobre a geometria selecionada, neste caso, os pontos. Na linha 2, é definido, justamente, sobre qual entidade geométrica se aplica essa condição: pontos. Na próxima linha, é definido como que essa informação associada à entidade geométrica se traduz na malha, neste caso, essa condição é aplicada sobre os nós que correspondem aos pontos, ou seja, quando o GID for gerar a malha, vai aplicar essa condição para o nó que corresponde ao ponto. \footnote{Isso se deve porque a malha é criada sobre a geometria, posteriormente à aplicação das condições de contorno sobre aquela.} As linhas seguintes, 4 a 9, se referem aos valores da condição, neste caso, aos deslocamentos prescritos sobre os nós nas direções de \emph{X}, \emph{Y} e \emph{Z}. 
 
 
