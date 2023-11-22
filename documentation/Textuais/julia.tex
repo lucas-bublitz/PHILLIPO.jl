@@ -27,28 +27,50 @@ Este capítulo aborda os seguintes tópicos que são relevantes para a aplicaç�
 
 
 
-\section{Matrizes esparsa e \emph{SparseArrays.jl}}
+\section{Matrizes esparsa}
 
 As matrizes esparsas desempenham um papel crucial em diversas áreas da computação científica, sendo particularmente relevantes no contexto do MEF. Entender o conceito de matrizes esparsas é fundamental para otimizar a resolução de sistemas lineares, economizando recursos computacionais e acelerando significativamente o tempo de resolução de sistemas lineares grandes.
 
-Uma matriz esparsa é aquela em que a maioria dos elementos é igual a zero (em contraste com as matrizes densas, onde a maioria dos elementos é diferente de zero). Na aplicação do MEF, a matriz de rigidez global tem essa characteristics, quando o problema é composto por um número grande de elementos, que pode ser explorada tanto na forma de armazena-lá quanto na solução de sistemas lineares \cite{LOGAN}. Aqui são apresentadas duas formas de armazenamento de matrizes esparsas, e como elas podem ser utilizadas em Julia pelo módulo \emph{SparseArrays.jl}: COO e CSR.
+Uma matriz esparsa é aquela em que a maioria dos elementos é igual a zero (em contraste com as matrizes densas, onde a maioria dos elementos é diferente de zero). Na aplicação do MEF, a matriz de rigidez global tem essa characteristics, quando o problema é composto por um número grande de elementos, que pode ser explorada tanto na forma de armazena-lá quanto na solução de sistemas lineares \cite{LOGAN}. Aqui são apresentadas duas formas de armazenamento de matrizes esparsas, e como elas podem ser utilizadas em Julia pelo módulo \emph{SparseArrays.jl}: COO e CSC.
 
 
-O armazenamento de matrizes esparsas por coordenadas (COO) consiste em gravar apenas os valores não nulos em um conjunto de tuplas $(i, j, v)$, em que $i$ e $j$ são os índices de linha e coluna, respectivamente, e $v$ é o valor na posição correspondente. Todas outras posições são presumidas nulas. Uma matriz esparsa, por exemplo
+O armazenamento de matrizes esparsas por coordenadas (COO) consiste em gravar apenas os valores não nulos em um conjunto de tuplas $(i, j, v)$, em que $i$ e $j$ são os índices de linha e coluna, respectivamente, e $v$ é o valor na posição correspondente. Todas outras posições são presumidas nulas \cite{sparse}. 
+
+Uma matriz esparsa, por exemplo
 \begin{equation}
     A = 
     \begin{bmatrix}
-        1 & 0 & 0 & 1 \\
-        0 & 2 & 0 & 0 \\
-        0 & 0 & 3 & 1 \\
-        0 & 0 & 0 & 4 \\
+        3 & 0 & 0 & 13 \\
+        0 & 5 & 0 & 0 \\
+        0 & 0 & 0 & 11 \\
+        0 & 7 & 0 & 9 \\
     \end{bmatrix},
     \label{eq:coo_matrix}
 \end{equation}
 pode ser armazenada no conjunto de tuplas
 \begin{equation}
-    A_{COO} = {(1,1,1), (2,2,2), (3,3,3), (4,4,4), (1,3,1), (3,4,1)}.
+    A_{COO} = \{(1,1,5), (2,2,5), (3,3,0), (4,4,9), (1,4,13), (3,4,3), (4,2,7)\}.
     \label{eq:coo}
 \end{equation}
 
-Putra 
+Como tuplas não são comumente utilizadas em programas imperativos para armazenar um grande volume de dados. O conjunto é substituído por um grupo de três vetores: $I$,$J$ e $V$. Para a matriz $A$, nessa forma
+
+
+\begin{equation}
+    I =  [1, 1, 2, 3, 4, 4], \qquad J = [1, 4, 2, 4, 2, 4], \quad V = [3, 13, 5, 11, 7, 9].
+    \label{eq:coo_2}
+\end{equation}
+
+Uma vantagem da utilização desse formato é a inserção de novos valores sobre posições não nulas. A inserção é realizada simplesmente concatenado mais uma posição nos vetores $I$, $J$ e $V$. Como é visto mais adiante, em outros formatos, como o CSC, essa operação requer mais alocações dependendo da posição nova a ser inserida.
+
+O formato COO infelizmente não está presente no módulo \emph{SparseArrays.jl}, e por conta disso, foi implementado explicitamente em PHILLIPO, no módulo interno \emph{Matrices.jl}\footnote{A programação do formato de matrizes COO está devidamente comentada no capítulo seguinte.}.
+
+O formato CSC, por sua vez, já consiste em uma forma mais sofisticado, fazendo um mapeamento coluna por coluna. As entradas não nulas da matriz são organizados em ordem crescente  de coluna e linha no vetor $V$, armazenando os índices de linha respectivos no vetor $I$. O vetor $P$ consiste nas posições do vetor $V$ que separam a armazenagem das colunas, quando uma coluna só tem valores a última posição da coluna não nula é repetida. Por convenção, ao final do vetor $P$ é concatenado a quantidade de entradas não nulas acrecida de um. A matriz $A$, nessa forma, se torna
+\begin{equation}
+    I = [1, 2, 4, 4, 1, 3], \qquad V = [3, 5, 7, 9, 13, 11], \quad P = [1,2,4,4,7].
+    \label{eq:coo_3}
+\end{equation}
+O módulo \emph{SparseArrays.jl} implementa esse formato como padrão de matrizes esparsas, além de adicionar diversas otimizações matemáticas nas operações definidas pelo módulo \emph{LinearAlgebra.jl}, principalmente quando se trada de resolver grandes sistemas lineares, escolhendo a melhor rotina aplicável \footnote{Detalhes da implementação de rotinas otimizadas para matrizes esparsas não faz parte do escopo deste trabalho.}.
+
+
+
