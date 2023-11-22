@@ -13,25 +13,42 @@
     \label{fig:julia-logo}
 \end{figure}
 
-Julia é uma linguagem de programação dinâmica, opcionalmente tipada, pré-compilada, generalista, de código livre\footnote{A Linguagem Julia, é distribuída, quase integralmente, sob a MIT License, que permite a modificação, utilização e distribuição, seja comercial ou não, de qualquer parte do código, assim como das documentações associadas. Os componentes do módulo Base e as bibliotecas e ferramentas externas, que têm licença diferente, assim como a da própria Julia, podem ser consultados diretamente no repositório da linguagem: \url{https://github.com/JuliaLang/julia}.} e de alto nível, criada por Jeff Bezanso, Stefan Karpinski, Viral B. Shah e Alan Edelman, em 2012, com o objetivo de minimizar o problema das duas linguagens (\emph{the two language problem}). É voltada para a programação científica, com capacidades de alta performance e sintaxe simples, similar à notação matemática usual. \cite{Sherrington}
+Julia é uma linguagem de programação dinâmica, opcionalmente tipada, pré-compilada, generalista, de código livre\footnote{A Linguagem Julia é distribuída, quase integralmente, sob a MIT License, que permite a modificação, utilização e distribuição, seja comercial ou não, de qualquer parte do código, assim como das documentações associadas.} e de alto nível, criada por Jeff Bezanso, Stefan Karpinski, Viral B. Shah e Alan Edelman, em 2012, com o objetivo de minimizar o problema das duas linguagens (\emph{the two language problem}). É voltada para a programação científica, com capacidades de alta performance e sintaxe simples, similar à notação matemática usual. \cite{Sherrington}
 
-Na aplicação do MEF, a linguagem se destaca por sua sintaxe próxima à linguagem matemática, principalmente na manipulação de matrizes e vetores, que permite a implementação de algoritmos de forma simples e rápida, e por sua capacidade de processamento paralelo, que permite a otimização na construção e resolução de sistemas algébricos grandes. Além disso, o empacotamento oferecido pela linguagem, por meio do \emph{Pkg.jl}, fornece ferramentas de controle e versionamento, como também, a criação de pacotes, que são facilmente compartilhas e instalados.
+Na aplicação do MEF, a linguagem se destaca por sua sintaxe semelhante a do MATLAB, que se mostra ideal na manipulação de matrizes e vetores, e por sua capacidade de processamento paralelo, que permite a otimização na construção e resolução de sistemas algébricos grandes. Além disso, o empacotamento oferecido pela linguagem, por meio do \emph{Pkg.jl}, fornece ferramentas de controle e versionamento, como também, a criação de módulos, uma forma eficiente de organizar e distribuir aplicações dentro o ecossistema de Julia.
 
-Este capítulo aborda os seguintes tópicos  que são relevantes para a aplicação do MEF em Julia, e que foram explorados no desenvolvimento de PHILLIPO:
+Este capítulo aborda os seguintes tópicos que são relevantes para a aplicação do MEF em Julia, e que foram explorados no desenvolvimento de PHILLIPO:
 
 \begin{enumerate}
-    \item sintaxe;
+    \item matrizes esparsas com \emph{SparseArrays.jl};
     \item empacotamento com \emph{Pkg.jl};
     \item processamento paralelo com \emph{Threads.jl};
-    \item matrizes esparsas com \emph{SparseArrays.jl};
-    \item performance de Julia;
 \end{enumerate}
 
-\section{O escopo de Julia}
 
-\begin{quotation}
-    "In short, because we are greedy."
-    (Jeff Bezanson, Stefan Karpinski, Viral B. Shah e Alan Edelman, em \emph{Why We Created Julia})
-\end{quotation}
 
-A linguagem Julia é rápida. Tão rápida \cite{julia}
+\section{Matrizes esparsa e \emph{SparseArrays.jl}}
+
+As matrizes esparsas desempenham um papel crucial em diversas áreas da computação científica, sendo particularmente relevantes no contexto do MEF. Entender o conceito de matrizes esparsas é fundamental para otimizar a resolução de sistemas lineares, economizando recursos computacionais e acelerando significativamente o tempo de resolução de sistemas lineares grandes.
+
+Uma matriz esparsa é aquela em que a maioria dos elementos é igual a zero (em contraste com as matrizes densas, onde a maioria dos elementos é diferente de zero). Na aplicação do MEF, a matriz de rigidez global tem essa characteristics, quando o problema é composto por um número grande de elementos, que pode ser explorada tanto na forma de armazena-lá quanto na solução de sistemas lineares \cite{LOGAN}. Aqui são apresentadas duas formas de armazenamento de matrizes esparsas, e como elas podem ser utilizadas em Julia pelo módulo \emph{SparseArrays.jl}: COO e CSR.
+
+
+O armazenamento de matrizes esparsas por coordenadas (COO) consiste em gravar apenas os valores não nulos em um conjunto de tuplas $(i, j, v)$, em que $i$ e $j$ são os índices de linha e coluna, respectivamente, e $v$ é o valor na posição correspondente. Todas outras posições são presumidas nulas. Uma matriz esparsa, por exemplo
+\begin{equation}
+    A = 
+    \begin{bmatrix}
+        1 & 0 & 0 & 1 \\
+        0 & 2 & 0 & 0 \\
+        0 & 0 & 3 & 1 \\
+        0 & 0 & 0 & 4 \\
+    \end{bmatrix},
+    \label{eq:coo_matrix}
+\end{equation}
+pode ser armazenada no conjunto de tuplas
+\begin{equation}
+    A_{COO} = {(1,1,1), (2,2,2), (3,3,3), (4,4,4), (1,3,1), (3,4,1)}.
+    \label{eq:coo}
+\end{equation}
+
+Putra 
