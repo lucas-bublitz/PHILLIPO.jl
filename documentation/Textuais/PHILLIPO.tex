@@ -153,7 +153,7 @@ O arquivo gerado é do formato \emph{.json}, o que pode ser não usual para apli
 
 Para gerar as listas de elementos triangules, foi escrito o seguinte código, dentro do arquivo emph{PHILLIPO.bas}:
 \lstinputlisting[firstline=10,lastline=16]{../GID connection/PHILLIPO.gid/PHILLIPO.bas}
-Em cada linha, os nós são definidos por listas, cujos valores representam as componentes $x$ e $y$ respectivamente. A numeração dos nós é implícita pela ordem das listas dentro da lista de \emph{"nodes"}.
+Em cada linha, os nós são definidos por listas, cujos valores representam as componentes $x$ e $y$ respectivamente. A numeração dos nós é implícita pela ordem da lista de \emph{"nodes"}.
 
 Na linha 1 é definido o nome do campo \emph{"nodes"}, separado pelo características \emph{:} inicia a declaração do valor daquele campo: uma lista \emph{[}\footnote{Essa sintaxe de listas e \emph{literals} é próprio do JavaScript.}. Na linha 2, é iniciado um laço de repetição, que percorre todos os nós, e, para cada um, é adicionado um elemento à lista, que é composto por um par de coordenadas, separadas por vírgula, e envolvidas por colchetes, pois cada nó é presentando por um vetor que contem suas coordenadas. Na linha 5, é fechado o laço de repetição, e, na linha 6, é fechado o campo \emph{]}. 
 
@@ -229,13 +229,73 @@ A parte posterior da função principal é a leitura dos dados de entrada, chama
     \item \textbf{\emph{constraints\_forces\_nodes}}: vetor dos vetores de restrições de força sobre nós;
     \item \textbf{\emph{constraints\_forces\_lines}}: vetor dos vetores de restrições de força sobre linhas;
     \item \textbf{\emph{constraints\_forces\_surfaces}}: vetor dos vetores de restrições de força sobre superfícies;
-    \item \textbf{\emph{constraints\_forces\_displacments }}: vetor dos vetores de restrições de deslocamento sobre nós;
+    \item \textbf{\emph{constraints\_forces\_displacements }}: vetor dos vetores de restrições de deslocamento sobre nós.
 \end{enumerate}
+
+Também são definidas, com espaço previamente alocado, os vetores deslocamento nodais global e forças nodais globais, respectivamente \emph{Ug} e \emph{Fg} (linhas 36 e 37). As linhas de chamando a função \emph{pop!} servem para retirar os valores \emph{null} dos fins dos vetores\footnote{Isso se dá pela forma como a programação no arquivo \emph{.bas} foi realizada. Nos arquivos \emph{.json} não são permitidos os \emph{Trailing commas}, e, para contornar essa situação, em cada loop foi adicionado um valor \emph{null} que é retirado justamente nesta parte do programa.}.
 
 \begin{figure}[hbtp]
     \caption{Parte do arquivo principal do módulo: PHILLIPO.jl}
-    \lstinputlisting[firstline = 29, lastline = 45, language=python]{../src/PHILLIPO.jl}
+    \lstinputlisting[firstline = 29, lastline = 65, language=python]{../src/PHILLIPO.jl}
     \label{fig:phillipo.jl_2}
 \end{figure}
 
+A próxima parte do arquivo cria os vetores de graus de liberdade prescritos e livres, respectivamente \emph{dof\_prescribe} e \emph{dof\_free}, e, em seguida, já aplicada as restrições de deslocamentos nodais sobre os graus respectivos no vetor \emph{Ug}, como está na figura \ref{fig:phillipo.jl_3}.
 
+Os graus de liberdade são numerados de acordo com a numeração dos nós sequencialmente, de modo que o nó de número $1$ tenha os graus $1$, $2$ e $3$, e um certo nó $n$, tenha os graus $3n-2$, $3n-1$ e $3n$, para um problema tridimensional. Para o caso bidimensional, a regra é similar: o nó $n$ tem o graus $2n-1$ e $2n$. Essas regras estão implementadas na forma de funções anônimas (linhas 4 e 12). 
+
+A função \emph{map} mapeia cada elemento do vetor de restrições de deslocamento para um vetor de graus de liberdade restritos. Para unir esses vetores, a função \emph{reduce} aplica uma função binária, no caso a função \emph{vcat}, entre os elementos do vetor, e retorna um único vetor com todos os graus de liberdade. Essa forma de construir o código é um exemplo de programação funcional.
+
+\begin{figure}[hbtp]
+    \caption{Parte do arquivo principal do módulo: PHILLIPO.jl}
+    \lstinputlisting[firstline = 67, lastline = 84, language=python]{../src/PHILLIPO.jl}
+    \label{fig:phillipo.jl_3}
+\end{figure}
+
+A próxima parte do arquivo, figura \ref{fig:phillipo.jl_4}, é o chamamento da função da montagem da matriz de rigidez global \emph{Elements.assemble\_stiffness\_matrix}, que a retorna no formato CSR para a variável \emph{Kg}. 
+
+\begin{figure}[hbtp]
+    \caption{Parte do arquivo principal do módulo: PHILLIPO.jl}
+    \lstinputlisting[firstline = 87, lastline = 89, language=python]{../src/PHILLIPO.jl}
+    \label{fig:phillipo.jl_4}
+\end{figure}
+
+Em seguida, a função principal aplica as restrições de força(figura \ref{fig:phillipo.jl_5}) de dois modos: diretamente sobre o vetor de forças nodais globais, e, chamando as funções que calculam as forças nodais equivalentes, para os casos de carregamentos sobre linhas e superfícies.
+
+Na aplicação de forças nodais prescritas, é primeiro calculado os graus de liberdade as forças serão aplicadas, num procedimento idêntico ao realizado para as restrições de deslocamento. Em seguida, o vetor \emph{Fg} é acessado sobre essas posições dos graus de liberdade para receber todas as forças prescritas na forma de um vetor único, por uma concatenação de vertical de vetores.
+
+As outras formas de restrições de força são aplicadas por meio das funções \emph{Elements.assemble\_force\_surface!} e \emph{Elements.assemble\_force\_line!}.
+
+\begin{figure}[hbtp]
+    \caption{Parte do arquivo principal do módulo: PHILLIPO.jl}
+    \lstinputlisting[firstline = 92, lastline = 112, language=python]{../src/PHILLIPO.jl}
+    \label{fig:phillipo.jl_5}
+\end{figure}
+
+A próxima parte do arquivo, figura \ref{fig:phillipo.jl_6}, é a resolução do sistema, chamando a função \emph{Solver.direct\_solve!}. Como essa função recebe os vetores de deslocamentos e forças nodais globais, não retorna nada, pois já aplicada a resolução do sistema sobre esses vetores. Em seguida, ocorre o cálculo das reações pela função \emph{Stress.reactions}, que retorna o vetor de reações \emph{R} e seu somatórios \emph{Re\_sum}, cujo propósito é verificar se o resultado do sistema está em equilíbrio.
+
+O cálculo das tensões é feito pela função \emph{Stress.recovery}, para as variáveis \emph{\sigma} e \emph{\sigma vm}, respectivamente, o vetor de tensões na notação de Voigt e o vetor de tensões de von Mises.
+
+\begin{figure}[hbtp]
+    \caption{Parte do arquivo principal do módulo: PHILLIPO.jl}
+    \lstinputlisting[firstline = 115, lastline = 125, language=python]{../src/PHILLIPO.jl}
+    \label{fig:phillipo.jl_6}
+\end{figure}
+
+A última parte do arquivo \emph{PHILLIPO.jl} é a escrita do próprio arquivo de saída \emph{.dat}, por meio do módulo interno \emph{IOfiles}, conforme a figura \ref{fig:phillipo.jl_7}. Nessa etapa é preciso inserir uma série de cabeçalhos no arquivo para que o GID possa interpretá-los corretamente. 
+
+Seja o exemplo de arquivo de saída o do quarto caso de verificação, figura \ref{fig:case_verification.pos}. Nele é possível observar que toda tabela de valores inicia com \emph{Values} e termina com \emph{End Values}, como também é precedida de um cabeçalhos que informa seus metadados, ou seja, sobre o que se trata aquela tabela. 
+
+\begin{figure}[hbtp]
+    \caption{Parte do arquivo principal do módulo: PHILLIPO.jl}
+    \lstinputlisting[firstline = 149, lastline = 172, language=python]{../src/PHILLIPO.jl}
+    \label{fig:phillipo.jl_7}
+\end{figure}
+
+\begin{figure}[hbtp]
+    \caption{Arquivo de saída do quarto caso de verificação: 4 verification case.dat}
+    \lstinputlisting{../verification/4 verification case/4 verification case.gid/4 verification case.post.res}
+    \label{fig:case_verification.pos}
+\end{figure}
+
+Finalizada a escrita sobre o arquivo de saída, a função principal é encerrada.

@@ -42,7 +42,7 @@ module PHILLIPO
         constraints_forces_nodes    = input_dict["constraints"]["forces_nodes"]
         constraints_forces_lines    = input_dict["constraints"]["forces_lines"]
         constraints_forces_surfaces = input_dict["constraints"]["forces_surfaces"]
-        constraints_displacments    = input_dict["constraints"]["displacements"]
+        constraints_displacements    = input_dict["constraints"]["displacements"]
         
         println("Tipo de problema: $(problem_type)")
 
@@ -54,7 +54,7 @@ module PHILLIPO
         pop!(constraints_forces_nodes)
         pop!(constraints_forces_lines)
         pop!(constraints_forces_surfaces)
-        pop!(constraints_displacments)
+        pop!(constraints_displacements)
 
         if isempty(materials) error("Não há nenhum material definido!") end
 
@@ -68,16 +68,19 @@ module PHILLIPO
         if problem_type == "3D"
             dof_prescribe = reduce(vcat, map(
                     (x) -> [3 * x[1] - 2, 3 * x[1] - 1, 3 * x[1]], 
-                    constraints_displacments
+                    constraints_displacements
                 ))
             dof_free = filter(x -> x ∉ dof_prescribe, 1:dimensions*nodes_length)
             # RESTRIÇÃO DE DESLOCAMENTO
-            Ug[dof_prescribe] = reduce(vcat, map((x) -> [x[2], x[3], x[4]], constraints_displacments))
+            Ug[dof_prescribe] = reduce(vcat, map((x) -> [x[2], x[3], x[4]], constraints_displacements))
         else
-            dof_prescribe = reduce(vcat, map((x) -> [2 * x[1] - 1, 2 * x[1]], constraints_displacments))
+            dof_prescribe = reduce(vcat, map(
+                (x) -> [2 * x[1] - 1, 2 * x[1]], 
+                constraints_displacements)
+            )
             dof_free = filter(x -> x ∉ dof_prescribe, 1:dimensions*nodes_length)
             # RESTRIÇÃO DE DESLOCAMENTO
-            Ug[dof_prescribe] = reduce(vcat, map((x) -> [x[2], x[3]], constraints_displacments))
+            Ug[dof_prescribe] = reduce(vcat, map((x) -> [x[2], x[3]], constraints_displacements))
         end
 
 
