@@ -323,7 +323,7 @@ O elemento CST, por exemplo, é definido pelo \emph{struct} \emph{TriangleLinear
 
 A função homônima \emph{TriangleLinear} é responsável por construir o elemento CST, conforme as relações estabelecidas no capitulo de Elementos Finitos. Ela é uma abstração superior da função \emph{new}, que de fato vai preencher as variáveis listadas acima e retornar o próprio \emph{struc} do elemento específico.
 
-Primeiramente, a função de construção do CST remaneja os dados de entrada para as variáveis do \emph{Struc}: \emph{index}, \emph{material\_index} e \emph{nodes\_index}, e preenche os as variáveis $i$, $j$ e $m$ os vetores de coordenadas dos respectivos nós, para, em seguida, construir a matriz $\bm{X}$ na variável \emb{position\_nodes\_matrix}. Em seguida, calcula a matriz $\bm{X}^{-1}$, e a área do elemento, variável \emph{\Delta}. A matriz $B$ é calculada com os os temos da inversa matriz $\bm{X}^{-1}$, cujas colunas foram distribuídas nas variáveis \emph{a}, \emph{b} e \emph{c}, que representam os termos $\alpha$, $\beta$ e $\gamma$ da equação \ref{eq:matriz_x}. 
+Primeiramente, a função de construção do CST remaneja os dados de entrada para as variáveis do \emph{Struc}: \emph{index}, \emph{material\_index} e \emph{nodes\_index}, e preenche os as variáveis $i$, $j$ e $m$ os vetores de coordenadas dos respectivos nós, para, em seguida, construir a matriz $\bm{X}$ na variável \emph{position\_nodes\_matrix}. Em seguida, calcula a matriz $\bm{X}^{-1}$, e a área do elemento, variável \emph{\Delta}. A matriz $B$ é calculada com os os temos da inversa matriz $\bm{X}^{-1}$, cujas colunas foram distribuídas nas variáveis \emph{a}, \emph{b} e \emph{c}, que representam os termos $\alpha$, $\beta$ e $\gamma$ da equação \ref{eq:matriz_x}. 
 
 Por fim, a função de construção calcula a matriz de rigidez local, \emph{K}(pela fórmula da equação \ref{eq:matriz_local}), determina os graus de liberdade do nós que compõe o elemento, na vetor \emph{degrees\_freedom}, e, por meio da função \emph{new}, retorna o elemento.
 
@@ -342,18 +342,17 @@ A função \emph{assemble\_stiffness\_matrix}, figura \ref{fig:asm}, é respons�
 \end{figure}
 
 
-
 Primeiramente, na linha 6, é criada a variável \emph{Kg\_vector}, um vetor de tamanho equivalente ao número de \emph{threads} disponibilizadas pela sessão Julia, cujas posições são matrizes no formato COO, que representam a matriz de rigidez global.
 
 A macro \emph{Threads.@threads} transforma a execução do loop na linha 12, sobre todos os elementos de síncrona para assíncrona, de modo que as iterações sejam distribuídas, em tempo de execução, pelas \emph{Treads}, ou seja, as iterações são armazenadas na forma de uma fila, um \emph{pipe}, e conforme as \emph{Threads} vão ficando disponíveis, elas vão retirando as iterações da fila e as executando.
 
-Dentro do loop, o elemento respectivo é criado pela sua função construção do \emph{strucs}. A função \emph{Matrices.add!}\footnote{Essa função é especializada em somar matrizes no formato COO.}, então, soma a matriz local desse elemento, sobre os seus graus de liberdade, na matriz global referente a posição do vetor \emph{Kg\_vector} correspondente a \emph{Thread} em que a iteração está sendo executada.
+Dentro do loop, o elemento respectivo é criado pela sua função construção do \emph{strucs}. A função \emph{Matrices.add!}, então, soma a matriz local desse elemento, sobre os seus graus de liberdade, na matriz global referente a posição do vetor \emph{Kg\_vector} correspondente a \emph{Thread} em que a iteração está sendo executada.
+
+A função \emph{Matrices.add!} não soma de fato os valores, apenas concatena os novos nos vetores que compõe o formato COO implementado. A soma de fato é realizada pela função \emph{Matrices.sum} depois de ser encerrado o loop.
 
 Os \emph{threads} são marcados por identificadores numéricos, que podem ser acessados pela função \emph{Threads.threadid}. O chamamentos dessa função dentro do loop garante que a soma da matriz local se dê sobre uma posição do vetor \emph{Kg\_vector} por vez.
 
 Caso não fosse realizado essa divisão de variáveis para a execução assíncrona, as iterações poderiam acessar a mesma posição ao mesmo tempo. Quando isso ocorre, uma iteração é descartada pela sessão, fazendo com que a matriz de rigidez seja montada errada.
-
-A escolha do formato COO permite que a matriz global, em cada \emph{thread}, s
 
 Finalizado o loop, as matrizes do vetor \emph{Kg\_vector} são somadas pela função \emph{Matrices.sum}, que retorna a matriz global de rigidez no formato CSR.
 
