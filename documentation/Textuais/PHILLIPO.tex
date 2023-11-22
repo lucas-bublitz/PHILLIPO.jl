@@ -153,18 +153,21 @@ O arquivo gerado é do formato \emph{.json}, o que pode ser não usual para apli
 
 Para gerar as listas de elementos triangules, foi escrito o seguinte código, dentro do arquivo emph{PHILLIPO.bas}:
 \lstinputlisting[firstline=10,lastline=16]{../GID connection/PHILLIPO.gid/PHILLIPO.bas}
+Em cada linha, os nós são definidos por listas, cujos valores representam as componentes $x$ e $y$ respectivamente. A numeração dos nós é implícita pela ordem das listas dentro da lista de \emph{"nodes"}.
 
 Na linha 1 é definido o nome do campo \emph{"nodes"}, separado pelo características \emph{:} inicia a declaração do valor daquele campo: uma lista \emph{[}\footnote{Essa sintaxe de listas e \emph{literals} é próprio do JavaScript.}. Na linha 2, é iniciado um laço de repetição, que percorre todos os nós, e, para cada um, é adicionado um elemento à lista, que é composto por um par de coordenadas, separadas por vírgula, e envolvidas por colchetes, pois cada nó é presentando por um vetor que contem suas coordenadas. Na linha 5, é fechado o laço de repetição, e, na linha 6, é fechado o campo \emph{]}. 
 
-Esse padrão se repete para o elementos também, com a diferença que estes, dependendo do seu tipo (CST ou tetraedro), são listas dentro da tupla que representa dos os elementos. Na figura \ref{fig:PHILLIPO.bas}, é possível nota essa hierarquia dos dados na estrutura de entrada de PHILLIPO.
+Esse padrão se repete para o elementos também, com a diferença que estes, dependendo do seu tipo (CST ou tetraedro), são listas dentro da tupla que representa dos os elementos. Na figura \ref{fig:PHILLIPO.bas}, é possível nota essa hierarquia dos dados na estrutura de entrada de PHILLIPO. O elementos são separados pela forma das funções de interpolação. Para o CST, as funções são linear, então esses elementos são gravados dentro da chave \emph{"linear"}. 
 
-No exemplo da figura
+Vale ressaltar também como as condições de contorno são gravas. Como as restrições de deslocamento sempre são sobre nós, só a uma lista desse tipo. Já os carregamentos, para serem aplicados no MEF, precisam ser convertidos para forças nodais, e, para tanto, é necessário utilizar as funções de interpolação que dependem do elemento. Por conta disso, são gravadas as condições de contorno de carregamento sobre as entidades geométricas: linhas e superfícies, por meio dos nós, de forma que o PHILLIPO se encarrega de calcular, utilizando as funções de interpolação, as forças nodais equivalentes sobre o elemento que a contém. Na linha 35, da figura \ref{fig:PHILLIPO.bas}, uma restrição de força é descrita: a primeira posição se refere a numeração que o GID deu para aquela entidade de linha, os dois valores seguintes são os identificadores dos que definem a entidade, e os valores restantes são as componentes do carregamento.
 
 \begin{figure}[hbtp]
     \caption{Arquivo de saída do quarto caso de verificação: 4 verification case.dat}
     \lstinputlisting{../verification/4 verification case/4 verification case.gid/4 verification case.dat}
     \label{fig:PHILLIPO.bas}
 \end{figure}
+
+
 
 O arquivo \emph{PHILLIPO.bat} (figura \ref{fig:PHILLIPO.bat}) é um \emph{script} que é chamado pela função CALCULAR do GID, para iniciar a análise do problema. É um arquivo de linhas de comando (ou arquivo de lote)\footnote{Comandos utilizados dentro do terminal do sistema: o CMD.} para o sistema operacional Windows\footnote{Por conta disso, o \emph{PHILLIPO.gid} só funciona em sistemas Windows.}.
 
@@ -205,11 +208,34 @@ O código-fonte de PHILLIPO foi organizado em seis módulos, ao longo de sete ar
 
 \subsection{PHILLIPO.jl}
 
-O arquivo \emph{PHILLIPO.jl} é o que define o próprio módulo, e por contada disso é homônimo. Nele é se encontra a função principal \emph{main}, que vai conduzir toda a parte do processamento da análise \footnote{Pode-se pensar na função principal como um ponto de partida do software, um \emph{int main()} como em C.}. 
+O arquivo \emph{PHILLIPO.jl} é o que define o próprio módulo, e por contada disso é homônimo. Nele é se encontra a função principal \emph{main}, que vai conduzir toda a parte do processamento da análise \footnote{Pode-se pensar na função principal como um ponto de partida do software, um \emph{int main()} como em C.}. Na figura \ref{fig:phillipo.jl}, uma parte desse arquivo é reproduzida. 
 
 \begin{figure}[hbtp]
     \caption{Parte do arquivo principal do módulo: PHILLIPO.jl}
-    \lstinputlisting[firstline = 15, lastline = 32]{../src/PHILLIPO.jl}
+    \lstinputlisting[firstline = 14, lastline = 32, language=python]{../src/PHILLIPO.jl}
     \label{fig:phillipo.jl}
 \end{figure}
+
+A primeira linha é a declaração da abertura do módulo, cujo nome é precedido pela keyword \emph{module}. As linhas 3 a 10 são responsáveis por importar os módulos utilizadas. Nessa parte é importante salientar o seguinte: os módulos internos, aqueles definidos como bibliotecas explícitas dentro de PHILLIPO são incluídos aninhadamente pela inclusão do arquivo \emph{includes.jl}, e para serem chamados à pré-compilação devem ser importados diretamente, conforme as linhas 9 a 13\footnote{Os nomes do módulos internos devem ser seguidos de um ponto quando forem importados. Isso é devido a localização dos arquivos do sistema de Julia. Sem essa notação, a sessão Julia vai tentar buscar nos módulos instaladas na aquele ambiente, e não os declarados explicitamente no código.}. As Inclusões são a forma de se particionar os arquivos do módulo, fazendo com que sejam aglutinados naquela linha em que são chamados. Para o \emph{Pkg.jl}, todo o código se torna apenas um arquivo contínuo.
+
+Na linha 16, a função \emph{main} é definida, e recebe dos valores: o caminho para o arquivo \emph{.dat} de dados de entrada, o caminho para o arquivo de saída. Após essas linha, o chamamento das funções segue o descrito no fluxo de execução do processamento, na subseção anterior. Vale ressaltar que nessa função estão presentes uma série de impressões, \emph{prints}. Esses são os \emph{debugs} já mencionados, que vão compor o arquivo \emph{.log}\footnote{Existem outros modos de realizar o debug, utilizando a macro \emph{@debug}.}.
+
+A parte posterior da função principal é a leitura dos dados de entrada, chamando a função \emph{IOfiles.open\_parse\_input\_file}, na linha 5 da figura \ref{fig:phillipo.jl_2}, retornando um dicionário na variável \emph{input\_dict}, cujos dados, nas linhas seguintes, são distribuídos às variáveis principais do problema:
+
+\begin{enumerate}
+    \item \textbf{\emph{problem\_type}}: referente ao tipo do problema (EPT, EPD ou tridimensional);
+    \item \textbf{\emph{nodes}}: vetor de vetores das coordenadas dos nós ordenados;
+    \item \textbf{\emph{materials}}: vetor de materiais declarados;
+    \item \textbf{\emph{constraints\_forces\_nodes}}: vetor dos vetores de restrições de força sobre nós;
+    \item \textbf{\emph{constraints\_forces\_lines}}: vetor dos vetores de restrições de força sobre linhas;
+    \item \textbf{\emph{constraints\_forces\_surfaces}}: vetor dos vetores de restrições de força sobre superfícies;
+    \item \textbf{\emph{constraints\_forces\_displacments }}: vetor dos vetores de restrições de deslocamento sobre nós;
+\end{enumerate}
+
+\begin{figure}[hbtp]
+    \caption{Parte do arquivo principal do módulo: PHILLIPO.jl}
+    \lstinputlisting[firstline = 29, lastline = 45, language=python]{../src/PHILLIPO.jl}
+    \label{fig:phillipo.jl_2}
+\end{figure}
+
 
