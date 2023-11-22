@@ -2,7 +2,7 @@
 
 \chapter{PHILLIPO}
 
-PHILLIPO é um \emph{solver} para análise de em estruturas discretizadas por elementos finitos, com algumas otimizações computacionais relacionadas a paralelismo e matrizes esparsas, e que visa constituir-se como exemplo didático na implementação legível e concisa dos algoritmos de elementos finitos em Julia no âmbito acadêmico do campus CCT, da UDESC. PHILLIPO é um programa de código aberto, que é distribuído em um repositório público\footnotemark[1]{} sob a licença LGPL\footnotemark[2]{}. Portanto, sua utilização é gratuita e livre para fins acadêmicos e comerciais, que incluem a modificação, implementação e venda de qualquer parte do programa, como também da documentação que o acompanha; só se resguarda, entretanto, a devida citação deste documento. A logo de PHILLIPO é mostrada na figura \ref{fig:log_phillipo}.
+PHILLIPO é um \emph{solver} para análise de estruturas discretizadas por elementos finitos, com algumas otimizações computacionais relacionadas a paralelismo e matrizes esparsas, e empacotamento, que visa constituir-se como exemplo didático na implementação legível e concisa dos algoritmos de elementos finitos em Julia no âmbito acadêmico do campus CCT, da UDESC. PHILLIPO é um programa de código aberto, que é distribuído em um repositório público\footnotemark[1]{} sob a licença LGPL\footnotemark[2]{}. Portanto, sua utilização é gratuita e livre para fins acadêmicos e comerciais, que incluem a modificação, implementação e venda de qualquer parte do programa, como também da documentação que o acompanha; só se resguarda, entretanto, a devida citação desta monografia. A logo de PHILLIPO é mostrada na figura \ref{fig:log_phillipo}.
 \footnotetext[1]{O repositório é mantido no GitHub, assim como o presente documento em formato Latex: \url{https://github.com/lucas-bublitz/PHILLIPO}}
 \footnotetext[2]{O GiD, interface de pré e pós-processamento, é um software distribuído comercialmente, e não está sujeito à mesma licença que PHILLIPO.}
 
@@ -13,11 +13,7 @@ PHILLIPO é um \emph{solver} para análise de em estruturas discretizadas por el
     \label{fig:log_phillipo}
 \end{figure}
 
-Um \emph{solver}, ou em melhor português, um solucionador em MEF não é uma novidade no mundo acadêmico, nem no comercial. Softwares como Calculix (que é distribuído integrado com o FreeCAD) e o FreeFEM, que já conta com 7 mil commits em seu repositório, são continuamente produzidos e aprimorados desde antes da virada do milênio, um trabalho que demanda tempo e uma comunidade bem ativa. Deste modo, a pretensão de PHILLIPO não é fornecer uma alternativa a esses softwares, muito menos servir de módulo ou biblioteca para agregar algum deles, além do mais, a elaboração de programas robustos e confiáveis é um trabalho demorado e de muitas pessoas.
-
-A pretensão de PHILLIPO é construir uma aplicação simples utilizando o MEF, que possa aproveitar algumas ferramentas de construção de código em Julia, como paralelismo e despachos múltiplos, para apresentar mais uma referência de programação em engenharia no campus CCT, da UDESC, e, deste modo, evidenciar que é possível construir aplicações do MEF de forma simples e legível, e por meio de uma linguagem de programação moderna, como Julia.
-
-Neste capítulo é apresentado como é feita a distribuição, instalação e como se dá o funcionamento de PHILLIPO, dividido em duas partes. A primeira, descrevendo o fluxo de execução normal do programa, isto é, utilizando o GID como interface de pré e pós-processamento, e, a segunda, esmiuçando o código, tanto do módulo PHILLIPO, quanto dos arquivos de integração com o GID.
+Neste capítulo é apresentado como é feita a distribuição e a instalação, e como se dá o funcionamento de PHILLIPO, dividido em duas partes. A primeira, descrevendo o fluxo de execução normal do programa, isto é, utilizando o GID como interface de pré e pós-processamento, e, a segunda, esmiuçando o código, tanto do módulo PHILLIPO, quanto dos arquivos de integração com o GID.
 
 \section{Distribuição pelo Pkg.jl e importação dos \emph{Problems types} no GID}
 
@@ -95,9 +91,29 @@ O processamento é realizado dentro da sessão Julia, executando a função prin
 
 Com o fim da execução da função principal, é encerrada a sessão Julia e, e é chamado o programa Notepad para a abrir o arquivo \emph{.log}, onde algumas informações de debug foram impressas durante o processamento. 
 
+\subsection{Pós-processamento}
+
+
+O Pós-processamento é realizado pelo GID, e consiste num conjunto de ferramentas de plotagem, com diversas formas de visualizar todo os dados impressos no arquivo de saída.
+
 \section{Integração com GID}
 
-O GID é um software utilizado como pré e pós-processamento. Com ele é possível criar a geometria do problema, definir as propriedades dos materiais, as condições de contorno, as cargas aplicadas, e, principalmente, gerar a malha de elementos. Além de se ser possível a integração com um \emph{solver} qualquer, por meio de um conjunto de arquivos de entrada e saída (ambos configurados de forma a permitir uma certa flexibilidade nessa integração), cuja execução é controlada por um \emph{script} em Batch, o que possibilita a automatização do processo de simulação. Nesta seção é abordado como é feita e integração entre o GID e PHILLIPO, por meio das pastas \emph{PHILLIPO.gid} e \emph{PHILLIPO3D.gid}, sendo que, como a nomeação dos arquivos sugere, a primeira é utilizada para problemas bidimensionais, e a segunda para problemas tridimensionais.
+O GID é um software utilizado como pré e pós-processamento (ver figuras \ref{fig:gid_1} e \ref{fig:gid_2}). Com ele é possível criar a geometria do problema, definir as propriedades dos materiais, as condições de contorno, as cargas aplicadas, e, principalmente, gerar a malha de elementos. Além de se ser possível a integração com um \emph{solver} qualquer, por meio de um conjunto de arquivos de entrada e saída (ambos configurados de forma a permitir uma certa flexibilidade nessa integração), cuja execução é controlada por um \emph{script} em Batch, o que possibilita a automatização do processo de simulação. Nesta seção é abordado como é feita e integração entre o GID e PHILLIPO, por meio das pastas \emph{PHILLIPO.gid} e \emph{PHILLIPO3D.gid}, sendo que, como a nomeação dos arquivos sugere, a primeira é utilizada para problemas bidimensionais, e a segunda para problemas tridimensionais.
+
+\begin{figure}[hbtp]
+    \centering
+    \caption{Exemplo de pré-processamento de geometria no GID}
+    \includegraphics[width = \textwidth]{Figuras/gid_1.png}
+    \label{fig:gid_1}
+\end{figure}
+
+\begin{figure}[hbtp]
+    \centering
+    \caption{Exemplo de pós-processamento no GID}
+    \includegraphics[width = \textwidth]{Figuras/gid_2.png}
+    \label{fig:gid_2}
+\end{figure}
+
 
 \subsection{PHILLIPO.gid}
 
@@ -244,7 +260,7 @@ A próxima parte do arquivo cria os vetores de graus de liberdade prescritos e l
 
 Os graus de liberdade são numerados de acordo com a numeração dos nós sequencialmente, de modo que o nó de número $1$ tenha os graus $1$, $2$ e $3$, e um certo nó $n$, tenha os graus $3n-2$, $3n-1$ e $3n$, para um problema tridimensional. Para o caso bidimensional, a regra é similar: o nó $n$ tem o graus $2n-1$ e $2n$. Essas regras estão implementadas na forma de funções anônimas (linhas 4 e 12). 
 
-A função \emph{map} mapeia cada elemento do vetor de restrições de deslocamento para um vetor de graus de liberdade restritos. Para unir esses vetores, a função \emph{reduce} aplica uma função binária, no caso a função \emph{vcat}, entre os elementos do vetor, e retorna um único vetor com todos os graus de liberdade. Essa forma de construir o código é um exemplo de programação funcional.
+A função \emph{map} mapeia cada elemento do vetor de restrições de deslocamento para um vetor de graus de liberdade restritos. Para unir esses vetores, a função \emph{reduce} aplica uma função binária, no caso a função \emph{vcat}, entre os elementos do vetor, e retorna um único vetor com todos os graus de liberdade \footnote{Essa forma de construir essa parte do código é um exemplo de um aspecto de programação funcional.}. 
 
 \begin{figure}[hbtp]
     \caption{Parte do arquivo principal do módulo: PHILLIPO.jl}
@@ -282,20 +298,64 @@ O cálculo das tensões é feito pela função \emph{Stress.recovery}, para as v
     \label{fig:phillipo.jl_6}
 \end{figure}
 
-A última parte do arquivo \emph{PHILLIPO.jl} é a escrita do próprio arquivo de saída \emph{.dat}, por meio do módulo interno \emph{IOfiles}, conforme a figura \ref{fig:phillipo.jl_7}. Nessa etapa é preciso inserir uma série de cabeçalhos no arquivo para que o GID possa interpretá-los corretamente. 
-
-Seja o exemplo de arquivo de saída o do quarto caso de verificação, figura \ref{fig:case_verification.pos}. Nele é possível observar que toda tabela de valores inicia com \emph{Values} e termina com \emph{End Values}, como também é precedida de um cabeçalhos que informa seus metadados, ou seja, sobre o que se trata aquela tabela. 
-
-\begin{figure}[hbtp]
-    \caption{Parte do arquivo principal do módulo: PHILLIPO.jl}
-    \lstinputlisting[firstline = 149, lastline = 172, language=python]{../src/PHILLIPO.jl}
-    \label{fig:phillipo.jl_7}
-\end{figure}
-
-\begin{figure}[hbtp]
-    \caption{Arquivo de saída do quarto caso de verificação: 4 verification case.dat}
-    \lstinputlisting{../verification/4 verification case/4 verification case.gid/4 verification case.post.res}
-    \label{fig:case_verification.pos}
-\end{figure}
+A última parte do arquivo \emph{PHILLIPO.jl} é a escrita do próprio arquivo de saída \emph{.dat}, por meio do módulo interno \emph{IOfiles}. Nessa etapa é preciso inserir uma série de cabeçalhos no arquivo para que o GID possa interpretá-los corretamente. 
 
 Finalizada a escrita sobre o arquivo de saída, a função principal é encerrada.
+
+\subsection{Elements.jl e paralelismo na montagem da matriz de rigidez global}
+
+O módulo \emph{Elements.jl} é divido em duas seções: a definição dos \emph{structs} do tipos de elementos, compostos pelos dados necessários para montar a matriz de rigidez local e uma função de criação, e as funções relativas à montagem da matriz de rigidez e da aplicação dos carregamentos sobre o sistema.
+
+
+O elemento CST, por exemplo, é definido pelo \emph{struct} \emph{TriangleLinear}, e contém os seguintes dados na forma de variáveis:
+
+\begin{enumerate}
+    \item \textbf{\emph{nodes}}: vetor de vetores das coordenadas dos nós ordenados;
+   \item \textbf{\emph{index}}: número de identificação do elemento;
+   \item \textbf{\emph{material\_index}}: número de identificação do material;
+   \item \textbf{\emph{nodes\_index}}: conectividade;
+   \item \textbf{\emph{interpolation\_function\_coeff}}: coeficientes das funções de interpolação na forma da matriz $\bm{X}^{-1}$, equação \ref{eq:matriz_x};
+   \item \textbf{\emph{D}}: matriz constitutiva do material $\bm{C}$;
+   \item \textbf{\emph{B}}: matriz deformação-deslocamento $B$, equação \ref{eq:deformacao_deslocamento};
+   \item \textbf{\emph{K}}: matriz de rigidez local;
+   \item \textbf{\emph{degrees\_freedom}}: graus de liberdade do elemento;
+\end{enumerate}
+
+A função homônima \emph{TriangleLinear} é responsável por construir o elemento CST, conforme as relações estabelecidas no capitulo de Elementos Finitos. Ela é uma abstração superior da função \emph{new}, que de fato vai preencher as variáveis listadas acima e retornar o próprio \emph{struc} do elemento específico.
+
+Primeiramente, a função de construção do CST remaneja os dados de entrada para as variáveis do \emph{Struc}: \emph{index}, \emph{material\_index} e \emph{nodes\_index}, e preenche os as variáveis $i$, $j$ e $m$ os vetores de coordenadas dos respectivos nós, para, em seguida, construir a matriz $\bm{X}$ na variável \emb{position\_nodes\_matrix}. Em seguida, calcula a matriz $\bm{X}^{-1}$, e a área do elemento, variável \emph{\Delta}. A matriz $B$ é calculada com os os temos da inversa matriz $\bm{X}^{-1}$, cujas colunas foram distribuídas nas variáveis \emph{a}, \emph{b} e \emph{c}, que representam os termos $\alpha$, $\beta$ e $\gamma$ da equação \ref{eq:matriz_x}. 
+
+Por fim, a função de construção calcula a matriz de rigidez local, \emph{K}(pela fórmula da equação \ref{eq:matriz_local}), determina os graus de liberdade do nós que compõe o elemento, na vetor \emph{degrees\_freedom}, e, por meio da função \emph{new}, retorna o elemento.
+
+\begin{figure}[hbtp]
+    \caption{\emph{Struct} do elemento CST: TriangleLinear}
+    \lstinputlisting[firstline = 25, lastline=71, language=python]{../src/modules/Elements.jl}
+    \label{fig:TriangleLinear}
+\end{figure}
+
+A função \emph{assemble\_stiffness\_matrix}, figura \ref{fig:asm}, é responsável pela montagem da matriz de rigidez global paralelamente, utilizando a estrutura de dados COO, para separar o processo em \emph{threads} diferentes.    
+
+\begin{figure}[hbtp!]
+    \caption{Função assemble\_stiffness\_matrix do arquivo: Elements.jl}
+    \lstinputlisting[firstline = 170, lastline=208]{../src/modules/Elements.jl}
+    \label{fig:asm}
+\end{figure}
+
+
+
+Primeiramente, na linha 6, é criada a variável \emph{Kg\_vector}, um vetor de tamanho equivalente ao número de \emph{threads} disponibilizadas pela sessão Julia, cujas posições são matrizes no formato COO, que representam a matriz de rigidez global.
+
+A macro \emph{Threads.@threads} transforma a execução do loop na linha 12, sobre todos os elementos de síncrona para assíncrona, de modo que as iterações sejam distribuídas, em tempo de execução, pelas \emph{Treads}, ou seja, as iterações são armazenadas na forma de uma fila, um \emph{pipe}, e conforme as \emph{Threads} vão ficando disponíveis, elas vão retirando as iterações da fila e as executando.
+
+Dentro do loop, o elemento respectivo é criado pela sua função construção do \emph{strucs}. A função \emph{Matrices.add!}\footnote{Essa função é especializada em somar matrizes no formato COO.}, então, soma a matriz local desse elemento, sobre os seus graus de liberdade, na matriz global referente a posição do vetor \emph{Kg\_vector} correspondente a \emph{Thread} em que a iteração está sendo executada.
+
+Os \emph{threads} são marcados por identificadores numéricos, que podem ser acessados pela função \emph{Threads.threadid}. O chamamentos dessa função dentro do loop garante que a soma da matriz local se dê sobre uma posição do vetor \emph{Kg\_vector} por vez.
+
+Caso não fosse realizado essa divisão de variáveis para a execução assíncrona, as iterações poderiam acessar a mesma posição ao mesmo tempo. Quando isso ocorre, uma iteração é descartada pela sessão, fazendo com que a matriz de rigidez seja montada errada.
+
+A escolha do formato COO permite que a matriz global, em cada \emph{thread}, s
+
+Finalizado o loop, as matrizes do vetor \emph{Kg\_vector} são somadas pela função \emph{Matrices.sum}, que retorna a matriz global de rigidez no formato CSR.
+
+
+
