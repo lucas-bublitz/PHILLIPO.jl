@@ -14,30 +14,29 @@ O Método dos Elementos Finitos consiste, basicamente, na ideia apresentada de a
 
 Esse procedimento é custoso em termos de cálculo, visto que para cada elemento é necessário calcular suas funções de interpolação, e depois justapor todos em um grande sistema de equações algébricas, cuja solução também é custosa. É evidente, então, que o Método dos Elementos Finitos, ou os métodos numéricos em geral, acompanham o desenvolvimento da programação, impulsionado pelo avanço do processamento computacional \cite[pág. 2]{Onate}. O poder computacional permite que se trabalhe com um volume inconcebível para a capacidade humana. 
 
-Os algoritmos e a estrutura de dados implementados passam a ser tão relevantes quanto a própria equação diferencial. Então, é de se esperar que uma aplicação desse método seja acompanhada de aspectos de estruturação de código, cujo objetivo não seja só a otimização computacional, mas a legibilidade e empacotamento, que são características úteis quando se espera a reutilização, aprimoramento continuado e, acima de tudo, a comunicação e distribuição do código-fonte.
+Os algoritmos e a estrutura de dados implementados passam a ser tão relevantes quanto a própria equação diferencial. É de se esperar que uma aplicação desse método seja acompanhada de aspectos de estruturação de código, cujo objetivo não seja só a otimização computacional, mas a legibilidade e empacotamento, que são características úteis quando se espera a reutilização, aprimoramento continuado e, acima de tudo, a comunicação e distribuição do código-fonte.
 
-A escolha da linguagem de programação para uma aplicação do MEF, é o passo fundamental para se planejar a estrutura do código, pois, são as ferramentas de sintaxe e processamento que a linguagem e seu compilador/interpretador oferecem que vão ditar, em parte, a forma como os algoritmos são implementados, além de outros aspectos de execução, como otimização e estrutura de dados. Comumente, programas comerciais de análise por elementos finitos, como Abaqus e Ansys, são escritos em linguagens compiladas, basicamente, C e FORTRAN, que são sinônimos de robustez e desempenho. Entretanto, também são conhecidas pela sua prolixidade, complexidade de sintaxe de distribuição de bibliotecas, empacotamento etc 
+A escolha da linguagem de programação para uma aplicação do MEF, é o passo fundamental para se planejar a estrutura do código, pois, são as ferramentas de sintaxe e processamento que a linguagem e seu compilador/interpretador oferecem que vão ditar, em parte, a forma como os algoritmos são implementados, além de outros aspectos de execução, como otimização e estrutura de dados. Comumente, programas comerciais de análise por elementos finitos, como Abaqus e Ansys, são escritos em linguagens compiladas, basicamente, C e FORTRAN, que são sinônimos de robustez e desempenho. Entretanto, também são conhecidas pela sua prolixidade, complexidade de sintaxe de distribuição de bibliotecas.
 
-Entretanto, linguagens compiladas não se mostram mais atrativas para se desenvolver, com praticidade, não só aplicações do MEF, como também a maioria das aplicações práticas na vida dos engenheiros e cientistas (automatização de tarefas, análise de dados e até computação algébrica simbólica). Linguagens como Python e suas bibliotecas, como Pandas e NumPy, utilizando-se de sua sintaxe simplificada, tipagem dinâmica e popularidade (ocupando o TIOBE Index três vezes nos últimos cinco anos), oferecem uma praticidade maior, e possibilitam uma produtividade maior na construção de programas. A conveniência dessas linguagens, porém, é acompanhada de um preço: o desempenho.
+Linguagens compiladas não se mostram mais atrativas para se desenvolver, com praticidade, não só aplicações do MEF, como também a maioria das aplicações práticas na vida dos engenheiros e cientistas (automatização de tarefas, análise de dados e até computação algébrica simbólica). Linguagens como Python e suas bibliotecas, como Pandas e NumPy, utilizando-se de sua sintaxe simplificada, tipagem dinâmica e popularidade (ocupando o TIOBE Index três vezes nos últimos cinco anos), oferecem uma praticidade maior, e possibilitam uma produtividade maior na construção de programas. A conveniência dessas linguagens, porém, é acompanhada de um preço: o desempenho.
 
-A performance de linguagens interpretadas é notavelmente inferior a linguagens compiladas, quando são implementadas em problemas grandes e complexos, envolvendo muito cálculos e um grande volume de variáveis. Esse dilema, entre performance (de linguagens como C e FORTRAN) e produtividade (de linguagens como Python) é conhecido como \emph{The Two language Problem}, em tradução livre, O Problema de Duas Linguagens.
+A performance de linguagens interpretadas é notavelmente inferior a linguagens compiladas, quando são implementadas em problemas grandes e complexos, envolvendo muito cálculos e um grande volume de variáveis, que é o caso de aplicações do MEF. Esse dilema, entre performance (de linguagens como C e FORTRAN) e produtividade (de linguagens como Python) é conhecido como \emph{The Two language Problem}, em tradução livre, O Problema de Duas Linguagens.
 
 Visando unificar esses dois mundos, e diminuir a distância entre as linguagens, engenheiros do MIT desenvolveram Julia, "a programming language for the scientific community that combines features of productivity languages, such as Python or MATLAB, with characteristics of performance-oriented languages, such as C++ or Fortran." \cite[tradução livre]{Bezanson} Por conta do sucesso de Julia, e de sua comunidade engajada, a linguagem vem sendo adotada mais e mais no âmbito acadêmico, incluindo na área de elementos finitos, o que motivou a escolha dela para o desenvolvimento deste trabalho.
 
-O Método dos Elementos Finitos é uma ferramenta numérica poderosa para a análise em sólidos, e o seu desenvolvimento em linguagens como Julia oferece uma porta de entrada muito convidativa para novos engenheiros, assim como impulsiona novas pesquisas no campo. Esta monografia aborda o desenvolvimento de um desses programas: PHILLIPO.jl, cujo o objetivo do desenvolvendo é expor e aplicar o MEF, com alguns aspectos de programação paralela e empacotamento.
-
+O Método dos Elementos Finitos é uma ferramenta numérica poderosa para a análise em sólidos, e o seu desenvolvimento em linguagens como Julia oferece uma porta de entrada muito convidativa para novos engenheiros, assim como impulsiona novas pesquisas no campo. Esta monografia aborda o desenvolvimento de um desses programas: PHILLIPO.jl, cujo o objetivo é expor e aplicar o MEF, com alguns aspectos de programação paralela e empacotamento.
 
 
 \section{Motivação}
 
-O tema surgiu quando o autor se encontrou na tarefa de adicionar uma funcionalidade em um software já existente de elementos finitos, e, já visto uma introdução ao assunto na graduação, teve o interesse de se aprofundar. Então resolveu por criar seu próprio programa, em Julia, aplicando seus conhecimento prévios de projeto de software, desenvolvendo mais o seu entendimento sobre o Método dos Elementos Finitos, assim como de aspectos numéricos computacionais.
+O tema surgiu quando o autor se encontrou na tarefa de adicionar uma funcionalidade em um software já existente de elementos finitos, e, já visto uma introdução ao assunto na graduação, teve o interesse de se aprofundar. Resolveu, para tanto, por criar seu próprio programa, em Julia, aplicando seus conhecimento prévios de programação, desenvolvendo mais o seu entendimento sobre o Método dos Elementos Finitos, assim como de aspectos numéricos computacionais.
 
 
 \section{Objetivo}
 
-O objetivo geral deste trabalho foi desenvolver uma aplicação de MEF para a análise de tensão e deformação em estruturas sólidas sob carregamentos estáticos em regime elástico linear, utilizando para tanto, aspectos de programação processamento paralelo, focando em algumas características empacotamento de implementação e de legibilidade, com o intuito secundário de expor as facilidades e vantagens da linguagem Julia, como também servir de exemplo menor.
+O objetivo geral deste trabalho foi desenvolver uma aplicação de MEF para a análise de tensão e deformação em estruturas sólidas sob carregamentos estáticos em regime elástico linear, utilizando para tanto, aspectos de processamento paralelo, focando em algumas características empacotamento e de legibilidade, com o intuito secundário de expor as facilidades e vantagens da linguagem Julia, como também servir de exemplo menor.
 
-\subsection{Objetivos propostos}
+\subsection{Objetivos específicos}
 
 Foram propostos os seguintes objetivos específicos:
 
@@ -45,8 +44,7 @@ Foram propostos os seguintes objetivos específicos:
     \item estudar o MEF aplicado na determinação de deformações de estruturas sólidas em regime elástico e linear, sob carregamentos estáticos (implementando os elementos triangulares e tetraédricos, de deformações constantes);
     \item programar os algoritmos de MEF em Julia;
     \item desenvolver um módulo que seja distribuível pelo gerenciador de pacotes Pkg.jl, em um repositório público hospedado no GitHub;
-    \item aplicar processamento paralelo em determinadas partes do programa em que as funções nativas não o fazem, a fim de utilizar mais da capacidade de processamento do computador que um código feito sobre o paradigma estruturado;
-    \item estudar as características da linguagem Julia, e como ela pode ser uma alternativa viável para C e FORTRAN em programação científica de alta performance.
+    \item aplicar processamento paralelo em determinadas partes do programa em que as funções nativas não o fazem, a fim de utilizar mais da capacidade de processamento do computador que um código feito sobre o paradigma estruturado.
 \end{enumerate}
 
 \section{Organização do documento}
@@ -56,7 +54,7 @@ Este documento aborda o desenvolvimento de um módulo em Julia, denominado PHILL
 \begin{enumerate}
     \item A mecânica dos sólidos: tensão e deformação no regime elástico;
     \item O método de elementos finitos aplicado no equilíbrio estático de estruturas sólidas;
-    \item A linguagem de programação Julia: o processamento paralelo acessível;
+    \item A linguagem Julia;
     \item PHILLIPO.jl;
     \item Validação e verificação de resultados;
     \item Objetivos alcançados e melhorias em projetos futuros;

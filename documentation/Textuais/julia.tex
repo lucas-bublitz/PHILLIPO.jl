@@ -15,14 +15,14 @@
 
 Julia é uma linguagem de programação dinâmica, opcionalmente tipada, pré-compilada, generalista, de código livre\footnote{A Linguagem Julia é distribuída, quase integralmente, sob a MIT License, que permite a modificação, utilização e distribuição, seja comercial ou não, de qualquer parte do código, assim como das documentações associadas.} e de alto nível, criada por Jeff Bezanso, Stefan Karpinski, Viral B. Shah e Alan Edelman, em 2012, com o objetivo de minimizar o problema das duas linguagens (\emph{the two language problem}). É voltada para a programação científica, com capacidades de alta performance e sintaxe simples, similar à notação matemática usual. \cite{Sherrington}
 
-Na aplicação do MEF, a linguagem se destaca por sua sintaxe semelhante a do MATLAB, que se mostra ideal na manipulação de matrizes e vetores, e por sua capacidade de processamento paralelo, que permite a otimização na construção e resolução de sistemas algébricos grandes. Além disso, o empacotamento oferecido pela linguagem, por meio do \emph{Pkg.jl}, fornece ferramentas de controle e versionamento, como também, a criação de módulos, uma forma eficiente de organizar e distribuir aplicações dentro o ecossistema de Julia.
+Na aplicação do MEF, a linguagem se destaca por sua sintaxe semelhante a do MATLAB, que se mostra ideal na manipulação de matrizes e vetores, e por sua capacidade de processamento paralelo, que permite a otimização na construção e resolução de sistemas algébricos grandes. Além disso, o empacotamento oferecido pela linguagem, por meio do \emph{Pkg.jl}, fornece ferramentas de controle e versionamento, como também, a criação de módulos, uma forma eficiente de organizar e distribuir aplicações.
 
 Este capítulo aborda os seguintes tópicos que são relevantes para a aplicação do MEF em Julia, e que foram explorados no desenvolvimento de PHILLIPO:
 
 \begin{enumerate}
     \item matrizes esparsas com \emph{SparseArrays.jl};
     \item empacotamento com \emph{Pkg.jl};
-    \item processamento paralelo com \emph{Threads.jl};
+    \item processamento paralelo com \emph{Threads.jl} em estruturas de repetição;
 \end{enumerate}
 
 
@@ -72,5 +72,5 @@ O formato CSC, por sua vez, já consiste em uma forma mais sofisticado, fazendo 
 \end{equation}
 O módulo \emph{SparseArrays.jl} implementa esse formato como padrão de matrizes esparsas, além de adicionar diversas otimizações matemáticas nas operações definidas pelo módulo \emph{LinearAlgebra.jl}, principalmente quando se trada de resolver grandes sistemas lineares, escolhendo a melhor rotina aplicável \footnote{Detalhes da implementação de rotinas otimizadas para matrizes esparsas não faz parte do escopo deste trabalho.}.
 
-
+Vale também ressaltar que o módulo \emph{SparseArrays.jl} implementa as matrizes esparsas de modo que ainda sejam compatíveis com as operações convencionais, isto é, a sintaxe e funções definidas para matrizes densas (adição, multiplicação e seleção de entradas...) são aplicáveis também para matrizes esparsas, de forma que o usuário não precisa se preocupar com a forma de armazenamento da matriz, e pode se concentrar apenas na resolução do problema em si.
 
