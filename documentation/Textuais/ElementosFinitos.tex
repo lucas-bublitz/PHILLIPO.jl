@@ -512,7 +512,7 @@ As condições de contorno sobre os deslocamentos, então, dividem os graus de l
     \cite{LOGAN}
 \end{enumerate}
 
-Um engaste, por exemplo, gera condições de contorno de Dirichlet, definindo graus de liberdade prescritos, pois impõe que o deslocamento naquela região do sólido é nulo. Um deslocamento conhecido, também o faz, determinando que os graus correspondentes recebam o valor deslocado.
+Um engaste, por exemplo, gera uma condições de contorno de Dirichlet, definindo graus de liberdade prescritos, pois impõe que o deslocamento naquela região do sólido é nulo. Um deslocamento conhecido, também o faz, determinando que os graus correspondentes recebam o valor deslocado.
 
 O vetor de forças $\bm{F}$ é nulo em regra sobre os graus de liberdade livres, pois essa entidade representa as forças externas sobre o elemento. Entretanto, como no MEF os deslocamentos são discretizados nos nós, o mesmo é feito com os carregamentos. Quando se aplicam condições de contorno de Neumann, os graus correspondentes devem receber forças nodais equivalentes, de forma que representem os carregamentos por forças externas concentradas nos nó. Pode-se encontrar as forças nodais equivalentes utilizando o mesmo método da seção anterior: o princípio dos trabalhos virtuais, fazendo com que o trabalho de carregamentos sobre a fronteira de um elemento $\partial \Omega^{(e)}$, causado por um deslocamento virtual $\delta \bm{U}^{(e)}$, seja igual ao trabalho da forças nodais equivalentes. Em termos matemáticos, de acordo com \citeshort{Zin},
 \begin{equation}
@@ -561,6 +561,7 @@ Com a determinação da matriz de rigidez global, as condições de contorno dev
     = \begin{Bmatrix}
         \bm{F}_L \\ \bm{F}_P
     \end{Bmatrix},
+    \label{eq:sistema_global_dividido}
 \end{equation}
 Nessa expressão, os graus de liberdade subdividem os vetores $\bm{U}$ e $\bm{F}$ em dois cada um, em prescritos ($\bm{U}_P$ e $\bm{F}_P$), e livres ($\bm{U}_L$ e $\bm{F}_L$). A matriz de rigidez, então, é subdividida em quatro, que relacionam os graus de liberdade prescritos e livros dos deslocamentos e das forças nodais, respectivamente.
 

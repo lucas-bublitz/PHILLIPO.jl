@@ -1,12 +1,10 @@
-
-
 \chapter{PHILLIPO}
 
 PHILLIPO é um \emph{solver} para análise de estruturas discretizadas por elementos finitos, com algumas otimizações computacionais relacionadas a paralelismo e matrizes esparsas, e empacotamento, que visa constituir-se como exemplo didático na implementação legível e concisa dos algoritmos de elementos finitos em Julia no âmbito acadêmico do campus CCT, da UDESC. PHILLIPO é um programa de código aberto, que é distribuído em um repositório público\footnotemark[1]{} sob a licença LGPL\footnotemark[2]{}. Portanto, sua utilização é gratuita e livre para fins acadêmicos e comerciais, que incluem a modificação, implementação e venda de qualquer parte do programa, como também da documentação que o acompanha; só se resguarda, entretanto, a devida citação desta monografia. A logo de PHILLIPO é mostrada na figura \ref{fig:log_phillipo}.
 \footnotetext[1]{O repositório é mantido no GitHub, assim como o presente documento em formato Latex: \url{https://github.com/lucas-bublitz/PHILLIPO}}
 \footnotetext[2]{O GiD, interface de pré e pós-processamento, é um software distribuído comercialmente, e não está sujeito à mesma licença que PHILLIPO.}
 
-\begin{figure}[hbtp]
+\begin{figure}[hbtp!]
     \centering
     \caption{Logo estilizada de PHILLIPO.jl}
     \includegraphics[width = \textwidth]{Figuras/logo_phillipo.pdf}
@@ -31,14 +29,14 @@ PHILLIPO utiliza a interface GID para gerar as malhas e definir as condições d
 \section{Fluxo de execução}
 
 O fluxo de execução é uma ferramenta de projeto que tem como objetivo descrever a ordem e as condições que determinadas seções do código são executadas. A utilização de PHILLIPO.jl segue os digramas das figuras \ref{fig:fluxograma_GID} e \ref{fig:fluxograma_PHILLIPO}. Esses diagramas não representações simplificados e parciais, e não utilizam um padrão ou simbologia formal que é própria desses diagramas.
-\begin{figure}[hbtp]
+\begin{figure}[hbtp!]
     \centering
     \caption{Fluxograma de execução: GID}
     \includegraphics[width = \textwidth]{Figuras/fluxograma_GID.pdf}
     \label{fig:fluxograma_GID}
 \end{figure}
 
-\begin{figure}[hbtp]
+\begin{figure}[hbtp!]
     \centering
     \caption{Fluxograma de execução: PHILLIPO.jl}
     \includegraphics[width = \textwidth]{Figuras/fluxograma_PHILLIPO.pdf}
@@ -341,20 +339,26 @@ A função \emph{assemble\_stiffness\_matrix}, figura \ref{fig:asm}, é respons�
     \label{fig:asm}
 \end{figure}
 
+Na linha 6, a variável \emph{Kg\_vector} é criada como um vetor de tamanho equivalente ao número de \emph{threads} disponíveis na sessão Julia. Cada posição desse vetor armazena matrizes no formato COO, que são utilizadas para representar a matriz de rigidez global. O formato COO é particularmente eficiente para matrizes esparsas neste caso porque inserções em posições nulas não fazem com que a matriz precise ser reescrita e realocada na memória, como ocorre com o formato CSR\footnote{No formato CST, o vetor de valores é ordenados conforme as posições não nulas da matriz.}, tornando o formato COO uma escolha razoável para a montagem da matriz de rigidez global.
 
-Primeiramente, na linha 6, é criada a variável \emph{Kg\_vector}, um vetor de tamanho equivalente ao número de \emph{threads} disponibilizadas pela sessão Julia, cujas posições são matrizes no formato COO, que representam a matriz de rigidez global.
+A macro \emph{Threads.@threads} na linha 12 transforma a execução do loop em uma abordagem assíncrona. Isso significa que as iterações do loop são distribuídas dinamicamente entre as \emph{threads} disponíveis em tempo de execução. Cada iteração é colocada em uma fila, ou \emph{pipe}, e as \emph{threads} disponíveis retiram iterações da fila para execução. Esse paralelismo oferece um aproveitamento melhor de sistemas com múltiplos núcleos de processamento.
 
-A macro \emph{Threads.@threads} transforma a execução do loop na linha 12, sobre todos os elementos de síncrona para assíncrona, de modo que as iterações sejam distribuídas, em tempo de execução, pelas \emph{Treads}, ou seja, as iterações são armazenadas na forma de uma fila, um \emph{pipe}, e conforme as \emph{Threads} vão ficando disponíveis, elas vão retirando as iterações da fila e as executando.
+Dentro do loop, cada elemento é construído pela sua função correspondente, utilizando a estrutura de \emph{strucs}. A função \emph{Matrices.add!} é então utilizada para somar a matriz local do elemento aos graus de liberdade correspondentes na matriz global, armazenada na posição do vetor \emph{Kg\_vector} associada à \emph{thread} em execução. É importante destacar que a função \emph{Matrices.add!} não realiza a soma efetiva dos valores, mas sim concatena os novos valores nos vetores que compõem o formato COO implementado. A soma real ocorre posteriormente, após o encerramento do loop, pela função \emph{Matrices.sum}\footnote{O formato COO não é ordenado, isto é, os valores podem ser inseridos em qualquer ordem e gravados em qualquer ordem pois cada inserção é vinculada a sua posição individualmente.}.
 
-Dentro do loop, o elemento respectivo é criado pela sua função construção do \emph{strucs}. A função \emph{Matrices.add!}, então, soma a matriz local desse elemento, sobre os seus graus de liberdade, na matriz global referente a posição do vetor \emph{Kg\_vector} correspondente a \emph{Thread} em que a iteração está sendo executada.
+O uso de \emph{Threads.threadid} dentro do loop garante que a soma da matriz local seja realizada sequencialmente em cada posição do vetor \emph{Kg\_vector} por vez, evitando assim que iterações acessem a mesma posição simultaneamente. Isso é crucial para evitar conflitos de acesso que poderiam resultar em erros na montagem da matriz de rigidez global\footnote{Existem outras formas de evitar conflitos de acesso simultâneo, como utilizar variáveis \emph{Atomic}.}.
 
-A função \emph{Matrices.add!} não soma de fato os valores, apenas concatena os novos nos vetores que compõe o formato COO implementado. A soma de fato é realizada pela função \emph{Matrices.sum} depois de ser encerrado o loop.
+Ao final do loop, as matrizes armazenadas no vetor \emph{Kg\_vector} são somadas pela função \emph{Matrices.sum}, que retorna a matriz global de rigidez no formato CSR. O formato CSR é utilizado para a matriz global pois é mais eficiente para a resolução do sistema, que é realizada pela função \emph{Solver.direct\_solve!}.
 
-Os \emph{threads} são marcados por identificadores numéricos, que podem ser acessados pela função \emph{Threads.threadid}. O chamamentos dessa função dentro do loop garante que a soma da matriz local se dê sobre uma posição do vetor \emph{Kg\_vector} por vez.
+\subsection{Solver.jl}
+ 
+Neste arquivo é feita a divisão da matriz de rigidez global de acordo com os graus de liberdade livres e prescritos, conforme a equação \ref{eq:sistema_global_dividido}. O que vale comentar aqui é a forma como a solução é encontrada, utilizando $\backslash$. A função $\backslash$, embora tenha outras utilidades devido ao emprego dos despachos múltiplos em Julia, define o chamamento da resolução de sistemas lineares pelo módulo \emph{LinearAlgebra.jl}, que, analisando as características da matriz, escolhe o método mais adequado para a resolução\footnote{}. Por conta dessa seleção de método que o módulo executa, a matriz global de rigidez é convertida para o formato CSR, que é mais eficiente na resolução de sistemas lineares. É possível encontrar a chamada da função por ferramentas de debug como a macro \emph{@less}, para se determinar qual realmente é o método chamado.
 
-Caso não fosse realizado essa divisão de variáveis para a execução assíncrona, as iterações poderiam acessar a mesma posição ao mesmo tempo. Quando isso ocorre, uma iteração é descartada pela sessão, fazendo com que a matriz de rigidez seja montada errada.
+Com ferramentas de debug empregadas, porém, não foi possível determinar com exatidão a forma como a função $\backslash$ escolhe o método de resolução. Observando o código fonte de \emph{LinearAlgebra.jl}, foi possível constatar que o módulo não compreende a matriz como simétrica, e acaba utilizando uma decomposição LU, que, devido a esparsidade da matriz e a documentação da linguagem, chama o UMFPACK, um método para matrizes esparsas assimétricas. 
 
-Finalizado o loop, as matrizes do vetor \emph{Kg\_vector} são somadas pela função \emph{Matrices.sum}, que retorna a matriz global de rigidez no formato CSR.
+Os motivos para a não compreensão da simetria da matriz podem ser diversos, mas o mais provável é que a função $\backslash$ não compreenda a estrutura de dados CSC, e, por isso, não consegue determinar a simetria da matriz. A função \emph{Symmetric} também foi utilizada para tentar contornar esse problema, porém, dentro do módulo \emph{LinearAlgebra.jl}, o formato composto (por simetria e CSC) parece não ser reconhecido, e a função retorna um erro de tipo.
 
-
-
+\begin{figure}[hbtp!]
+    \caption{Arquivo: Solver.jl}
+    \lstinputlisting{../src/modules/Solver.jl}
+    \label{fig:solver}
+\end{figure}

@@ -8,6 +8,7 @@ module Matrices
     using SparseArrays
     import Base.sum
     export SparseMatrixCOO, spCOO, sum, add!
+    using LinearAlgebra
 
     mutable struct SparseMatrixCOO{Tv,Ti<:Integer} <: AbstractSparseMatrix{Tv,Ti}
         I :: Vector{Ti}
@@ -76,7 +77,7 @@ module Matrices
         I = reduce(vcat, getfield.(A, :I))
         J = reduce(vcat, getfield.(A, :J))
         V = reduce(vcat, getfield.(A, :V))
-        sparse(I,J,V)
+        LinearAlgebra.Symmetric(sparse(I,J,V))
     end
 
     function add!(A::SparseMatrixCOO, dof::Vector{<:Integer}, data)
