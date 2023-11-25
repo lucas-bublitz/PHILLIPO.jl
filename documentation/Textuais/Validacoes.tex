@@ -476,7 +476,7 @@ Nos casos bidimensionais foi empregado a geometria de um quadrado unitário, con
 
 Em todas as sequências de comparação para o caso bidimensionais, os resultados exportados do Abaqus convergiram com os produzidos por PHILLIPO, com exceção, tal qual nos casos tridimensionais, dos deslocamentos prescritos, que não são definidos exatamente zero nos engastes, e, da mesma forma, essa diferença é desprezível.
 
-Destes modo, fica demonstrado que algoritmo matemático do ME foi implementado corretamente nessas condições. 
+Destes modo, fica demonstrado que algoritmo matemático do MEF foi implementado corretamente nessas condições. 
 
 \section{Validação}
 
@@ -534,7 +534,7 @@ No GID, a geometria da viga foi construída utilizando quatro paralelepípedos i
 
 A mesma análise foi realizada utilizando elementos CST, modelando a viga por um EPT, cujo resultado consta na figura \ref{fig:viga_longa_grafico_CST}. 
 
-É possível notar que a modelagem por CST converge mais rápido, para o total de nós utilizado em cada análise, que a feita por elementos tetraédricos. Isso é devido porque no caso tridimensional os nós são postos sobre toda a geometria da viga, e no caso bidimensional, os nós são postos apenas sobre um plano e os efeitos transversais são definidos pelo EPT.
+É possível notar que a modelagem por CST converge mais rápido, para o total de nós utilizado em cada análise, que a feita por elementos tetraédricos. Isso é porque no caso tridimensional os nós são postos sobre toda a geometria da viga, e no caso bidimensional, os nós são postos apenas sobre um plano e os efeitos transversais são definidos pelo EPT. Assim, a estrutura é melhor discretizada no plano com menos nós, obtendo resultado mais próximo da solução analítica.
 
 \begin{figure}
     \centering  
