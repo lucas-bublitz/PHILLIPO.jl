@@ -93,9 +93,9 @@ Nesse sentido, bidimensional, $\bm{\varphi}$ é uma função vetorial de campo q
 Para determinar as constantes $a$ e $b$, e termos dos deslocamentos nodais basta aplicar a condição de que em cada nó a função deve assumir o valor do deslocamento respectivo. Isto é, analisando somente a componente $x$, ou seja, $u(x,y)$, temos que
 
 \begin{align}
-    u(x_i, y_i) &= u_i &= a_1 + a_2 x_i + a_3 y_i, \\
-    u(x_h, y_i) &= u_j &= a_1 + a_2 x_j + a_3 y_j, \\
-    u(x_i, y_i) &= u_k &= a_1 + a_2 x_k + a_3 y_k,
+    u(x_i, y_i) &= u_i = a_1 + a_2 x_i + a_3 y_i, \\
+    u(x_h, y_i) &= u_j = a_1 + a_2 x_j + a_3 y_j, \\
+    u(x_i, y_i) &= u_k = a_1 + a_2 x_k + a_3 y_k,
 \end{align}
 em que $u_i$ é o valor do deslocamento nodais $i$, assim como $x_i$ e $y_i$ é sua posição sobre o domínio $\Omega$.
  
@@ -232,7 +232,7 @@ Utilizando essas equações, é possível reescrever o vetor de deformação $\{
         \gamma_i & \beta_i & \gamma_j & \beta_j & \gamma_k & \beta_k
     \end{bmatrix} \begin{Bmatrix}
         u_i \\ v_i \\ u_j \\ v_j \\ u_k \\ v_k
-    \end{Bmatrix} = \frac{1}{2A} \bm{B} \bm{U}^{(e)}.
+    \end{Bmatrix} = \bm{B} \bm{U}^{(e)}.
     \label{eq:deformacao_deslocamento}
 \end{equation}
 
@@ -656,7 +656,7 @@ As mesmas relações gerais da seção anterior podem ser utilizadas para deriva
             \draw [->] (0,0,0) -- (0,0,8) node[anchor = east] {$z$};
             \draw[dashed, blue, ultra thick] (i) -- (k);
             \draw (i) node[blue, circle, draw, inner sep=1pt, fill=white, thin, scale = 1.1, fill opacity = 1] {$i$};
-            \draw (j) node[blue, circle, draw, inner sep=1pt, fill=white, thin, scale = 1.1, fill opacity = 1] {$k$};
+            \draw (j) node[blue, circle, draw, inner sep=1pt, fill=white, thin, scale = 1.1, fill opacity = 1] {$j$};
             \draw (k) node[blue, circle, draw, inner sep=1pt, fill=white, thin, scale = 1.1, fill opacity = 1] {$k$};
             \draw (m) node[blue, circle, draw, inner sep=1pt, fill=white, thin, scale = 1.1, fill opacity = 1] {$m$};
     \end{tikzpicture}

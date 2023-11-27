@@ -288,7 +288,7 @@ As outras formas de restrições de força são aplicadas por meio das funções
 
 A próxima parte do arquivo, figura \ref{fig:phillipo.jl_6}, é a resolução do sistema, chamando a função \emph{Solver.direct\_solve!}. Como essa função recebe os vetores de deslocamentos e forças nodais globais, não retorna nada, pois já aplicada a resolução do sistema sobre esses vetores. Em seguida, ocorre o cálculo das reações pela função \emph{Stress.reactions}, que retorna o vetor de reações \emph{R} e seu somatórios \emph{Re\_sum}, cujo propósito é verificar se o resultado do sistema está em equilíbrio.
 
-O cálculo das tensões é feito pela função \emph{Stress.recovery}, para as variáveis \emph{\sigma} e \emph{\sigma vm}, respectivamente, o vetor de tensões na notação de Voigt e o vetor de tensões de von Mises.
+O cálculo das tensões é feito pela função \emph{Stress.recovery}, para as variáveis \emph{$\sigma$} e \emph{$\sigma$\_vm}, respectivamente, o vetor de tensões na notação de Voigt e o vetor de tensões de von Mises.
 
 \begin{figure}[hbtp]
     \caption{Parte do arquivo principal do módulo: PHILLIPO.jl}
@@ -321,7 +321,8 @@ O elemento CST, por exemplo, é definido pelo \emph{struct} \emph{TriangleLinear
 
 A função homônima \emph{TriangleLinear} é responsável por construir o elemento CST, conforme as relações estabelecidas no capitulo de Elementos Finitos. Ela é uma abstração superior da função \emph{new}, que de fato vai preencher as variáveis listadas acima e retornar o próprio \emph{struc} do elemento específico.
 
-Primeiramente, a função de construção do CST remaneja os dados de entrada para as variáveis do \emph{Struc}: \emph{index}, \emph{material\_index} e \emph{nodes\_index}, e preenche os as variáveis $i$, $j$ e $m$ os vetores de coordenadas dos respectivos nós, para, em seguida, construir a matriz $\bm{X}$ na variável \emph{position\_nodes\_matrix}. Em seguida, calcula a matriz $\bm{X}^{-1}$, e a área do elemento, variável \emph{\Delta}. A matriz $B$ é calculada com os os temos da inversa matriz $\bm{X}^{-1}$, cujas colunas foram distribuídas nas variáveis \emph{a}, \emph{b} e \emph{c}, que representam os termos $\alpha$, $\beta$ e $\gamma$ da equação \ref{eq:matriz_x}. 
+
+Primeiramente, a função de construção do CST remaneja os dados de entrada para as variáveis do \emph{Struc}: \emph{index}, \emph{material\_index} e \emph{nodes\_index}, e preenche os as variáveis $i$, $j$ e $m$ os vetores de coordenadas dos respectivos nós, para, em seguida, construir a matriz $\bm{X}$ na variável \emph{position\_nodes\_matrix}. Em seguida, calcula a matriz $\bm{X}^{-1}$, e a área do elemento, variável \emph{$\Delta$}. A matriz $B$ é calculada com os os temos da inversa matriz $\bm{X}^{-1}$, cujas colunas foram distribuídas nas variáveis \emph{a}, \emph{b} e \emph{c}, que representam os termos $\alpha$, $\beta$ e $\gamma$ da equação \ref{eq:matriz_x}. 
 
 Por fim, a função de construção calcula a matriz de rigidez local, \emph{K}(pela fórmula da equação \ref{eq:matriz_local}), determina os graus de liberdade do nós que compõe o elemento, na vetor \emph{degrees\_freedom}, e, por meio da função \emph{new}, retorna o elemento.
 
