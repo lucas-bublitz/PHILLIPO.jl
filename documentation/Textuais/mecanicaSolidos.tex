@@ -136,7 +136,7 @@ Seja um corpo $\mathcal{B}$ definido sobre uma região $\Omega$, e a função $\
 
 \begin{equation}
     T(\bm{x}) = \bm{x} + \bm{\varphi}(\bm{x}), \qquad
-    \bm{U}(x,y,z) = \begin{Bmatrix}
+    \bm{\varphi}(x,y,z) = \begin{Bmatrix}
         u(x,y,z) \\ v(x,y,z) \\ w(x,y,z) 
     \end{Bmatrix}.
     \label{eq:transformacao}
@@ -389,8 +389,8 @@ Utilizando a notação de Voigt, a Lei de Hooke generalizada pode ser em forma c
 Invertendo esse sistema, obtemos a matriz constitutiva da equação \ref{eq:lei_de_hooke},
 
 \begin{equation}
-    \{\sigma\} = \frac{E}{(1+\nu)(1-2\nu)}
-    \underbrace{\begin{bmatrix} 1-\nu & \nu & \nu & 0 & 0 & 0 \\
+    \{\sigma\} = \underbrace{\frac{E}{(1+\nu)(1-2\nu)}
+    \begin{bmatrix} 1-\nu & \nu & \nu & 0 & 0 & 0 \\
         \nu & 1-\nu & \nu & 0 & 0 & 0 \\
         \nu & \nu & 1-\nu & 0 & 0 & 0 \\
         0 & 0 & 0 & \frac{1-2\nu}{2} & 0 & 0 \\
