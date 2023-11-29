@@ -42,7 +42,7 @@ Seguindo \citeshort{LOGAN}, neste capítulo aborda-se como
 
 As funções de interpolação são funções matemáticas que aproximam o campo de interesse, neste caso o deslocamento, dentro de um elemento, por meio de uma combinação linear de funções conhecidas, definidas sobre os nós do elemento. Essas funções são definidas, e depois justapostas, de modo que o campo seja contínuo. O objetivo dessa ferramente é alterar os valores incógnitos do campo de contínuos para discretos, para que o deslocamento seja bem definido pelo seu valor sobre a posição cada nó, e que, por sobre o domínio de cada elemento, o campo seja interpolado. Esses valores discretos desconhecidos do campo nos nós, em que o campo tem "liberdade" pra variar, denominam-se \emph{graus de liberdade}. \cite{LOGAN}
 
-O CST, por exemplo, tem seis graus de liberdade, uma vez que para cada nó, o vetor de deslocamento têm três componentes. Os problemas abordados aqui têm sempre três graus de liberdade por nó.
+O CST (\emph{Constant Strain Triangle}), por exemplo, tem seis graus de liberdade, uma vez que para cada nó, o vetor de deslocamento tem duas componentes. O tetraedro linear, por sua vez, tem doze graus de liberdade, uma vez que para cada nó, o vetor de deslocamento tem três componentes. 
 
 Define-se, então, a função de deslocamento sobre um elemento, representado pela figura \ref{fig:CST}, assim como a proposta linear de interpolação,
 
@@ -53,7 +53,7 @@ Define-se, então, a função de deslocamento sobre um elemento, representado pe
         a_1 + a_2 x + a_3 y \\ b_1 + b_2 x + b_3 y 
     \end{Bmatrix}^{(e)}.
 \end{equation}
-Nesse sentido, bidimensional, $\bm{\varphi}$ é uma função vetorial de campo que mapeia cada ponto do sólido para seu respectivo deslocamento nos eixos do sistema $xy$ ($u$ e $v$ respectivamente).
+No caso bidimensional, $\bm{\varphi}$ é uma função vetorial de campo que mapeia cada ponto do sólido para seu respectivo deslocamento nos eixos do sistema $xy$ ($u$ e $v$ respectivamente).
 
 \begin{figure}
 	\centering
@@ -94,8 +94,8 @@ Para determinar as constantes $a$ e $b$, e termos dos deslocamentos nodais basta
 
 \begin{align}
     u(x_i, y_i) &= u_i = a_1 + a_2 x_i + a_3 y_i, \\
-    u(x_h, y_i) &= u_j = a_1 + a_2 x_j + a_3 y_j, \\
-    u(x_i, y_i) &= u_k = a_1 + a_2 x_k + a_3 y_k,
+    u(x_j, y_j) &= u_j = a_1 + a_2 x_j + a_3 y_j, \\
+    u(x_k, y_k) &= u_k = a_1 + a_2 x_k + a_3 y_k,
 \end{align}
 em que $u_i$ é o valor do deslocamento nodais $i$, assim como $x_i$ e $y_i$ é sua posição sobre o domínio $\Omega$.
  
@@ -128,7 +128,7 @@ Reescrevendo esse sistema na forma matricial, temos que
     \label{eq:matriz_x}
 \end{equation}
 
-sendo que\footnote{É fácil demonstrar que esse sistema sempre é possível e determinado apenas observando o fato de que as posições dos nós são distintas e não colineares, a final, os elementos são triangulares.}
+sendo que\footnote{É fácil demonstrar que esse sistema sempre é possível e determinado apenas observando o fato de que as posições dos nós são distintas e não colineares, afinal os elementos são triangulares.}
 
 \begin{equation}
     \frac{1}{2A}
@@ -179,7 +179,7 @@ Expandido essas expressões, multiplicando as matrizes e rearranjado os termos, 
     \label{eq:funcao_v}
 \end{equation}
 
-Para simplificar a notação das equações \ref{eq:funcao_u} e \ref{eq:funcao_v}, define-se funções $N$ da forma
+Para simplificar a notação das equações \ref{eq:funcao_u} e \ref{eq:funcao_v}, definem-se as funções de interpolação $N$ da forma
 
 \begin{align}
     N_i &= \frac{1}{2A} \left[ \alpha_i + \beta_i x + \gamma_i y \right], \\
@@ -204,7 +204,7 @@ em que $\bm{N}$ é a matrix de funções de interpolação, e $\bm{U}^{(e)}$ é 
 
 \section{As Relações de Tensão-Deformação-Deslocamento}
 
-No caso bidimensional, o vetor de deformação, na notação de Voigt, é dado por, conforme definido no capítulo anterior,
+No caso bidimensional, o tensor de deformação, na notação de Voigt, é dado, conforme definido no capítulo anterior,
 
 \begin{equation}
     \{\epsilon\} = \begin{Bmatrix}
@@ -223,7 +223,7 @@ Aplicando nessas derivadas parciais as funções de interpolação de $\bm{\varp
     \frac{\partial u}{\partial y} + \frac{\partial v}{\partial x} &= \frac{1}{2A} \left[ \gamma_i u_i + \gamma_j u_j + \gamma_k u_k + \beta_i v_i + \beta_j v_j + \beta_k v_k \right].
 \end{align}
 
-Utilizando essas equações, é possível reescrever o vetor de deformação $\{\epsilon\}$ em termos dos coeficientes $\beta$ e $\gamma$, como também do vetor de deslocamentos nodais do elemento $\{U\}^{(e)}$, na forma
+Utilizando essas equações, é possível reescrever o tensor de deformação $\{\epsilon\}$ em termos dos coeficientes $\beta$ e $\gamma$, como também do vetor de deslocamentos nodais do elemento $\{U\}^{(e)}$, na forma
 
 \begin{equation}
     \{\epsilon\} = \frac{1}{2A} \begin{bmatrix}
@@ -236,7 +236,7 @@ Utilizando essas equações, é possível reescrever o vetor de deformação $\{
     \label{eq:deformacao_deslocamento}
 \end{equation}
 
-A matrix $\bm{B}$ é uma função das coordenadas dos nós do elemento, e relaciona o vetor de deslocamentos nodais do elemento $\bm{U}^{(e)}$ com o vetor de deformações $\{\epsilon\}$, assim como é constante ao longo de todo o elemento, o que é devido pela escolha de funções lineares de interpolação. Por causa dessa propriedade, esse elemento é denominado triângulo de deformações constantes, ou CST (\emph{Constant Strain Triangle}).
+A matrix $\bm{B}$ é uma função das coordenadas dos nós do elemento, e relaciona o vetor de deslocamentos nodais do elemento $\bm{U}^{(e)}$ com o tensor de deformações $\{\epsilon\}$. Como as funções de interpolação são lineares, os coeficientes da matriz  $\bm{B}$ são constantes ao longo do elemento e, consequentemente, as deformação também são constantes. Por causa dessa propriedade, esse elemento é denominado triângulo de deformações constantes, ou CST (\emph{Constant Strain Triangle}).
 
 Por fim, ao passo que a relação entre deformação e tensão é dada pela Lei de Hooke generalizada, na forma da matriz constitutiva $\bm{C}$ (por conveniência, a matriz constitutiva será expressa sem a notação usual $[C]$), expressar a relação entre tensão e deslocamento, ou tensão-Deformação-Deslocamento, é simplesmente uma questão de multiplicar a matriz constitutiva pela matriz $\bm{B}$, obtendo assim a relação
 
@@ -268,19 +268,19 @@ Um dos métodos para derivar essa matriz é utilizar o \emph{Princípio dos Trab
     Se um corpo deformável em equilíbrio é submetido a deslocamentos virtuais arbitrários (imaginários) associados a uma deformação compatível do corpo, o trabalho virtual das forças externas no corpo é igual à energia virtual de deformação das tensões internas. \cite[pág. 876, tradução livre]{LOGAN}
 \end{citacao}
 
-Nesse contexto, o trabalho virtual interno é causado por uma deformação do próprio corpo, denotada $\delta \bm{\epsilon}$, enquanto o trabalho virtual externo, por sua vez, é causado diretamente por um deslocamento virtual das forças que atuam sobre as fronteiras do corpo, denotado $\delta \bm{u}$. Em um corpo elástico, modelado pela Lei de Hooke, o trabalho virtual interno pode ser descrito em termos do deslocamento, como a energia armazenada na forma elástica, a fim de desenvolver as equações de equilíbrio estático apresentadas a seguir. \footnote{A notação $\delta$ se refere a um variacional, que representa uma variação infinitesimal sobre o todo o contínuo da função, de modo que seja nulo na região em que são aplicadas as condições de contorno. O cálculo variacional, entretanto, não é abordado diretamente nesta monografia.}
+Nesse contexto, o trabalho virtual interno é causado por uma deformação do próprio corpo, denotada $\delta \bm{\epsilon}$, devida a uma deformação virtual $\delta \bm{u}$, enquanto o trabalho virtual externo é causado diretamente pelas forças que atuam sobre as fronteiras do corpo. Em um corpo elástico, modelado pela Lei de Hooke, o trabalho virtual interno pode ser descrito em termos do deslocamento virtual, como a energia armazenada na forma elástica, a fim de desenvolver as equações de equilíbrio estático apresentadas a seguir. \footnote{A notação $\delta$ se refere a um variacional, que representa uma variação infinitesimal sobre o todo o contínuo da função, de modo que seja nulo na região em que são aplicadas as condições de contorno. O cálculo variacional, entretanto, não é abordado diretamente nesta monografia.}
 
 
 Seja um elemento triangular, como da figura \ref{fig:CST_carregamentos}, que sofre um deslocamento virtual $\delta \bm{U}^{(e)}$. De acordo com \citeshort{Zin}, o trabalho interno do elemento é dado por\footnote{Poder escrever a energia interna desta forma simples é devido à escolha de que, na notação de Voigt do tensor de deformação, foi utilizado a convenção de $\gamma = 2 \epsilon$.}
 
 \begin{equation}
-    \mathcal{U} = \int_{\Omega^{(e)}} \delta \{\epsilon\}^t \{\sigma\} dV,
+    \delta\mathcal{U} = \int_{\Omega^{(e)}} \delta \{\epsilon\}^t \{\sigma\} dV,
 \end{equation}
 
 Utilizando as relações de tensão-deformação-deslocamento, descritas nas equações \ref{eq:deformacao_deslocamento} e \ref{eq:relacao_tensao_deslocamento}, temos que\footnote{Utilizando também a propriedade de transposição do produto de matrizes, $(\bm{A}\bm{B})^t = \bm{B}^t \bm{A}^t$.}
 
 \begin{equation}
-    \mathcal{U} = \int_{\Omega^{(e)}} (\bm{B} \delta \bm{U}^{(e)})^t \bm{C} \bm{B} \bm{U}^{(e)} dV
+    \delta\mathcal{U} = \int_{\Omega^{(e)}} (\bm{B} \delta \bm{U}^{(e)})^t \bm{C} \bm{B} \bm{U}^{(e)} dV
     \implies \mathcal{U} = \delta (\bm{U}^{(e)})^t \int_{\Omega^{(e)}} \bm{B}^t \bm{C} \bm{B} dV \bm{U}^{(e)}.
 \end{equation}
 
@@ -357,16 +357,16 @@ Utilizando as relações de tensão-deformação-deslocamento, descritas nas equ
 \end{figure}
 
 
-O trabalho desenvolvido pelas forças externas é dado, também de acordo com \citeshort{Zin}, pelo produto dos deslocamento nodais e das forças nodais, na forma
+O trabalho desenvolvido pelas forças externas é dado, também de acordo com \citeshort{Zin}, pelo produto dos deslocamentos nodais e das forças nodais, na forma
 
 \begin{equation}
-    \mathcal{W} = \delta (\bm{U}^{(e)})^t \bm{F}^{(e)}.
+    \delta\mathcal{W} = \delta (\bm{U}^{(e)})^t \bm{F}^{(e)}.
 \end{equation}
 
 Igualando as duas parcelas de trabalho, temos que
 
 \begin{equation}
-    \mathcal{U} =  \mathcal{W}\implies
+    \delta\mathcal{U} =  \delta\mathcal{W}\implies
     \delta (\bm{U}^{(e)})^t \int_{\Omega^{(e)}} \bm{B}^t \bm{C} \bm{B} dV \bm{U}^{(e)} = \delta (\bm{U}^{(e)})^t \bm{F}^{(e)}.
 \end{equation}
 
@@ -383,7 +383,7 @@ Comparando com a forma da equação \ref{eq:sistema_global}, fica evidente que a
     \bm{K}^{(e)} = \int_{\Omega^{(e)}} \bm{B}^t \bm{C} \bm{B} dV.
 \end{equation}
 
-O elemento tratado aqui é o CST, portanto, a matriz $\bm{B}$ é constante em todo o domínio $\Omega^{(e)}$, como também é constante a matriz constitutiva $\bm{C}$. A integral, portanto, não precisa ser computada em um sistema local, pois todos os termos que a compõe são constantes. Logo, a matriz de rigidez local pode ser simplificada ainda mais, tornando-se, de acordo com \citeshort{LOGAN}
+O elemento tratado aqui é o CST, portanto, a matriz $\bm{B}$ é constante em todo o domínio $\Omega^{(e)}$, como também é constante a matriz constitutiva $\bm{C}$. A integral, portanto, não precisa ser computada em um sistema local, pois todos os termos que a compõem são constantes. Logo, a matriz de rigidez local pode ser simplificada ainda mais, tornando-se, de acordo com \citeshort{LOGAN}
 
 \begin{equation}
     \bm{K}^{(e)} = \bm{B}^t \bm{C} \bm{B} \int_{\Omega^{(e)}} dV = \bm{B}^t \bm{C} \bm{B} V,
@@ -391,11 +391,9 @@ O elemento tratado aqui é o CST, portanto, a matriz $\bm{B}$ é constante em to
 \end{equation}
 em que $V$ é o volume do elemento, definido, no caso bidimensional, por $V = A d$, em que $d$ é a espessura.
 
-Essa matriz pode ser lida como uma lista de causa e efeito. Enquanto a linha da matriz representa onde que o efeito do deslocamento é aplicado, a força no caso, a coluna informa qual é o deslocamento, o grau de liberdade, que o causa. \cite{LOGAN}
-
 Outra forma de derivar essa relação diretamente da equação de equilíbrio estático é por meio do método de Galerkin, em que as bases da função de interpolação são as mesmas da função de ponderação, utilizando a chamada formulação fraca da equação de governo. Esse método leva à mesma formulação mostrada acima.
 
-Vale ressaltar que não foi preciso definir um sistema local de coordenadas para derivar essas relações, uma vez que o elemento tradado aqui, como também o tetraedro (tratado mais adiante), tem funções de interpolação simples o suficiente que um sistema orientado a cada elemento não é necessário. Elementos mais sofisticados necessitam, por uma questão de manipulação algébrica, de um sistema de referência local. Esses elementos não são tratados aqui.
+Vale ressaltar que não foi preciso definir um sistema local de coordenadas para derivar essas relações, uma vez que o elemento tradado aqui, como também o tetraedro (tratado mais adiante), tem funções de interpolação simples o suficiente para que um sistema orientado a cada elemento não seja necessário. Elementos mais sofisticados necessitam, por uma questão de manipulação algébrica, de um sistema de referência local. Esses elementos não são tratados aqui.
 
 \section{Matriz de Rigidez Global e Condições de Contorno}
 
@@ -425,12 +423,12 @@ As matrizes locais de rigidez desses elementos são quadradas $6 \times 6$, pois
     \end{bmatrix}^{(1)}
     \color{black}
     \begin{Bmatrix}
-        u_1 \\ v_1 \\ u_2 \\ v_2 \\ u_3 \\ v_3
+        u_1 \\ v_1 \\ u_3 \\ v_3 \\ u_2 \\ v_2
     \end{Bmatrix}
     &=
     \begin{Bmatrix}
         f_{x1} \\ f_{y1} \\ f_{x2} \\ f_{y2} \\ f_{x3} \\ f_{y3}
-    \end{Bmatrix} \iff \color{blue} \bm{K}^{(e)} \bm{U}^{(e)} = \bm{F}^{(e)}, \\
+    \end{Bmatrix} \iff \color{blue} \bm{K}^{(1)} \bm{U}^{(1)} = \bm{F}^{(1)}, \\
     \color{red} \begin{bmatrix}
         k_{11} & k_{12} & k_{13} & k_{14} & k_{15} & k_{16} \\
         k_{21} & k_{22} & k_{23} & k_{24} & k_{25} & k_{26} \\
@@ -446,7 +444,7 @@ As matrizes locais de rigidez desses elementos são quadradas $6 \times 6$, pois
     &=
     \begin{Bmatrix}
         f_{x2} \\ f_{y2} \\ f_{x3} \\ f_{y3} \\ f_{x4} \\ f_{y4}
-    \end{Bmatrix} \iff \color{red} \bm{K}^{(e)} \bm{U}^{(e)} = \bm{F}^{(e)}, \\
+    \end{Bmatrix} \iff \color{red} \bm{K}^{(2)} \bm{U}^{(2)} = \bm{F}^{(2)}, \\
     \color{green} \begin{bmatrix}
         k_{11} & k_{12} & k_{13} & k_{14} & k_{15} & k_{16} \\
         k_{21} & k_{22} & k_{23} & k_{24} & k_{25} & k_{26} \\
@@ -462,7 +460,7 @@ As matrizes locais de rigidez desses elementos são quadradas $6 \times 6$, pois
     &=
     \begin{Bmatrix}
         f_{x3} \\ f_{y3} \\ f_{x5} \\ f_{y5} \\ f_{x4} \\ f_{y4}
-    \end{Bmatrix} \iff \color{green} \bm{K}^{(e)} \bm{U}^{(e)} = \bm{F}^{(e)}.
+    \end{Bmatrix} \iff \color{green} \bm{K}^{(3)} \bm{U}^{(3)} = \bm{F}^{(3)}.
 \end{align}
 
 A montagem do sistema global é somar essas matrizes de rigidez sobre os graus de liberdade. Observemos que o primeiro nó só faz parte de um elemento, o \textcolor{blue}{azul}, portanto sua rigidez só tem contribuição desse elemento; o nó $3$, por sua vez, pertence aos três elementos (\textcolor{blue}{azul}, \textcolor{red}{vermelho} e \textcolor{green}{verde}), e, portanto, seu termo de rigidez tem contribuição de todos eles. Realizando esse procedimento, é possível montar a matriz global de rigidez, utilizando, para tanto, a notação dos vetores de deslocamentos nodais $\bm{U}$ e de forças nodais $\bm{F}$.
@@ -483,7 +481,7 @@ A matriz de rigidez global é quadrada $10 \times 10$, pois existem cinco nós, 
                 0                        & 0                         & 0                                                   & 0                                                     &  \textcolor{green}{k_{61}}                                                      &  \textcolor{green}{k_{62}}                                                      &  \textcolor{green}{k_{63}}                           &  \textcolor{green}{k_{64}}                           &  \textcolor{green}{k_{65}} &  \textcolor{green}{k_{66}} 
             \end{bmatrix}
             \begin{Bmatrix}
-                0 \\ 0 \\ u_2 \\ v_2 \\ 0 \\ 0 \\ u_4 \\ v_4 \\ u_5 \\ v_5
+                u_1 \\ v_1 \\ u_2 \\ v_2 \\ u_3 \\ v_3 \\ u_4 \\ v_4 \\ u_5 \\ v_5
             \end{Bmatrix} = 
             \begin{Bmatrix}
                 R_{x1} \\ R_{y1} \\ 0 \\ \textcolor{purple}{f} \\ R_{x3} \\ R_{y3} \\ \frac{1}{2} \ell_{4-5} \textcolor{orange}{t} \\ 0 \\ \frac{1}{2} \ell_{4-5} \textcolor{orange}{t} \\ 0
@@ -491,7 +489,7 @@ A matriz de rigidez global é quadrada $10 \times 10$, pois existem cinco nós, 
         \label{eq:sistema_global_montado}
     \end{equation}
 \end{landscape}
-Nas duas primeiras linhas do sistema, que representam as forças nodais sobre o primeiro nó, é possível notar que somente os deslocamentos do elemento azulado que impactam diretamente. Nos graus de $u_3$ e $u_v$, fica evidente que todos os elementos contribuem para as forças nodais do nó $3$, conforme descrito anteriormente.
+Nas duas primeiras linhas do sistema, que representam as forças nodais sobre o primeiro nó, é possível notar que somente os deslocamentos do elemento azulado que impactam diretamente. Nos graus de $u_3$ e $v_3$, fica evidente que todos os elementos contribuem para as forças nodais do nó $3$, conforme descrito anteriormente.
 
 Um outro passo nessa montagem do sistema global é a aplicação das condições de contorno. As condições de contorno, tradas aqui, podem ser dividas em dois tipos: 
 
@@ -500,7 +498,7 @@ Um outro passo nessa montagem do sistema global é a aplicação das condições
     \item de Neumann, ou de segundo tipo.
 \end{enumerate}
 
- As condições de Dirichlet são aquelas que definem valores da variável incógnita na fronteira do domínio. Já as de Neumann, são aquelas que definem valores de contorno sobre a derivada da variável incógnita nas fronteiras do domínio \cite{sinan}. Aqui, as condições de contorno de Dirichlet são restrições de deslocamento, enquanto as condições de Neumann são carregamentos aplicados sobre a estrutura.
+ As condições de Dirichlet são aquelas que definem valores da variável incógnita na fronteira do domínio. Já as de Neumann, são aquelas que definem valores de contorno sobre a derivada da variável incógnita nas fronteiras do domínio \cite{sinan}. Aqui, as condições de contorno de Dirichlet são restrições de deslocamento, enquanto as condições de Neumann são trações aplicados sobre a estrutura.
  
 As condições de contorno sobre os deslocamentos, então, dividem os graus de liberdade entre 
 
@@ -516,7 +514,7 @@ Um engaste, por exemplo, gera uma condições de contorno de Dirichlet, definind
 
 O vetor de forças $\bm{F}$ é nulo em regra sobre os graus de liberdade livres, pois essa entidade representa as forças externas sobre o elemento. Entretanto, como no MEF os deslocamentos são discretizados nos nós, o mesmo é feito com os carregamentos. Quando se aplicam condições de contorno de Neumann, os graus correspondentes devem receber forças nodais equivalentes, de forma que representem os carregamentos por forças externas concentradas nos nó. Pode-se encontrar as forças nodais equivalentes utilizando o mesmo método da seção anterior: o princípio dos trabalhos virtuais, fazendo com que o trabalho de carregamentos sobre a fronteira de um elemento $\partial \Omega^{(e)}$, causado por um deslocamento virtual $\delta \bm{U}^{(e)}$, seja igual ao trabalho da forças nodais equivalentes. Em termos matemáticos, de acordo com \citeshort{Zin},
 \begin{equation}
-    \delta (\bm{U}^{(e)})^t \bm{F}^{(e)} = \int_{\partial \Omega^{(e)}} (\bm{N}\bm{U}^{(e)})^t \bm{t} d \ell,
+    \delta (\bm{U}^{(e)})^t \bm{F}^{(e)} = \int_{\partial \Omega^{(e)}} (\bm{N}\delta\bm{U}^{(e)})^t \bm{t} d \ell,
 \end{equation}
 em que $\bm{t}$ é o vetor do carregamento sobre a fronteira do elemento, na forma
 \begin{equation}
@@ -531,7 +529,7 @@ Aqui os carregamentos são constantes sobre as fronteiras dos elementos, isto é
 \begin{equation}
     \delta (\bm{U}^{(e)})^t \bm{F}^{(e)} = \delta \bm{U}^{(e)} \int_{\partial \Omega^{(e)}} \bm{N}^t d\ell \bm{t}. 
 \end{equation}
-Portanto, as forças nodais equivalentes, devidas a carregamentos uniformes sobre a fronteira do elemento, é dada por
+Portanto, as forças nodais equivalentes, devidas a carregamentos uniformes sobre a fronteira do elemento, são dadas por
 \begin{equation}
     \bm{F}^{(e)} = \int_{\partial \Omega^{(e)}} \bm{N}^t dl \bm{t}.
 \end{equation}
@@ -542,7 +540,7 @@ No elemento CST, pela simplicidade das funções de interpolação, é possível
 \end{equation}
 em que $\bm{F}^{(e)}_{\bm{t}}$ são as forças equivalentes que compreendem a fronteira em que o carregamento $\bm{t}$ é aplicado, $l^{(e)}$ é o comprimento da fronteira do elemento, e $d$ é a espessura do elemento.
 
-Na equação \ref{eq:sistema_global_montado}, em que foi montado o sistema global, já foram aplicada essas condições de contorno. Pode-se notar que os deslocamentos vinculados à fronteira compostas pelos nós $1$ e $3$ são nulos, pois alí se faz um engaste. A força roxeada \textcolor{purple}{$f$}, agindo sobre o nó $2$, faz-se presente diretamente no vetor de forças nodais, pois já é uma força concentrada em um nó. O carregamento alaranjado \textcolor{orange}{$t$}, por sua vez, foi decomposto em duas parcelas, para os nós $5$ e $4$, seguindo a expressão da equação anterior. 
+Na equação \ref{eq:sistema_global_montado}, em que foi montado o sistema global, já foram aplicada essas condições de contorno de carregamentos. A força roxeada \textcolor{purple}{$f$}, agindo sobre o nó $2$, faz-se presente diretamente no vetor de forças nodais, pois já é uma força concentrada em um nó. O carregamento alaranjado \textcolor{orange}{$t$}, por sua vez, foi decomposto em duas parcelas, para os nós $5$ e $4$, seguindo a expressão da equação anterior. 
 
 Vale ressaltar que nos graus de liberdade prescritos as forças nodais desconhecidas são as reações das estruturas, isto é, as forças de reação que as restrições fazem sobre o corpo que se mantenha em equilíbrio. Por conta disso, na equação \ref{eq:sistema_global_montado}, as forças sobre os graus prescritos foram denominadas $R$, de reação.
 
@@ -569,16 +567,17 @@ Portanto, o sistema global pode ser reescrito mais uma vez em termos dessas subm
 
 \begin{align}
     \bm{K}_{LL} \bm{U}_L + \bm{K}_{LP} \bm{U}_P &= \bm{F}_L \\
-    \bm{K}_{PL} \bm{U}_L + \bm{K}_{PP} \bm{U}_P &= \bm{F}_P.
+    \bm{K}_{PL} \bm{U}_L + \bm{K}_{PP} \bm{U}_P &= \bm{F}_P. \label{eq:pipoca}
 \end{align}
 
-Os valores conhecidos desse sistema são os deslocamentos sobre os graus prescritos $\bm{U}_P$, e as forças externas sobre o graus livres $\bm{F}_L$, a final, são as próprias condições de contorno definidas matematicamente pelo MEF. Logo, como o objetivo de resolver o sistema é encontrar os deslocamentos nodais, é possível isolar $\bm{U}_L$ na primeira equação, ou seja,
+Os valores conhecidos desse sistema são os deslocamentos sobre os graus prescritos $\bm{U}_P$, e as forças externas sobre o graus livres $\bm{F}_L$, afinal, são as próprias condições de contorno definidas matematicamente pelo MEF. Logo, como o objetivo de resolver o sistema é encontrar os deslocamentos nodais, é possível isolar $\bm{U}_L$ na primeira equação, ou seja,
 
-\begin{align}
-    \bm{U}_L &= \bm{K}_{LL}^{-1} (\bm{F}_L - \bm{K}_{LP} \bm{U}_P), \\
-    \bm{F}_P &= \bm{K}_{PL} \bm{U}_L + \bm{K}_{PP} \bm{U}_P.
-\end{align}
-a matriz $\bm{K}_{LL}$ é quadrada, simétrica e sempre possui inversa quando o problema está estaticamente determinado. \cite{rao}
+\begin{equation}
+    \bm{U}_L = \bm{K}_{LL}^{-1} (\bm{F}_L - \bm{K}_{LP} \bm{U}_P). \\
+\end{equation}
+A matriz $\bm{K}_{LL}$ é quadrada, simétrica e sempre possui inversa quando o problema está estaticamente determinado \cite{rao}.
+
+Desse sistema, também, é possível determinar as forças nodais sobre os graus de liberdade prescritos, isto é, as reações da estrutura, apenas aplicando a equação \ref{eq:pipoca}, após o cálculo dos deslocamentos nodais livres.
 
 Aplicando essas expressões à equação \ref{eq:sistema_global_montado}, referente ao exemplo da figura \ref{fig:exemplo_matriz_global}, temos que
 \begin{landscape}
@@ -593,6 +592,9 @@ Aplicando essas expressões à equação \ref{eq:sistema_global_montado}, refere
         \end{bmatrix}
         \begin{Bmatrix}
             u_2 \\ v_2 \\ u_4 \\ v_4 \\ u_5 \\ v_5
+        \end{Bmatrix} &=
+        \begin{Bmatrix}
+            0 \\ \textcolor{purple}{f} \\ \frac{1}{2} \ell_{4-5} \textcolor{orange}{t} \\ 0 \\ \frac{1}{2} \ell_{4-5} \textcolor{orange}{t} \\ 0
         \end{Bmatrix} +
         \begin{bmatrix}
             \textcolor{blue}{k_{31}} &  \textcolor{blue}{k_{32}} &  \textcolor{blue}{k_{35}} + \textcolor{red}{k_{13}} &  \textcolor{blue}{k_{36}} + \textcolor{red}{k_{14}} & \\ 
@@ -604,9 +606,6 @@ Aplicando essas expressões à equação \ref{eq:sistema_global_montado}, refere
         \end{bmatrix}
         \begin{Bmatrix}
             0 \\ 0 \\ 0 \\ 0
-        \end{Bmatrix} &=
-        \begin{Bmatrix}
-            0 \\ \textcolor{purple}{f} \\ \frac{1}{2} \ell_{4-5} \textcolor{orange}{t} \\ 0 \\ \frac{1}{2} \ell_{4-5} \textcolor{orange}{t} \\ 0
         \end{Bmatrix} \\
         \begin{bmatrix}
             \textcolor{blue}{k_{13}} &  \textcolor{blue}{k_{14}} & 0 & 0 & 0 & 0 & \\ 
@@ -616,7 +615,10 @@ Aplicando essas expressões à equação \ref{eq:sistema_global_montado}, refere
         \end{bmatrix} 
         \begin{Bmatrix}
             u_2 \\ v_2 \\ u_4 \\ v_4 \\ u_5 \\ v_5
-        \end{Bmatrix} + 
+        \end{Bmatrix} &=
+        \begin{Bmatrix}
+            R_{x1} \\ R_{y1} \\ R_{x3} \\ R_{y3}
+        \end{Bmatrix} +
         \begin{bmatrix}
             \textcolor{blue}{k_{11}} &  \textcolor{blue}{k_{12}} &  \textcolor{blue}{k_{15}} &  \textcolor{blue}{k_{16}} & \\ 
             \textcolor{blue}{k_{21}} &  \textcolor{blue}{k_{22}} &  \textcolor{blue}{k_{25}} &  \textcolor{blue}{k_{26}} & \\ 
@@ -625,10 +627,7 @@ Aplicando essas expressões à equação \ref{eq:sistema_global_montado}, refere
         \end{bmatrix}
         \begin{Bmatrix}
             0 \\ 0 \\ 0 \\ 0
-        \end{Bmatrix}  &=
-        \begin{Bmatrix}
-            R_{x1} \\ R_{y1} \\ R_{x3} \\ R_{y3}
-        \end{Bmatrix}
+        \end{Bmatrix}  
     \end{align*}
 \end{landscape}
 
@@ -738,7 +737,10 @@ em que $V$ é o volume do tetraedro.
 
 Expandindo os termos, temos que
 \begin{equation}
-    u(x,y,z) = \frac{1}{6V} (\alpha_1 + \beta_1 x + \gamma_1 y + \delta_1 z) u_1 + (\alpha_2 + \beta_2 x + \gamma_2 y + \delta_2 z) u_2 + (\alpha_3 + \beta_3 x + \gamma_3 y + \delta_3 z) u_3 + (\alpha_4 + \beta_4 x + \gamma_4 y + \delta_4 z) u_4.
+    \begin{split}
+      u(x,y,z) =& \frac{1}{6V} (\alpha_1 + \beta_1 x + \gamma_1 y + \delta_1 z) u_1 + \frac{1}{6V} (\alpha_2 + \beta_2 x + \gamma_2 y + \delta_2 z) u_2 + \\
+                & \frac{1}{6V} (\alpha_3 + \beta_3 x + \gamma_3 y + \delta_3 z) u_3 + \frac{1}{6V} (\alpha_4 + \beta_4 x + \gamma_4 y + \delta_4 z) u_4.
+    \end{split}
 \end{equation}
 
 Desta forma, as funções de interpolação $N$ têm a forma
@@ -804,7 +806,7 @@ A relação entre tensão e deformação é dada pela lei de Hooke generalizada 
 
 \subsection{As condições de contorno}
 
-Tal qual o CST, os carregamentos aplicados sobre as fronteiras dos elementos devem ser decompostos em forças nodais equivalentes. O mesmo procedimento descrito na seção anterior é aplicando o PTV. A integração da equação \ref{eq:forca_equivalente} então deve ser feita sobre o tetraedro o que, similar ao CST, tem uma forma algébrica, devido ao fato da simplicidade das funções de interpolação, como também é a mera distribuição uniforme do carregamento sobre os nós que compõe a superfície sobre a qual é aplicado. De acordo com \citeshort{Onate}, a força nodal equivalente sobre os nós de um carregamento uniforme na superfície de um elemento tetraédrico linear é dado por
+Tal qual o CST, os carregamentos aplicados sobre as fronteiras dos elementos devem ser decompostos em forças nodais equivalentes. O mesmo procedimento descrito na seção anterior, aplicando o PTV, pode ser empregado a integração da equação \ref{eq:forca_equivalente} então deve ser feita sobre o tetraedro o que, similar ao CST, tem uma forma algébrica, devido ao fato da simplicidade das funções de interpolação. Similarmente, as forças nodais equivalentes são dadas pela mera distribuição uniforme do carregamento sobre os nós que compõem a superfície sobre a qual é aplicado. De acordo com \citeshort{Onate}, a força nodal equivalente sobre os nós de um carregamento uniforme na superfície de um elemento tetraédrico linear é dado por
 
 \begin{equation}
     \bm{F}^{(e)}_{\bm{t}} = \frac{1}{3} A^{(e)} \bm{t},

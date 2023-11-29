@@ -27,7 +27,7 @@ Este capítulo aborda brevemente alguns conceito dos seguintes tópicos, vincula
 
 \section{Matrizes esparsa}
 
-As matrizes esparsas desempenham um papel crucial em diversas áreas da computação científica, sendo particularmente relevantes no contexto do MEF quando se refere às matrizes de rigidez globais, que geralmente são grandes. Se $n$ é o número de nós e $g$ o número de graus de liberdade, a matriz de rigidez terá dimensão $ng \times ng$, que pode ser da ordem de milhares quando a malha é suficientemente refinada. No entanto, a maioria dos elementos da matriz de rigidez é nulo, pois cada nó está conectado apenas a um número limitado de outros nós, devido a conectividade dos elementos. Pode-se, então, definir essa matriz como esparsa, o que tem implicações importantes na sua armazenagem e manipulação \cite{LOGAN}.
+As matrizes esparsas desempenham um papel crucial em diversas áreas da computação científica, sendo particularmente relevantes no contexto do MEF quando se refere às matrizes de rigidez globais, que geralmente são grandes. Se $n$ é o número de nós e $g$ o número de graus de liberdade, a matriz de rigidez terá dimensão $ng \times ng$, que pode ser da ordem de milhares quando a malha é suficientemente refinada. No entanto, a maioria dos elementos da matriz de rigidez é nulo, pois cada nó está conectado apenas a um número limitado de outros nós, devido à conectividade dos elementos. Pode-se, então, definir essa matriz como esparsa, o que tem implicações importantes na sua armazenagem e manipulação \cite{LOGAN}.
 
 Uma matriz esparsa é aquela em que a maioria dos elementos é igual a zero (em contraste com as matrizes densas, onde a maioria dos elementos é diferente de zero). Aqui são apresentadas duas formas de armazenamento de matrizes esparsas, e como elas podem ser utilizadas em Julia pelo módulo \emph{SparseArrays.jl}: COO e CSC.
 
@@ -50,23 +50,24 @@ pode ser armazenada no conjunto de tuplas
     \label{eq:coo}
 \end{equation}
 
-Como tuplas não são comumente utilizadas em programação imperativa para armazenar um grande volume de dados. O conjunto é substituído por um grupo de três vetores: $I$,$J$ e $V$. Para a matriz $A$, nessa forma
-
+Como tuplas não são comumente utilizadas em programação imperativa para armazenar um grande volume de dados, o conjunto é substituído por uma representação ordenada: um grupo de três vetores ($I$,$J$ e $V$). Para a matriz $A$, nessa forma
 
 \begin{equation}
-    I =  [1, 1, 2, 3, 4, 4], \qquad J = [1, 4, 2, 4, 2, 4], \quad V = [3, 13, 5, 11, 7, 9].
+    I =  [1, 1, 2, 3, 4, 4], \qquad J = [1, 4, 2, 4, 2, 4], \quad V = [3, 13, 5, 11, 7, 9],
     \label{eq:coo_2}
 \end{equation}
+em que $I$ são os índices de linha, $J$ os índices de coluna e $V$ os valores não nulos.
 
 Uma vantagem da utilização desse formato é a inserção de novos valores sobre posições não nulas. A inserção é realizada simplesmente concatenado mais uma posição nos vetores $I$, $J$ e $V$. Como é visto mais adiante, em outros formatos, como o CSC, essa operação requer mais alocações dependendo da posição nova a ser inserida.
 
 O formato COO infelizmente não está presente no módulo \emph{SparseArrays.jl}, e por conta disso, foi implementado explicitamente em PHILLIPO, no módulo interno \emph{Matrices.jl}\footnote{Esse trecho do código é uma adaptação da implementação do formato COO em \emph{FEMSparse.jl}. Detalhes da implementação não fazem parte do escopo deste trabalho.}.
 
-O formato CSC, por sua vez, já consiste em uma forma mais sofisticado, fazendo um mapeamento coluna por coluna. As entradas não nulas da matriz são organizados em ordem crescente de coluna e linha no vetor $V$, armazenando os índices de linha respectivos no vetor $I$. O vetor $P$ consiste nas posições do vetor $V$ que separam a armazenagem das colunas, e quando uma coluna só tem valores a última posição da coluna não nula é repetida. Por convenção, ao final do vetor $P$ é concatenado a quantidade de entradas não nulas acrecida de um. A matriz $A$, nessa forma, se torna
+O formato CSC, por sua vez, já consiste em uma forma mais sofisticada, fazendo um mapeamento coluna por coluna. As entradas não nulas da matriz são organizados em ordem crescente de coluna e linha no vetor $V$, armazenando os índices de linha respectivos no vetor $I$. O vetor $J$ é substituído por um vetor $P$, que consiste nas posições do vetor $V$ que separam a armazenagem das colunas, e quando uma coluna só tem valores nulos a última posição da coluna não nula é repetida. Por convenção, ao final do vetor $P$ é concatenado a quantidade de entradas não nulas acrescida de um. A matriz $A$, nessa forma, se torna
 \begin{equation}
     I = [1, 2, 4, 4, 1, 3], \qquad V = [3, 5, 7, 9, 13, 11], \quad P = [1,2,4,4,7].
     \label{eq:coo_3}
 \end{equation}
+
 O módulo \emph{SparseArrays.jl} implementa esse formato como padrão de matrizes esparsas, além de adicionar diversas otimizações matemáticas nas operações definidas pelo módulo \emph{LinearAlgebra.jl}, principalmente quando se trada de resolver grandes sistemas lineares, escolhendo a melhor rotina aplicável \footnote{Detalhes da implementação de rotinas otimizadas para matrizes esparsas não faz parte do escopo deste trabalho.}.
 
 Vale também ressaltar que o módulo \emph{SparseArrays.jl} implementa as matrizes esparsas de modo que ainda sejam compatíveis com as operações convencionais, isto é, a sintaxe e funções definidas para matrizes densas (adição, multiplicação e seleção de entradas...) são aplicáveis também para matrizes esparsas, de forma que o usuário não precise se preocupar com a forma de armazenamento da matriz, e pode se ater apenas na resolução do problema em si.
@@ -79,10 +80,10 @@ A linguagem Julia implementa suporte a quatro categorias de programação concor
 
 \begin{enumerate}
     \item Tarefas Assíncronas, ou Corotinas:
-    As Tarefas em Julia permitem a suspensão e retomada de computações para operações de entrada/saída, manipulação de eventos, processos produtor-consumidor e padrões semelhantes. As Tarefas podem sincronizar por meio de operações como espera (wait) e obtenção (fetch), e se comunicam por meio de Canais. Embora estritamente não sejam computação paralela por si mesmas, Julia permite agendar Tarefas em vários threads.\footnote{Esse conceito é similar as \emph{promises} em JavaScript.}
+    As tarefas em Julia permitem a suspensão e retomada de computações para operações de entrada/saída, manipulação de eventos, processos produtor-consumidor e padrões semelhantes. As tarefas podem sincronizar por meio de operações como espera (wait) e obtenção (fetch), e se comunicam por meio de Canais. Embora estritamente não sejam computação paralela por si mesmas, Julia permite agendar tarefas em vários threads.\footnote{Esse conceito é similar as \emph{promises} em JavaScript.}
 
     \item Multi-threading:
-    O suporte a multi-threading em Julia proporciona a capacidade de agendar Tarefas simultaneamente em mais de um thread ou núcleo de CPU, compartilhando memória. Geralmente, essa é a maneira mais fácil de obter paralelismo em um PC ou em um único servidor com vários núcleos. O suporte a multi-threading em Julia é fornecido pelo módulo \emph{Threads.jl}.
+    O suporte a multi-threading em Julia proporciona a capacidade de agendar tarefas simultaneamente em mais de um thread ou núcleo de CPU, compartilhando memória. Geralmente, essa é a maneira mais fácil de obter paralelismo em um PC ou em um único servidor com vários núcleos. O suporte a multi-threading em Julia é fornecido pelo módulo \emph{Threads.jl}.
 
     \item Computação Distribuída:
     A computação distribuída executa vários processos Julia com espaços de memória separados. Esses processos podem estar no mesmo computador ou em vários computadores. A biblioteca padrão Distribuída fornece a capacidade de execução remota de uma função Julia. Com esse bloco de construção básico, é possível criar várias abstrações de computação distribuída. Pacotes como DistributedArrays.jl são exemplos de tais abstrações. Por outro lado, pacotes como MPI.jl e Elemental.jl fornecem acesso ao ecossistema existente de bibliotecas MPI. O suporte a computação distribuída em Julia é fornecido pelo módulo \emph{Distributed.jl} \footnote{\emph{JuliaFEM.jl} utiliza desas abordagem para implementar o MEF de forma escalável.}.

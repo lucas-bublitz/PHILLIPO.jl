@@ -16,6 +16,8 @@ Os arquivos de verificação estão disponíveis no repositório do projeto, no 
 
 Em todos os casos, definiu-se o aço ASIS 4340 como material, cujas características físicas empregadas aqui foram: $E = 210 \text{GPa}$ (módulo de elasticidade) e $\nu = 0.3$ (coeficiente de Poisson).
 
+O carregamento distribuído $\bm{t}$
+
 Primeiramente, o problema é definido no Abaqus, para depois ser exportado para o GID, a fim de se manter tanto a geometria como a malha e, principalmente, as identificações dos nós e elementos, o que facilitada a comparação dos resultados. O procedimento empregado em todos os casos foi o seguinte:
 
 \begin{enumerate}
@@ -299,8 +301,8 @@ Nos casos bidimensionais foi empregado a geometria de um quadrado unitário, con
 
 \begin{enumerate}
     \item Carregamento em linha (figura \ref{fig:verificacao_quadrado_3}), resultados nas tabelas \ref{tab:verificacao_quadrado_1_deslocamentos} e \ref{tab:verificacao_quadrado_1_tensoes};
-    \item Carregamento pontual (figura \ref{fig:verificacao_quadrado_4}), resultados nas tabelas \ref{tab:verificacao_quadrado_2_deslocamentos} e \ref{tab:verificacao_quadrado_2_tesoes};
-    \item Deslocamento prescrito (figura \ref{fig:verificacao_cubo_5}) resultados nas tabelas \ref{tab:verificacao_quadrado_3_deslocamentos} e \ref{tab:verificacao_quadrado_3_tesoes}.
+    \item Carregamento pontual (figura \ref{fig:verificacao_quadrado_4}), resultados nas tabelas \ref{tab:verificacao_quadrado_2_deslocamentos} e \ref{tab:verificacao_quadrado_2_tensoes};
+    \item Deslocamento prescrito (figura \ref{fig:verificacao_cubo_5}) resultados nas tabelas \ref{tab:verificacao_quadrado_3_deslocamentos} e \ref{tab:verificacao_quadrado_3_tensoes}.
 \end{enumerate}
 
 \begin{table}

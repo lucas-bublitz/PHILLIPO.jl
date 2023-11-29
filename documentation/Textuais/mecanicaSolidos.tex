@@ -278,9 +278,9 @@ Essa relação desconsidera outros efeitos de deformação no interior do sólid
 
 \subsection{A Lei de Hooke em Cisalhamento}
 
-Seja um quadrilátero $\mathcal{B}$, um corpo sólido, homogêneo, em equilíbrio, de comprimento $L$, engastado em sua face inferior, e de seção transversal $S$, e seja $Q$, uma carregamento constante que atua sobre a face superior de $\mathcal{B}$, tangencialmente, na direção de $x$, que a deforma em $\mathcal{B}'$, inclinando-a, até um ângulo $\gamma$, tal como na figura \ref{fig:barra_deformada_2}. 
+Seja um quadrilátero $\mathcal{B}$, um corpo sólido, homogêneo, em equilíbrio, de comprimento $L$, engastado em sua face inferior, e de seção transversal $S$, e seja $Q$, um carregamento constante que atua sobre a face superior de $\mathcal{B}$, tangencialmente, na direção de $x$, que a deforma em $\mathcal{B}'$, inclinando-a, até um ângulo $\gamma$, tal como na figura \ref{fig:barra_deformada_2}. 
 
-A tensão desenvolvida em uma seção $S$ de $\mathcal{B}$, paralela ao carregamento de  $Q$, pode ser descrita em termos do módulo de cisalhamento, $G$, que é uma característica intrínseca do material de $\mathcal{B}$, e da deformação angular, $\gamma$, atuando na inclinação das seções verticais. Essa relação, denominada \emph{Lei de Hooke em Cisalhamento}, é linear da forma
+A tensão desenvolvida em uma seção $S$ de $\mathcal{B}$, paralela ao carregamento $Q$, pode ser descrita em termos do módulo de cisalhamento, $G$, que é uma característica intrínseca do material de $\mathcal{B}$, e da deformação angular, $\gamma$, atuando na inclinação das seções verticais. Essa relação, denominada \emph{Lei de Hooke em Cisalhamento}, é linear da forma
 
 \begin{equation}
     \tau_{xy} = G \gamma_{xy} \implies \tau_{xy} = 2G \epsilon_{xy}.
@@ -290,7 +290,7 @@ O módulo de cisalhamento tem a mesma unidade de tensão, e, assim como o módul
 
 \subsection{O Coeficiente de Poisson}
 
-Na deformação uniaxial de um corpo sólido, tal como na figura \ref{fig:barra_deformada_1}, é razoável que o corpo também se deforme nas direções transversais, de forma que existe, dentro de determinados limites do regime elástico, uma relação entre essa deformações. Observa-se, por meio da experiência prática, que a deformação transversal geralmente é negativa, o corpo tende a se contrair quando submetido a uma deformação axial positiva. Se o corpo se deforma ao longo de $x$ um $\epsilon_x > 0$, ele se contrai em $y$, ou seja, desenvolve uma deformação $\epsilon_y < 0$, de forma que, de acordo com \citeshort{lub}, para deformação axial
+Na deformação uniaxial de um corpo sólido, tal como na figura \ref{fig:barra_deformada_1}, é razoável que o corpo também se deforme nas direções transversais, de forma que existe, dentro de determinados limites do regime elástico, uma relação entre essa deformações. De acordo com \citeshort{lub}, para deformação axial em $x$ observa-se uma deformação transversal em $y$, de modo que
 \begin{equation}
     \nu = -\frac{\epsilon_y}{\epsilon_x},
     \label{eq:coeficiente_de_poisson}
@@ -336,7 +336,7 @@ As tensões de cisalhamento, $\tau_{xy}$, $\tau_{xz}$ e $\tau_{yz}$, por sua vez
     \gamma_{xy} = \frac{\tau_{xy}}, \qquad \gamma_{xz} = \frac{\tau_{xz}}{G}, \qquad \gamma_{yz} = \frac{\tau_{yz}}{G}.
 \end{gather}
 
-Sobrepondo as deformações axiais para cada eixo, e as deformações angulares, é possível determinar as relaçãoes entre todas as tensões e todas as deformações, denominada \emph{lei de Hooke generalizada}:
+Sobrepondo as deformações axiais para cada eixo, e as deformações angulares, é possível determinar as relações entre todas as tensões e todas as deformações, denominada \emph{lei de Hooke generalizada}:
 \begin{gather}
     \epsilon_x = \frac{\sigma_x}{E} - \nu \frac{\sigma_y}{E} - \nu \frac{\sigma_z}{E}, \\
     \epsilon_y = -\nu \frac{\sigma_x}{E} + \frac{\sigma_y}{E} - \nu \frac{\sigma_z}{E}, \\
@@ -424,7 +424,7 @@ O Estado Plano de Tensão (EPT) ocorre quando a rigidez do corpo na direção tr
 \end{gather}
 $\epsilon_z$ passou a ser uma variável dependente, pois é determinada, totalmente, pelas outras deformações. \cite[pág. 90]{Zin}
 
-As Relações que definem a matriz constitutiva para o estado plano de tensão:
+As relações que definem a matriz constitutiva para o estado plano de tensão são
 
 \begin{gather}
     \begin{Bmatrix}
@@ -464,7 +464,7 @@ O Estado de Plano de Deformação (EPD), por sua vez, ocorre quando o corpo é m
     \end{Bmatrix}, \\
     \sigma{z} = \nu (\sigma_x + \sigma_y)
 \end{gather}
-$\gamma_{xz}$ passou a ser uma variável dependente, pois é determinada, totalmente, pelas outras deformações.  \cite[pág. 91]{Zin}
+$\sigma_{z}$ passou a ser uma variável dependente, pois é determinada, totalmente, pelas outras deformações.  \cite[pág. 91]{Zin}
 
 \section{Teoria da Energia de Distorção Máxima: A Tensão Equivalente de Von Mises}
 
@@ -488,7 +488,7 @@ Substituindo as deformações pelas tensões, utilizando a lei de Hooke generali
     \label{eq:energia_deformacao}
 \end{equation}
 
-Essa energia pode sem compreendia como a soma de duas parcelas: a energia de deformação volumétrica, $u_v$, e a energia de deformação por cisalhamento, $u_d$. A energia de deformação volumétrica é a energia de deformação que tende a alterar o volume do elemento, sem distorcer sua geometria, ou seja, a energia de deformação devido à tensão média das tesões principais. Substituindo, então, as tensões principais pela tensão média na equação anterior, temos que
+Essa energia pode ser compreendida como a soma de duas parcelas: a energia de deformação volumétrica, $u_v$, e a energia de deformação por cisalhamento, $u_d$. A energia de deformação volumétrica é a energia de deformação que tende a alterar o volume do elemento, sem distorcer sua geometria, ou seja, a energia de deformação devido à tensão média das tensões principais. Substituindo, então, as tensões principais pela tensão média na equação anterior, temos que
 \begin{equation}
     \mathcal{U}_v = \frac{3\bar{\sigma}^2}{2E} (1 - 2\nu),
     \label{eq:energia_deformacao_volumetrica}
