@@ -129,7 +129,7 @@
         \addplot+ [sharp plot, thick, mark=square,] table {../../validation/1 validation case 8535 nodes.dat};
         \addlegendentry{8535 nós};
         \addplot+[domain = 0:10]{-1e6 * 12 / 210e9 / 24 * \x^2 * (6 * 10^2 - 4 * 10 * \x + \x^2) };
-        \addlegendentry{$y(x) = \frac{t_0}{EI} \frac{Lx^2}{24} \left(6L^2 - 4Lx+x^2\right)$};
+        \addlegendentry{$y(x) = -\frac{t_0 x^2}{24EI} \left(x^2 - 4 Lx + 6L^2\right)$};
     \end{axis}
 \end{tikzpicture}
 
@@ -233,7 +233,7 @@
         \addplot+ [sharp plot, thick, mark=square,] table {../../validation/2 validation case 4796 nodes.dat};
         \addlegendentry{4796 nós};
         \addplot+[domain = 0:10]{-1e6 * 12 / 210e9 / 24 * \x^2 * (6 * 10^2 - 4 * 10 * \x + \x^2) };
-        \addlegendentry{$y(x) = \frac{t_0}{EI} \frac{Lx^2}{24} \left(6L^2 - 4Lx+x^2\right)$};
+        \addlegendentry{$y(x) =  -\frac{t_0 x^2}{24EI} \left(x^2 - 4 Lx + 6L^2\right)$};
     \end{axis}
 \end{tikzpicture}
 
